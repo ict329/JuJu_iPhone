@@ -15,13 +15,6 @@
 		CA270CD7178974120053A29C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CD6178974120053A29C /* Default.png */; };
 		CA270CD9178974120053A29C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CD8178974120053A29C /* Default@2x.png */; };
 		CA270CDB178974120053A29C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CDA178974120053A29C /* Default-568h@2x.png */; };
-		CA270CEF178974C80053A29C /* GHRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CE4178974C80053A29C /* GHRevealViewController.m */; };
-		CA270CF0178974C80053A29C /* GHSidebarSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CE6178974C80053A29C /* GHSidebarSearchViewController.m */; };
-		CA270CF1178974C80053A29C /* searchBarBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CE9178974C80053A29C /* searchBarBG.png */; };
-		CA270CF2178974C80053A29C /* searchBarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CEA178974C80053A29C /* searchBarIcon.png */; };
-		CA270CF3178974C80053A29C /* searchBarIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CEB178974C80053A29C /* searchBarIcon@2x.png */; };
-		CA270CF4178974C80053A29C /* searchTextBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CEC178974C80053A29C /* searchTextBG.png */; };
-		CA270CF5178974C80053A29C /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CED178974C80053A29C /* user.png */; };
 		CA270D01178974F20053A29C /* JJAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CF8178974F20053A29C /* JJAppDelegate.m */; };
 		CA270D02178974F20053A29C /* JJMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CFA178974F20053A29C /* JJMenuCell.m */; };
 		CA270D03178974F20053A29C /* JJMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CFC178974F20053A29C /* JJMenuViewController.m */; };
@@ -42,16 +35,6 @@
 		CA270CD6178974120053A29C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		CA270CD8178974120053A29C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		CA270CDA178974120053A29C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		CA270CE3178974C80053A29C /* GHRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHRevealViewController.h; sourceTree = "<group>"; };
-		CA270CE4178974C80053A29C /* GHRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHRevealViewController.m; sourceTree = "<group>"; };
-		CA270CE5178974C80053A29C /* GHSidebarSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHSidebarSearchViewController.h; sourceTree = "<group>"; };
-		CA270CE6178974C80053A29C /* GHSidebarSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHSidebarSearchViewController.m; sourceTree = "<group>"; };
-		CA270CE7178974C80053A29C /* GHSidebarSearchViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHSidebarSearchViewControllerDelegate.h; sourceTree = "<group>"; };
-		CA270CE9178974C80053A29C /* searchBarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchBarBG.png; sourceTree = "<group>"; };
-		CA270CEA178974C80053A29C /* searchBarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchBarIcon.png; sourceTree = "<group>"; };
-		CA270CEB178974C80053A29C /* searchBarIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchBarIcon@2x.png"; sourceTree = "<group>"; };
-		CA270CEC178974C80053A29C /* searchTextBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchTextBG.png; sourceTree = "<group>"; };
-		CA270CED178974C80053A29C /* user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user.png; sourceTree = "<group>"; };
 		CA270CF7178974F20053A29C /* JJAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJAppDelegate.h; sourceTree = "<group>"; };
 		CA270CF8178974F20053A29C /* JJAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJAppDelegate.m; sourceTree = "<group>"; };
 		CA270CF9178974F20053A29C /* JJMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJMenuCell.h; sourceTree = "<group>"; };
@@ -144,35 +127,9 @@
 		CA270CE1178974C80053A29C /* Common_iPhone */ = {
 			isa = PBXGroup;
 			children = (
-				CA270CE2178974C80053A29C /* GHSidebarNav */,
 			);
 			name = Common_iPhone;
 			path = ../../Common_iPhone;
-			sourceTree = "<group>";
-		};
-		CA270CE2178974C80053A29C /* GHSidebarNav */ = {
-			isa = PBXGroup;
-			children = (
-				CA270CE3178974C80053A29C /* GHRevealViewController.h */,
-				CA270CE4178974C80053A29C /* GHRevealViewController.m */,
-				CA270CE5178974C80053A29C /* GHSidebarSearchViewController.h */,
-				CA270CE6178974C80053A29C /* GHSidebarSearchViewController.m */,
-				CA270CE7178974C80053A29C /* GHSidebarSearchViewControllerDelegate.h */,
-				CA270CE8178974C80053A29C /* Images */,
-			);
-			path = GHSidebarNav;
-			sourceTree = "<group>";
-		};
-		CA270CE8178974C80053A29C /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				CA270CE9178974C80053A29C /* searchBarBG.png */,
-				CA270CEA178974C80053A29C /* searchBarIcon.png */,
-				CA270CEB178974C80053A29C /* searchBarIcon@2x.png */,
-				CA270CEC178974C80053A29C /* searchTextBG.png */,
-				CA270CED178974C80053A29C /* user.png */,
-			);
-			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,11 +187,6 @@
 				CA270CD7178974120053A29C /* Default.png in Resources */,
 				CA270CD9178974120053A29C /* Default@2x.png in Resources */,
 				CA270CDB178974120053A29C /* Default-568h@2x.png in Resources */,
-				CA270CF1178974C80053A29C /* searchBarBG.png in Resources */,
-				CA270CF2178974C80053A29C /* searchBarIcon.png in Resources */,
-				CA270CF3178974C80053A29C /* searchBarIcon@2x.png in Resources */,
-				CA270CF4178974C80053A29C /* searchTextBG.png in Resources */,
-				CA270CF5178974C80053A29C /* user.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,8 +198,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA270CD1178974120053A29C /* main.m in Sources */,
-				CA270CEF178974C80053A29C /* GHRevealViewController.m in Sources */,
-				CA270CF0178974C80053A29C /* GHSidebarSearchViewController.m in Sources */,
 				CA270D01178974F20053A29C /* JJAppDelegate.m in Sources */,
 				CA270D02178974F20053A29C /* JJMenuCell.m in Sources */,
 				CA270D03178974F20053A29C /* JJMenuViewController.m in Sources */,
