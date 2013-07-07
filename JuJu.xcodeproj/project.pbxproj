@@ -11,6 +11,24 @@
 		CA270CC7178974120053A29C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA270CC6178974120053A29C /* Foundation.framework */; };
 		CA270CC9178974120053A29C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA270CC8178974120053A29C /* CoreGraphics.framework */; };
 		CA270D07178975410053A29C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA270D06178975410053A29C /* QuartzCore.framework */; };
+		CA270D25178979390053A29C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA270D09178979390053A29C /* InfoPlist.strings */; };
+		CA270D26178979390053A29C /* JJAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D0C178979390053A29C /* JJAppDelegate.m */; };
+		CA270D27178979390053A29C /* JJMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D10178979390053A29C /* JJMenuViewController.m */; };
+		CA270D28178979390053A29C /* JJPushedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D12178979390053A29C /* JJPushedViewController.m */; };
+		CA270D29178979390053A29C /* JJRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D14178979390053A29C /* JJRootViewController.m */; };
+		CA270D2A178979390053A29C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D1A178979390053A29C /* Default-568h@2x.png */; };
+		CA270D2B178979390053A29C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D1B178979390053A29C /* Default.png */; };
+		CA270D2C178979390053A29C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D1C178979390053A29C /* Default@2x.png */; };
+		CA270D2D178979390053A29C /* JJMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D21178979390053A29C /* JJMenuCell.m */; };
+		CA270D2E178979390053A29C /* JuJu-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA270D22178979390053A29C /* JuJu-Info.plist */; };
+		CA270D2F178979390053A29C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D24178979390053A29C /* main.m */; };
+		CA270DEB1789797B0053A29C /* GHRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D3C178979790053A29C /* GHRevealViewController.m */; };
+		CA270DEC1789797B0053A29C /* GHSidebarSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D3E178979790053A29C /* GHSidebarSearchViewController.m */; };
+		CA270DED1789797B0053A29C /* searchBarBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D411789797A0053A29C /* searchBarBG.png */; };
+		CA270DEE1789797B0053A29C /* searchBarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D421789797A0053A29C /* searchBarIcon.png */; };
+		CA270DEF1789797B0053A29C /* searchBarIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D431789797A0053A29C /* searchBarIcon@2x.png */; };
+		CA270DF01789797B0053A29C /* searchTextBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D441789797A0053A29C /* searchTextBG.png */; };
+		CA270DF11789797B0053A29C /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D451789797A0053A29C /* user.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +37,33 @@
 		CA270CC6178974120053A29C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CA270CC8178974120053A29C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		CA270D06178975410053A29C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CA270D0A178979390053A29C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		CA270D0B178979390053A29C /* JJAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJAppDelegate.h; sourceTree = "<group>"; };
+		CA270D0C178979390053A29C /* JJAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJAppDelegate.m; sourceTree = "<group>"; };
+		CA270D0F178979390053A29C /* JJMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJMenuViewController.h; sourceTree = "<group>"; };
+		CA270D10178979390053A29C /* JJMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJMenuViewController.m; sourceTree = "<group>"; };
+		CA270D11178979390053A29C /* JJPushedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJPushedViewController.h; sourceTree = "<group>"; };
+		CA270D12178979390053A29C /* JJPushedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJPushedViewController.m; sourceTree = "<group>"; };
+		CA270D13178979390053A29C /* JJRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJRootViewController.h; sourceTree = "<group>"; };
+		CA270D14178979390053A29C /* JJRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJRootViewController.m; sourceTree = "<group>"; };
+		CA270D1A178979390053A29C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		CA270D1B178979390053A29C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		CA270D1C178979390053A29C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		CA270D20178979390053A29C /* JJMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJMenuCell.h; sourceTree = "<group>"; };
+		CA270D21178979390053A29C /* JJMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJMenuCell.m; sourceTree = "<group>"; };
+		CA270D22178979390053A29C /* JuJu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "JuJu-Info.plist"; sourceTree = "<group>"; };
+		CA270D23178979390053A29C /* JuJu-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JuJu-Prefix.pch"; sourceTree = "<group>"; };
+		CA270D24178979390053A29C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CA270D3B178979790053A29C /* GHRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHRevealViewController.h; sourceTree = "<group>"; };
+		CA270D3C178979790053A29C /* GHRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHRevealViewController.m; sourceTree = "<group>"; };
+		CA270D3D178979790053A29C /* GHSidebarSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHSidebarSearchViewController.h; sourceTree = "<group>"; };
+		CA270D3E178979790053A29C /* GHSidebarSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHSidebarSearchViewController.m; sourceTree = "<group>"; };
+		CA270D3F1789797A0053A29C /* GHSidebarSearchViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHSidebarSearchViewControllerDelegate.h; sourceTree = "<group>"; };
+		CA270D411789797A0053A29C /* searchBarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchBarBG.png; sourceTree = "<group>"; };
+		CA270D421789797A0053A29C /* searchBarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchBarIcon.png; sourceTree = "<group>"; };
+		CA270D431789797A0053A29C /* searchBarIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchBarIcon@2x.png"; sourceTree = "<group>"; };
+		CA270D441789797A0053A29C /* searchTextBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchTextBG.png; sourceTree = "<group>"; };
+		CA270D451789797A0053A29C /* user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +84,14 @@
 		CA270CB8178974120053A29C = {
 			isa = PBXGroup;
 			children = (
+				CA270D30178979790053A29C /* Common_iPhone */,
+				CA270D0D178979390053A29C /* JuJu */,
+				CA270D22178979390053A29C /* JuJu-Info.plist */,
+				CA270D23178979390053A29C /* JuJu-Prefix.pch */,
+				CA270D24178979390053A29C /* main.m */,
+				CA270D0B178979390053A29C /* JJAppDelegate.h */,
+				CA270D0C178979390053A29C /* JJAppDelegate.m */,
+				CA270D08178979390053A29C /* en.lproj */,
 				CA270D06178975410053A29C /* QuartzCore.framework */,
 				CA270CC3178974120053A29C /* Frameworks */,
 				CA270CC2178974120053A29C /* Products */,
@@ -61,6 +114,250 @@
 				CA270CC8178974120053A29C /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CA270D08178979390053A29C /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D09178979390053A29C /* InfoPlist.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		CA270D0D178979390053A29C /* JuJu */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D0E178979390053A29C /* Controllers */,
+				CA270D15178979390053A29C /* Models */,
+				CA270D16178979390053A29C /* Network */,
+				CA270D17178979390053A29C /* Resource */,
+				CA270D1E178979390053A29C /* Service */,
+				CA270D1F178979390053A29C /* Views */,
+			);
+			path = JuJu;
+			sourceTree = "<group>";
+		};
+		CA270D0E178979390053A29C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D0F178979390053A29C /* JJMenuViewController.h */,
+				CA270D10178979390053A29C /* JJMenuViewController.m */,
+				CA270D11178979390053A29C /* JJPushedViewController.h */,
+				CA270D12178979390053A29C /* JJPushedViewController.m */,
+				CA270D13178979390053A29C /* JJRootViewController.h */,
+				CA270D14178979390053A29C /* JJRootViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		CA270D15178979390053A29C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		CA270D16178979390053A29C /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		CA270D17178979390053A29C /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D18178979390053A29C /* Data */,
+				CA270D19178979390053A29C /* Image */,
+				CA270D1D178979390053A29C /* Sound */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		CA270D18178979390053A29C /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CA270D19178979390053A29C /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D1A178979390053A29C /* Default-568h@2x.png */,
+				CA270D1B178979390053A29C /* Default.png */,
+				CA270D1C178979390053A29C /* Default@2x.png */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
+		CA270D1D178979390053A29C /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sound;
+			sourceTree = "<group>";
+		};
+		CA270D1E178979390053A29C /* Service */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		CA270D1F178979390053A29C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D20178979390053A29C /* JJMenuCell.h */,
+				CA270D21178979390053A29C /* JJMenuCell.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CA270D30178979790053A29C /* Common_iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D31178979790053A29C /* Component */,
+				CA270D38178979790053A29C /* Core */,
+			);
+			name = Common_iPhone;
+			path = ../Common_iPhone;
+			sourceTree = "<group>";
+		};
+		CA270D31178979790053A29C /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D32178979790053A29C /* Controllers */,
+				CA270D33178979790053A29C /* Data */,
+				CA270D34178979790053A29C /* Misc */,
+				CA270D35178979790053A29C /* Network */,
+				CA270D36178979790053A29C /* Utils */,
+				CA270D37178979790053A29C /* Views */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
+		CA270D32178979790053A29C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		CA270D33178979790053A29C /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CA270D34178979790053A29C /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		CA270D35178979790053A29C /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		CA270D36178979790053A29C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		CA270D37178979790053A29C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CA270D38178979790053A29C /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D39178979790053A29C /* Controllers */,
+				CA270D461789797A0053A29C /* Data */,
+				CA270D471789797A0053A29C /* Misc */,
+				CA270D481789797A0053A29C /* Network */,
+				CA270DE81789797B0053A29C /* Utils */,
+				CA270DE91789797B0053A29C /* Views */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		CA270D39178979790053A29C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D3A178979790053A29C /* GHSidebarNav */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		CA270D3A178979790053A29C /* GHSidebarNav */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D3B178979790053A29C /* GHRevealViewController.h */,
+				CA270D3C178979790053A29C /* GHRevealViewController.m */,
+				CA270D3D178979790053A29C /* GHSidebarSearchViewController.h */,
+				CA270D3E178979790053A29C /* GHSidebarSearchViewController.m */,
+				CA270D3F1789797A0053A29C /* GHSidebarSearchViewControllerDelegate.h */,
+				CA270D401789797A0053A29C /* Images */,
+			);
+			path = GHSidebarNav;
+			sourceTree = "<group>";
+		};
+		CA270D401789797A0053A29C /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				CA270D411789797A0053A29C /* searchBarBG.png */,
+				CA270D421789797A0053A29C /* searchBarIcon.png */,
+				CA270D431789797A0053A29C /* searchBarIcon@2x.png */,
+				CA270D441789797A0053A29C /* searchTextBG.png */,
+				CA270D451789797A0053A29C /* user.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		CA270D461789797A0053A29C /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CA270D471789797A0053A29C /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		CA270D481789797A0053A29C /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		CA270DE81789797B0053A29C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		CA270DE91789797B0053A29C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -114,6 +411,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA270D25178979390053A29C /* InfoPlist.strings in Resources */,
+				CA270D2A178979390053A29C /* Default-568h@2x.png in Resources */,
+				CA270D2B178979390053A29C /* Default.png in Resources */,
+				CA270D2C178979390053A29C /* Default@2x.png in Resources */,
+				CA270D2E178979390053A29C /* JuJu-Info.plist in Resources */,
+				CA270DED1789797B0053A29C /* searchBarBG.png in Resources */,
+				CA270DEE1789797B0053A29C /* searchBarIcon.png in Resources */,
+				CA270DEF1789797B0053A29C /* searchBarIcon@2x.png in Resources */,
+				CA270DF01789797B0053A29C /* searchTextBG.png in Resources */,
+				CA270DF11789797B0053A29C /* user.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,10 +431,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA270D26178979390053A29C /* JJAppDelegate.m in Sources */,
+				CA270D27178979390053A29C /* JJMenuViewController.m in Sources */,
+				CA270D28178979390053A29C /* JJPushedViewController.m in Sources */,
+				CA270D29178979390053A29C /* JJRootViewController.m in Sources */,
+				CA270D2D178979390053A29C /* JJMenuCell.m in Sources */,
+				CA270D2F178979390053A29C /* main.m in Sources */,
+				CA270DEB1789797B0053A29C /* GHRevealViewController.m in Sources */,
+				CA270DEC1789797B0053A29C /* GHSidebarSearchViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		CA270D09178979390053A29C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CA270D0A178979390053A29C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		CA270CDC178974120053A29C /* Debug */ = {
@@ -192,8 +518,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "JuJu/JuJu-Prefix.pch";
-				INFOPLIST_FILE = "JuJu/JuJu-Info.plist";
+				GCC_PREFIX_HEADER = "JuJu-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/JuJu-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -204,8 +530,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "JuJu/JuJu-Prefix.pch";
-				INFOPLIST_FILE = "JuJu/JuJu-Info.plist";
+				GCC_PREFIX_HEADER = "JuJu-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/JuJu-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
