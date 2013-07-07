@@ -69,6 +69,7 @@
 		CA27108B17898BC70053A29C /* WireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = CA27107517898BC60053A29C /* WireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CA2710921789D5AE0053A29C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710901789D5AE0053A29C /* libMobClickLibrary.a */; };
 		CA2710941789D5F60053A29C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710931789D5F60053A29C /* libz.dylib */; };
+		CAA75C541789D8750041C019 /* AppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CAA75C531789D8750041C019 /* AppManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,6 +188,8 @@
 		CA2710901789D5AE0053A29C /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		CA2710911789D5AE0053A29C /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		CA2710931789D5F60053A29C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		CAA75C521789D8750041C019 /* AppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManager.h; sourceTree = "<group>"; };
+		CAA75C531789D8750041C019 /* AppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +226,8 @@
 				CA270D24178979390053A29C /* main.m */,
 				CA270D0B178979390053A29C /* JJAppDelegate.h */,
 				CA270D0C178979390053A29C /* JJAppDelegate.m */,
+				CAA75C521789D8750041C019 /* AppManager.h */,
+				CAA75C531789D8750041C019 /* AppManager.m */,
 				CA270D08178979390053A29C /* en.lproj */,
 				CA270D06178975410053A29C /* QuartzCore.framework */,
 				CA270CC3178974120053A29C /* Frameworks */,
@@ -754,6 +759,7 @@
 				CA27108917898BC70053A29C /* UnknownFieldSet_Builder.m in Sources */,
 				CA27108A17898BC70053A29C /* Utilities.m in Sources */,
 				CA27108B17898BC70053A29C /* WireFormat.m in Sources */,
+				CAA75C541789D8750041C019 /* AppManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
