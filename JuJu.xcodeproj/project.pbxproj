@@ -10,16 +10,6 @@
 		CA270CC5178974120053A29C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA270CC4178974120053A29C /* UIKit.framework */; };
 		CA270CC7178974120053A29C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA270CC6178974120053A29C /* Foundation.framework */; };
 		CA270CC9178974120053A29C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA270CC8178974120053A29C /* CoreGraphics.framework */; };
-		CA270CCF178974120053A29C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA270CCD178974120053A29C /* InfoPlist.strings */; };
-		CA270CD1178974120053A29C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CD0178974120053A29C /* main.m */; };
-		CA270CD7178974120053A29C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CD6178974120053A29C /* Default.png */; };
-		CA270CD9178974120053A29C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CD8178974120053A29C /* Default@2x.png */; };
-		CA270CDB178974120053A29C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270CDA178974120053A29C /* Default-568h@2x.png */; };
-		CA270D01178974F20053A29C /* JJAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CF8178974F20053A29C /* JJAppDelegate.m */; };
-		CA270D02178974F20053A29C /* JJMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CFA178974F20053A29C /* JJMenuCell.m */; };
-		CA270D03178974F20053A29C /* JJMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CFC178974F20053A29C /* JJMenuViewController.m */; };
-		CA270D04178974F20053A29C /* JJPushedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270CFE178974F20053A29C /* JJPushedViewController.m */; };
-		CA270D05178974F20053A29C /* JJRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D00178974F20053A29C /* JJRootViewController.m */; };
 		CA270D07178975410053A29C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA270D06178975410053A29C /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,23 +18,6 @@
 		CA270CC4178974120053A29C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CA270CC6178974120053A29C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CA270CC8178974120053A29C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		CA270CCC178974120053A29C /* JuJu-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JuJu-Info.plist"; sourceTree = "<group>"; };
-		CA270CCE178974120053A29C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		CA270CD0178974120053A29C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		CA270CD2178974120053A29C /* JuJu-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JuJu-Prefix.pch"; sourceTree = "<group>"; };
-		CA270CD6178974120053A29C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		CA270CD8178974120053A29C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		CA270CDA178974120053A29C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		CA270CF7178974F20053A29C /* JJAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJAppDelegate.h; sourceTree = "<group>"; };
-		CA270CF8178974F20053A29C /* JJAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJAppDelegate.m; sourceTree = "<group>"; };
-		CA270CF9178974F20053A29C /* JJMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJMenuCell.h; sourceTree = "<group>"; };
-		CA270CFA178974F20053A29C /* JJMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJMenuCell.m; sourceTree = "<group>"; };
-		CA270CFB178974F20053A29C /* JJMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJMenuViewController.h; sourceTree = "<group>"; };
-		CA270CFC178974F20053A29C /* JJMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJMenuViewController.m; sourceTree = "<group>"; };
-		CA270CFD178974F20053A29C /* JJPushedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJPushedViewController.h; sourceTree = "<group>"; };
-		CA270CFE178974F20053A29C /* JJPushedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJPushedViewController.m; sourceTree = "<group>"; };
-		CA270CFF178974F20053A29C /* JJRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJRootViewController.h; sourceTree = "<group>"; };
-		CA270D00178974F20053A29C /* JJRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJRootViewController.m; sourceTree = "<group>"; };
 		CA270D06178975410053A29C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -67,8 +40,6 @@
 			isa = PBXGroup;
 			children = (
 				CA270D06178975410053A29C /* QuartzCore.framework */,
-				CA270CE1178974C80053A29C /* Common_iPhone */,
-				CA270CCA178974120053A29C /* JuJu */,
 				CA270CC3178974120053A29C /* Frameworks */,
 				CA270CC2178974120053A29C /* Products */,
 			);
@@ -90,46 +61,6 @@
 				CA270CC8178974120053A29C /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CA270CCA178974120053A29C /* JuJu */ = {
-			isa = PBXGroup;
-			children = (
-				CA270CF7178974F20053A29C /* JJAppDelegate.h */,
-				CA270CF8178974F20053A29C /* JJAppDelegate.m */,
-				CA270CF9178974F20053A29C /* JJMenuCell.h */,
-				CA270CFA178974F20053A29C /* JJMenuCell.m */,
-				CA270CFB178974F20053A29C /* JJMenuViewController.h */,
-				CA270CFC178974F20053A29C /* JJMenuViewController.m */,
-				CA270CFD178974F20053A29C /* JJPushedViewController.h */,
-				CA270CFE178974F20053A29C /* JJPushedViewController.m */,
-				CA270CFF178974F20053A29C /* JJRootViewController.h */,
-				CA270D00178974F20053A29C /* JJRootViewController.m */,
-				CA270CCB178974120053A29C /* Supporting Files */,
-			);
-			path = JuJu;
-			sourceTree = "<group>";
-		};
-		CA270CCB178974120053A29C /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				CA270CCC178974120053A29C /* JuJu-Info.plist */,
-				CA270CCD178974120053A29C /* InfoPlist.strings */,
-				CA270CD0178974120053A29C /* main.m */,
-				CA270CD2178974120053A29C /* JuJu-Prefix.pch */,
-				CA270CD6178974120053A29C /* Default.png */,
-				CA270CD8178974120053A29C /* Default@2x.png */,
-				CA270CDA178974120053A29C /* Default-568h@2x.png */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		CA270CE1178974C80053A29C /* Common_iPhone */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Common_iPhone;
-			path = ../../Common_iPhone;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,10 +114,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA270CCF178974120053A29C /* InfoPlist.strings in Resources */,
-				CA270CD7178974120053A29C /* Default.png in Resources */,
-				CA270CD9178974120053A29C /* Default@2x.png in Resources */,
-				CA270CDB178974120053A29C /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,27 +124,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA270CD1178974120053A29C /* main.m in Sources */,
-				CA270D01178974F20053A29C /* JJAppDelegate.m in Sources */,
-				CA270D02178974F20053A29C /* JJMenuCell.m in Sources */,
-				CA270D03178974F20053A29C /* JJMenuViewController.m in Sources */,
-				CA270D04178974F20053A29C /* JJPushedViewController.m in Sources */,
-				CA270D05178974F20053A29C /* JJRootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		CA270CCD178974120053A29C /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CA270CCE178974120053A29C /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		CA270CDC178974120053A29C /* Debug */ = {
