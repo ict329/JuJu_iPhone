@@ -33,6 +33,12 @@
 
 #pragma mark UIApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
+    //init mobclick
+    [MobClick startWithAppkey:@"51d99add56240b73a1057fcb" reportPolicy:SEND_INTERVAL channelId:@""];
+    
+    
 	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
 	
 	UIColor *bgColor = [UIColor colorWithRed:(50.0f/255.0f) green:(57.0f/255.0f) blue:(74.0f/255.0f) alpha:1.0f];

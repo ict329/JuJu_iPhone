@@ -16,5 +16,6 @@
     #import <SystemConfiguration/SystemConfiguration.h>
     #import <MobileCoreServices/MobileCoreServices.h>
     #import "Bootstrap.h"
+    #import "MobClick.h"
 
 #endif

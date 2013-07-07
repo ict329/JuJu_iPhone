@@ -67,6 +67,8 @@
 		CA27108917898BC70053A29C /* UnknownFieldSet_Builder.m in Sources */ = {isa = PBXBuildFile; fileRef = CA27107117898BC60053A29C /* UnknownFieldSet_Builder.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CA27108A17898BC70053A29C /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CA27107317898BC60053A29C /* Utilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CA27108B17898BC70053A29C /* WireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = CA27107517898BC60053A29C /* WireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CA2710921789D5AE0053A29C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710901789D5AE0053A29C /* libMobClickLibrary.a */; };
+		CA2710941789D5F60053A29C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710931789D5F60053A29C /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -182,6 +184,9 @@
 		CA27107417898BC60053A29C /* WireFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WireFormat.h; sourceTree = "<group>"; };
 		CA27107517898BC60053A29C /* WireFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WireFormat.m; sourceTree = "<group>"; };
 		CA27107617898BC60053A29C /* ProtocolBuffers.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ProtocolBuffers.xcodeproj; sourceTree = "<group>"; };
+		CA2710901789D5AE0053A29C /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		CA2710911789D5AE0053A29C /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		CA2710931789D5F60053A29C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA2710941789D5F60053A29C /* libz.dylib in Frameworks */,
 				CA270E9417897D800053A29C /* MobileCoreServices.framework in Frameworks */,
 				CA270E9217897D7A0053A29C /* SystemConfiguration.framework in Frameworks */,
 				CA270E9017897D6F0053A29C /* CoreLocation.framework in Frameworks */,
@@ -198,6 +204,7 @@
 				CA270CC9178974120053A29C /* CoreGraphics.framework in Frameworks */,
 				CA270CC5178974120053A29C /* UIKit.framework in Frameworks */,
 				CA270CC7178974120053A29C /* Foundation.framework in Frameworks */,
+				CA2710921789D5AE0053A29C /* libMobClickLibrary.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +214,7 @@
 		CA270CB8178974120053A29C = {
 			isa = PBXGroup;
 			children = (
+				CA2710931789D5F60053A29C /* libz.dylib */,
 				CA270E9517897D980053A29C /* Frameworks */,
 				CA270D30178979790053A29C /* Common_iPhone */,
 				CA270D0D178979390053A29C /* JuJu */,
@@ -409,6 +417,7 @@
 		CA270D38178979790053A29C /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CA27108E1789D5AE0053A29C /* SDK */,
 				CA270D39178979790053A29C /* Controllers */,
 				CA270D461789797A0053A29C /* Data */,
 				CA270D471789797A0053A29C /* Misc */,
@@ -608,6 +617,23 @@
 			children = (
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CA27108E1789D5AE0053A29C /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				CA27108F1789D5AE0053A29C /* UmengSDK */,
+			);
+			path = SDK;
+			sourceTree = "<group>";
+		};
+		CA27108F1789D5AE0053A29C /* UmengSDK */ = {
+			isa = PBXGroup;
+			children = (
+				CA2710901789D5AE0053A29C /* libMobClickLibrary.a */,
+				CA2710911789D5AE0053A29C /* MobClick.h */,
+			);
+			path = UmengSDK;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -814,6 +840,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../Common_iPhone/Core/Data/ProtoBuf/build/Debug-iphonesimulator\"",
+					"\"$(SRCROOT)/../Common_iPhone/Core/SDK/UmengSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -830,6 +857,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../Common_iPhone/Core/Data/ProtoBuf/build/Debug-iphonesimulator\"",
+					"\"$(SRCROOT)/../Common_iPhone/Core/SDK/UmengSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
