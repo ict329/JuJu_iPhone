@@ -70,6 +70,10 @@
 		CA2710921789D5AE0053A29C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710901789D5AE0053A29C /* libMobClickLibrary.a */; };
 		CA2710941789D5F60053A29C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710931789D5F60053A29C /* libz.dylib */; };
 		CAA75C541789D8750041C019 /* AppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CAA75C531789D8750041C019 /* AppManager.m */; };
+		CACEC2AF178B0CCF00D88643 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A7178B0CCF00D88643 /* DateUtil.m */; };
+		CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A9178B0CCF00D88643 /* PointUtil.m */; };
+		CACEC2B1178B0CCF00D88643 /* RectUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2AB178B0CCF00D88643 /* RectUtil.m */; };
+		CACEC2B2178B0CCF00D88643 /* StringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2AD178B0CCF00D88643 /* StringUtil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -190,6 +194,14 @@
 		CA2710931789D5F60053A29C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CAA75C521789D8750041C019 /* AppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManager.h; sourceTree = "<group>"; };
 		CAA75C531789D8750041C019 /* AppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManager.m; sourceTree = "<group>"; };
+		CACEC2A6178B0CCF00D88643 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
+		CACEC2A7178B0CCF00D88643 /* DateUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateUtil.m; sourceTree = "<group>"; };
+		CACEC2A8178B0CCF00D88643 /* PointUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointUtil.h; sourceTree = "<group>"; };
+		CACEC2A9178B0CCF00D88643 /* PointUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointUtil.m; sourceTree = "<group>"; };
+		CACEC2AA178B0CCF00D88643 /* RectUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RectUtil.h; sourceTree = "<group>"; };
+		CACEC2AB178B0CCF00D88643 /* RectUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RectUtil.m; sourceTree = "<group>"; };
+		CACEC2AC178B0CCF00D88643 /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtil.h; sourceTree = "<group>"; };
+		CACEC2AD178B0CCF00D88643 /* StringUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -492,6 +504,14 @@
 		CA270DE81789797B0053A29C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				CACEC2A6178B0CCF00D88643 /* DateUtil.h */,
+				CACEC2A7178B0CCF00D88643 /* DateUtil.m */,
+				CACEC2A8178B0CCF00D88643 /* PointUtil.h */,
+				CACEC2A9178B0CCF00D88643 /* PointUtil.m */,
+				CACEC2AA178B0CCF00D88643 /* RectUtil.h */,
+				CACEC2AB178B0CCF00D88643 /* RectUtil.m */,
+				CACEC2AC178B0CCF00D88643 /* StringUtil.h */,
+				CACEC2AD178B0CCF00D88643 /* StringUtil.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -760,6 +780,10 @@
 				CA27108A17898BC70053A29C /* Utilities.m in Sources */,
 				CA27108B17898BC70053A29C /* WireFormat.m in Sources */,
 				CAA75C541789D8750041C019 /* AppManager.m in Sources */,
+				CACEC2AF178B0CCF00D88643 /* DateUtil.m in Sources */,
+				CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */,
+				CACEC2B1178B0CCF00D88643 /* RectUtil.m in Sources */,
+				CACEC2B2178B0CCF00D88643 /* StringUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -922,46 +922,64 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 @interface PBActivity : PBGeneratedMessage {
 @private
   BOOL hasCDate_:1;
+  BOOL hasPrice_:1;
   BOOL hasCommentCount_:1;
   BOOL hasShareCount_:1;
-  BOOL hasInterestedCount_:1;
+  BOOL hasSignupCount_:1;
   BOOL hasParticipantCount_:1;
+  BOOL hasMarkCount_:1;
   BOOL hasUid_:1;
+  BOOL hasToken_:1;
   BOOL hasParty_:1;
   BOOL hasTraffic_:1;
   BOOL hasShopping_:1;
   BOOL hasType_:1;
   int32_t cDate;
+  int32_t price;
   int32_t commentCount;
   int32_t shareCount;
-  int32_t interestedCount;
+  int32_t signupCount;
   int32_t participantCount;
+  int32_t markCount;
   NSString* uid;
+  NSString* token;
   PBParty* party;
   PBTraffic* traffic;
   PBShopping* shopping;
   PBActivityType type;
+  NSMutableArray* mutableParticipantsList;
+  NSMutableArray* mutableSignupsList;
 }
 - (BOOL) hasType;
 - (BOOL) hasCDate;
 - (BOOL) hasUid;
+- (BOOL) hasToken;
 - (BOOL) hasParty;
 - (BOOL) hasTraffic;
 - (BOOL) hasShopping;
+- (BOOL) hasPrice;
 - (BOOL) hasCommentCount;
 - (BOOL) hasShareCount;
-- (BOOL) hasInterestedCount;
+- (BOOL) hasSignupCount;
 - (BOOL) hasParticipantCount;
+- (BOOL) hasMarkCount;
 @property (readonly) PBActivityType type;
 @property (readonly) int32_t cDate;
 @property (readonly, retain) NSString* uid;
+@property (readonly, retain) NSString* token;
 @property (readonly, retain) PBParty* party;
 @property (readonly, retain) PBTraffic* traffic;
 @property (readonly, retain) PBShopping* shopping;
+@property (readonly) int32_t price;
 @property (readonly) int32_t commentCount;
 @property (readonly) int32_t shareCount;
-@property (readonly) int32_t interestedCount;
+@property (readonly) int32_t signupCount;
 @property (readonly) int32_t participantCount;
+@property (readonly) int32_t markCount;
+- (NSArray*) participantsList;
+- (NSString*) participantsAtIndex:(int32_t) index;
+- (NSArray*) signupsList;
+- (NSString*) signupsAtIndex:(int32_t) index;
 
 + (PBActivity*) defaultInstance;
 - (PBActivity*) defaultInstance;
@@ -1012,6 +1030,11 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBActivity_Builder*) setUid:(NSString*) value;
 - (PBActivity_Builder*) clearUid;
 
+- (BOOL) hasToken;
+- (NSString*) token;
+- (PBActivity_Builder*) setToken:(NSString*) value;
+- (PBActivity_Builder*) clearToken;
+
 - (BOOL) hasParty;
 - (PBParty*) party;
 - (PBActivity_Builder*) setParty:(PBParty*) value;
@@ -1033,6 +1056,25 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBActivity_Builder*) mergeShopping:(PBShopping*) value;
 - (PBActivity_Builder*) clearShopping;
 
+- (BOOL) hasPrice;
+- (int32_t) price;
+- (PBActivity_Builder*) setPrice:(int32_t) value;
+- (PBActivity_Builder*) clearPrice;
+
+- (NSArray*) participantsList;
+- (NSString*) participantsAtIndex:(int32_t) index;
+- (PBActivity_Builder*) replaceParticipantsAtIndex:(int32_t) index with:(NSString*) value;
+- (PBActivity_Builder*) addParticipants:(NSString*) value;
+- (PBActivity_Builder*) addAllParticipants:(NSArray*) values;
+- (PBActivity_Builder*) clearParticipantsList;
+
+- (NSArray*) signupsList;
+- (NSString*) signupsAtIndex:(int32_t) index;
+- (PBActivity_Builder*) replaceSignupsAtIndex:(int32_t) index with:(NSString*) value;
+- (PBActivity_Builder*) addSignups:(NSString*) value;
+- (PBActivity_Builder*) addAllSignups:(NSArray*) values;
+- (PBActivity_Builder*) clearSignupsList;
+
 - (BOOL) hasCommentCount;
 - (int32_t) commentCount;
 - (PBActivity_Builder*) setCommentCount:(int32_t) value;
@@ -1043,15 +1085,20 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBActivity_Builder*) setShareCount:(int32_t) value;
 - (PBActivity_Builder*) clearShareCount;
 
-- (BOOL) hasInterestedCount;
-- (int32_t) interestedCount;
-- (PBActivity_Builder*) setInterestedCount:(int32_t) value;
-- (PBActivity_Builder*) clearInterestedCount;
+- (BOOL) hasSignupCount;
+- (int32_t) signupCount;
+- (PBActivity_Builder*) setSignupCount:(int32_t) value;
+- (PBActivity_Builder*) clearSignupCount;
 
 - (BOOL) hasParticipantCount;
 - (int32_t) participantCount;
 - (PBActivity_Builder*) setParticipantCount:(int32_t) value;
 - (PBActivity_Builder*) clearParticipantCount;
+
+- (BOOL) hasMarkCount;
+- (int32_t) markCount;
+- (PBActivity_Builder*) setMarkCount:(int32_t) value;
+- (PBActivity_Builder*) clearMarkCount;
 @end
 
 @interface PBJoin : PBGeneratedMessage {

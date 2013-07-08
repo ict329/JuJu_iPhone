@@ -3700,13 +3700,18 @@ static PBShopping* defaultPBShoppingInstance = nil;
 @property PBActivityType type;
 @property int32_t cDate;
 @property (retain) NSString* uid;
+@property (retain) NSString* token;
 @property (retain) PBParty* party;
 @property (retain) PBTraffic* traffic;
 @property (retain) PBShopping* shopping;
+@property int32_t price;
+@property (retain) NSMutableArray* mutableParticipantsList;
+@property (retain) NSMutableArray* mutableSignupsList;
 @property int32_t commentCount;
 @property int32_t shareCount;
-@property int32_t interestedCount;
+@property int32_t signupCount;
 @property int32_t participantCount;
+@property int32_t markCount;
 @end
 
 @implementation PBActivity
@@ -3732,6 +3737,13 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasUid_ = !!value;
 }
 @synthesize uid;
+- (BOOL) hasToken {
+  return !!hasToken_;
+}
+- (void) setHasToken:(BOOL) value {
+  hasToken_ = !!value;
+}
+@synthesize token;
 - (BOOL) hasParty {
   return !!hasParty_;
 }
@@ -3753,6 +3765,15 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasShopping_ = !!value;
 }
 @synthesize shopping;
+- (BOOL) hasPrice {
+  return !!hasPrice_;
+}
+- (void) setHasPrice:(BOOL) value {
+  hasPrice_ = !!value;
+}
+@synthesize price;
+@synthesize mutableParticipantsList;
+@synthesize mutableSignupsList;
 - (BOOL) hasCommentCount {
   return !!hasCommentCount_;
 }
@@ -3767,13 +3788,13 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasShareCount_ = !!value;
 }
 @synthesize shareCount;
-- (BOOL) hasInterestedCount {
-  return !!hasInterestedCount_;
+- (BOOL) hasSignupCount {
+  return !!hasSignupCount_;
 }
-- (void) setHasInterestedCount:(BOOL) value {
-  hasInterestedCount_ = !!value;
+- (void) setHasSignupCount:(BOOL) value {
+  hasSignupCount_ = !!value;
 }
-@synthesize interestedCount;
+@synthesize signupCount;
 - (BOOL) hasParticipantCount {
   return !!hasParticipantCount_;
 }
@@ -3781,11 +3802,21 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasParticipantCount_ = !!value;
 }
 @synthesize participantCount;
+- (BOOL) hasMarkCount {
+  return !!hasMarkCount_;
+}
+- (void) setHasMarkCount:(BOOL) value {
+  hasMarkCount_ = !!value;
+}
+@synthesize markCount;
 - (void) dealloc {
   self.uid = nil;
+  self.token = nil;
   self.party = nil;
   self.traffic = nil;
   self.shopping = nil;
+  self.mutableParticipantsList = nil;
+  self.mutableSignupsList = nil;
   [super dealloc];
 }
 - (id) init {
@@ -3793,13 +3824,16 @@ static PBShopping* defaultPBShoppingInstance = nil;
     self.type = PBActivityTypeParty;
     self.cDate = 0;
     self.uid = @"";
+    self.token = @"";
     self.party = [PBParty defaultInstance];
     self.traffic = [PBTraffic defaultInstance];
     self.shopping = [PBShopping defaultInstance];
+    self.price = 0;
     self.commentCount = 0;
     self.shareCount = 0;
-    self.interestedCount = 0;
+    self.signupCount = 0;
     self.participantCount = 0;
+    self.markCount = 0;
   }
   return self;
 }
@@ -3814,6 +3848,20 @@ static PBActivity* defaultPBActivityInstance = nil;
 }
 - (PBActivity*) defaultInstance {
   return defaultPBActivityInstance;
+}
+- (NSArray*) participantsList {
+  return mutableParticipantsList;
+}
+- (NSString*) participantsAtIndex:(int32_t) index {
+  id value = [mutableParticipantsList objectAtIndex:index];
+  return value;
+}
+- (NSArray*) signupsList {
+  return mutableSignupsList;
+}
+- (NSString*) signupsAtIndex:(int32_t) index {
+  id value = [mutableSignupsList objectAtIndex:index];
+  return value;
 }
 - (BOOL) isInitialized {
   if (!self.hasType) {
@@ -3852,6 +3900,9 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (self.hasUid) {
     [output writeString:3 value:self.uid];
   }
+  if (self.hasToken) {
+    [output writeString:4 value:self.token];
+  }
   if (self.hasParty) {
     [output writeMessage:10 value:self.party];
   }
@@ -3861,17 +3912,29 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (self.hasShopping) {
     [output writeMessage:12 value:self.shopping];
   }
+  if (self.hasPrice) {
+    [output writeInt32:13 value:self.price];
+  }
+  for (NSString* element in self.mutableParticipantsList) {
+    [output writeString:14 value:element];
+  }
+  for (NSString* element in self.mutableSignupsList) {
+    [output writeString:15 value:element];
+  }
   if (self.hasCommentCount) {
     [output writeInt32:50 value:self.commentCount];
   }
   if (self.hasShareCount) {
     [output writeInt32:51 value:self.shareCount];
   }
-  if (self.hasInterestedCount) {
-    [output writeInt32:52 value:self.interestedCount];
+  if (self.hasSignupCount) {
+    [output writeInt32:52 value:self.signupCount];
   }
   if (self.hasParticipantCount) {
     [output writeInt32:53 value:self.participantCount];
+  }
+  if (self.hasMarkCount) {
+    [output writeInt32:54 value:self.markCount];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -3891,6 +3954,9 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (self.hasUid) {
     size += computeStringSize(3, self.uid);
   }
+  if (self.hasToken) {
+    size += computeStringSize(4, self.token);
+  }
   if (self.hasParty) {
     size += computeMessageSize(10, self.party);
   }
@@ -3900,17 +3966,39 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (self.hasShopping) {
     size += computeMessageSize(12, self.shopping);
   }
+  if (self.hasPrice) {
+    size += computeInt32Size(13, self.price);
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSString* element in self.mutableParticipantsList) {
+      dataSize += computeStringSizeNoTag(element);
+    }
+    size += dataSize;
+    size += 1 * self.mutableParticipantsList.count;
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSString* element in self.mutableSignupsList) {
+      dataSize += computeStringSizeNoTag(element);
+    }
+    size += dataSize;
+    size += 1 * self.mutableSignupsList.count;
+  }
   if (self.hasCommentCount) {
     size += computeInt32Size(50, self.commentCount);
   }
   if (self.hasShareCount) {
     size += computeInt32Size(51, self.shareCount);
   }
-  if (self.hasInterestedCount) {
-    size += computeInt32Size(52, self.interestedCount);
+  if (self.hasSignupCount) {
+    size += computeInt32Size(52, self.signupCount);
   }
   if (self.hasParticipantCount) {
     size += computeInt32Size(53, self.participantCount);
+  }
+  if (self.hasMarkCount) {
+    size += computeInt32Size(54, self.markCount);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -3996,6 +4084,9 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (other.hasUid) {
     [self setUid:other.uid];
   }
+  if (other.hasToken) {
+    [self setToken:other.token];
+  }
   if (other.hasParty) {
     [self mergeParty:other.party];
   }
@@ -4005,17 +4096,35 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (other.hasShopping) {
     [self mergeShopping:other.shopping];
   }
+  if (other.hasPrice) {
+    [self setPrice:other.price];
+  }
+  if (other.mutableParticipantsList.count > 0) {
+    if (result.mutableParticipantsList == nil) {
+      result.mutableParticipantsList = [NSMutableArray array];
+    }
+    [result.mutableParticipantsList addObjectsFromArray:other.mutableParticipantsList];
+  }
+  if (other.mutableSignupsList.count > 0) {
+    if (result.mutableSignupsList == nil) {
+      result.mutableSignupsList = [NSMutableArray array];
+    }
+    [result.mutableSignupsList addObjectsFromArray:other.mutableSignupsList];
+  }
   if (other.hasCommentCount) {
     [self setCommentCount:other.commentCount];
   }
   if (other.hasShareCount) {
     [self setShareCount:other.shareCount];
   }
-  if (other.hasInterestedCount) {
-    [self setInterestedCount:other.interestedCount];
+  if (other.hasSignupCount) {
+    [self setSignupCount:other.signupCount];
   }
   if (other.hasParticipantCount) {
     [self setParticipantCount:other.participantCount];
+  }
+  if (other.hasMarkCount) {
+    [self setMarkCount:other.markCount];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -4055,6 +4164,10 @@ static PBActivity* defaultPBActivityInstance = nil;
         [self setUid:[input readString]];
         break;
       }
+      case 34: {
+        [self setToken:[input readString]];
+        break;
+      }
       case 82: {
         PBParty_Builder* subBuilder = [PBParty builder];
         if (self.hasParty) {
@@ -4082,6 +4195,18 @@ static PBActivity* defaultPBActivityInstance = nil;
         [self setShopping:[subBuilder buildPartial]];
         break;
       }
+      case 104: {
+        [self setPrice:[input readInt32]];
+        break;
+      }
+      case 114: {
+        [self addParticipants:[input readString]];
+        break;
+      }
+      case 122: {
+        [self addSignups:[input readString]];
+        break;
+      }
       case 400: {
         [self setCommentCount:[input readInt32]];
         break;
@@ -4091,11 +4216,15 @@ static PBActivity* defaultPBActivityInstance = nil;
         break;
       }
       case 416: {
-        [self setInterestedCount:[input readInt32]];
+        [self setSignupCount:[input readInt32]];
         break;
       }
       case 424: {
         [self setParticipantCount:[input readInt32]];
+        break;
+      }
+      case 432: {
+        [self setMarkCount:[input readInt32]];
         break;
       }
     }
@@ -4147,6 +4276,22 @@ static PBActivity* defaultPBActivityInstance = nil;
 - (PBActivity_Builder*) clearUid {
   result.hasUid = NO;
   result.uid = @"";
+  return self;
+}
+- (BOOL) hasToken {
+  return result.hasToken;
+}
+- (NSString*) token {
+  return result.token;
+}
+- (PBActivity_Builder*) setToken:(NSString*) value {
+  result.hasToken = YES;
+  result.token = value;
+  return self;
+}
+- (PBActivity_Builder*) clearToken {
+  result.hasToken = NO;
+  result.token = @"";
   return self;
 }
 - (BOOL) hasParty {
@@ -4239,6 +4384,84 @@ static PBActivity* defaultPBActivityInstance = nil;
   result.shopping = [PBShopping defaultInstance];
   return self;
 }
+- (BOOL) hasPrice {
+  return result.hasPrice;
+}
+- (int32_t) price {
+  return result.price;
+}
+- (PBActivity_Builder*) setPrice:(int32_t) value {
+  result.hasPrice = YES;
+  result.price = value;
+  return self;
+}
+- (PBActivity_Builder*) clearPrice {
+  result.hasPrice = NO;
+  result.price = 0;
+  return self;
+}
+- (NSArray*) participantsList {
+  if (result.mutableParticipantsList == nil) {
+    return [NSArray array];
+  }
+  return result.mutableParticipantsList;
+}
+- (NSString*) participantsAtIndex:(int32_t) index {
+  return [result participantsAtIndex:index];
+}
+- (PBActivity_Builder*) replaceParticipantsAtIndex:(int32_t) index with:(NSString*) value {
+  [result.mutableParticipantsList replaceObjectAtIndex:index withObject:value];
+  return self;
+}
+- (PBActivity_Builder*) addParticipants:(NSString*) value {
+  if (result.mutableParticipantsList == nil) {
+    result.mutableParticipantsList = [NSMutableArray array];
+  }
+  [result.mutableParticipantsList addObject:value];
+  return self;
+}
+- (PBActivity_Builder*) addAllParticipants:(NSArray*) values {
+  if (result.mutableParticipantsList == nil) {
+    result.mutableParticipantsList = [NSMutableArray array];
+  }
+  [result.mutableParticipantsList addObjectsFromArray:values];
+  return self;
+}
+- (PBActivity_Builder*) clearParticipantsList {
+  result.mutableParticipantsList = nil;
+  return self;
+}
+- (NSArray*) signupsList {
+  if (result.mutableSignupsList == nil) {
+    return [NSArray array];
+  }
+  return result.mutableSignupsList;
+}
+- (NSString*) signupsAtIndex:(int32_t) index {
+  return [result signupsAtIndex:index];
+}
+- (PBActivity_Builder*) replaceSignupsAtIndex:(int32_t) index with:(NSString*) value {
+  [result.mutableSignupsList replaceObjectAtIndex:index withObject:value];
+  return self;
+}
+- (PBActivity_Builder*) addSignups:(NSString*) value {
+  if (result.mutableSignupsList == nil) {
+    result.mutableSignupsList = [NSMutableArray array];
+  }
+  [result.mutableSignupsList addObject:value];
+  return self;
+}
+- (PBActivity_Builder*) addAllSignups:(NSArray*) values {
+  if (result.mutableSignupsList == nil) {
+    result.mutableSignupsList = [NSMutableArray array];
+  }
+  [result.mutableSignupsList addObjectsFromArray:values];
+  return self;
+}
+- (PBActivity_Builder*) clearSignupsList {
+  result.mutableSignupsList = nil;
+  return self;
+}
 - (BOOL) hasCommentCount {
   return result.hasCommentCount;
 }
@@ -4271,20 +4494,20 @@ static PBActivity* defaultPBActivityInstance = nil;
   result.shareCount = 0;
   return self;
 }
-- (BOOL) hasInterestedCount {
-  return result.hasInterestedCount;
+- (BOOL) hasSignupCount {
+  return result.hasSignupCount;
 }
-- (int32_t) interestedCount {
-  return result.interestedCount;
+- (int32_t) signupCount {
+  return result.signupCount;
 }
-- (PBActivity_Builder*) setInterestedCount:(int32_t) value {
-  result.hasInterestedCount = YES;
-  result.interestedCount = value;
+- (PBActivity_Builder*) setSignupCount:(int32_t) value {
+  result.hasSignupCount = YES;
+  result.signupCount = value;
   return self;
 }
-- (PBActivity_Builder*) clearInterestedCount {
-  result.hasInterestedCount = NO;
-  result.interestedCount = 0;
+- (PBActivity_Builder*) clearSignupCount {
+  result.hasSignupCount = NO;
+  result.signupCount = 0;
   return self;
 }
 - (BOOL) hasParticipantCount {
@@ -4301,6 +4524,22 @@ static PBActivity* defaultPBActivityInstance = nil;
 - (PBActivity_Builder*) clearParticipantCount {
   result.hasParticipantCount = NO;
   result.participantCount = 0;
+  return self;
+}
+- (BOOL) hasMarkCount {
+  return result.hasMarkCount;
+}
+- (int32_t) markCount {
+  return result.markCount;
+}
+- (PBActivity_Builder*) setMarkCount:(int32_t) value {
+  result.hasMarkCount = YES;
+  result.markCount = value;
+  return self;
+}
+- (PBActivity_Builder*) clearMarkCount {
+  result.hasMarkCount = NO;
+  result.markCount = 0;
   return self;
 }
 @end
