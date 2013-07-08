@@ -32,10 +32,14 @@ typedef enum {
 BOOL PBRelationIsValidValue(PBRelation value);
 
 typedef enum {
-  PBRegTypeNick = 1,
-  PBRegTypeQq = 3,
-  PBRegTypeRenren = 4,
-  PBRegTypeEmail = 5,
+  PBRegTypeNick = 0,
+  PBRegTypeSinaWeibo = 1,
+  PBRegTypeQqWeibo = 2,
+  PBRegTypeRenren = 3,
+  PBRegTypeQqSpace = 4,
+  PBRegTypeKaixin = 5,
+  PBRegTypeFacebook = 6,
+  PBRegTypeTwitter = 7,
 } PBRegType;
 
 BOOL PBRegTypeIsValidValue(PBRegType value);

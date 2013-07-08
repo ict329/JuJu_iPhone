@@ -26,6 +26,8 @@ static PBExtensionRegistry* extensionRegistry = nil;
 BOOL PBResultCodeIsValidValue(PBResultCode value) {
   switch (value) {
     case PBResultCodeSuccess:
+    case PBResultCodeSystemError:
+    case PBResultCodeParsePbError:
       return YES;
     default:
       return NO;

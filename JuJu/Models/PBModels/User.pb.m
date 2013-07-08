@@ -34,9 +34,13 @@ BOOL PBRelationIsValidValue(PBRelation value) {
 BOOL PBRegTypeIsValidValue(PBRegType value) {
   switch (value) {
     case PBRegTypeNick:
-    case PBRegTypeQq:
+    case PBRegTypeSinaWeibo:
+    case PBRegTypeQqWeibo:
     case PBRegTypeRenren:
-    case PBRegTypeEmail:
+    case PBRegTypeQqSpace:
+    case PBRegTypeKaixin:
+    case PBRegTypeFacebook:
+    case PBRegTypeTwitter:
       return YES;
     default:
       return NO;

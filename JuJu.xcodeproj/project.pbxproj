@@ -74,6 +74,8 @@
 		CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A9178B0CCF00D88643 /* PointUtil.m */; };
 		CACEC2B1178B0CCF00D88643 /* RectUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2AB178B0CCF00D88643 /* RectUtil.m */; };
 		CACEC2B2178B0CCF00D88643 /* StringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2AD178B0CCF00D88643 /* StringUtil.m */; };
+		CACEC2B6178B0DEF00D88643 /* JJService.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2B5178B0DEF00D88643 /* JJService.m */; };
+		CACEC2B9178B136600D88643 /* UserService.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2B8178B136600D88643 /* UserService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -202,6 +204,10 @@
 		CACEC2AB178B0CCF00D88643 /* RectUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RectUtil.m; sourceTree = "<group>"; };
 		CACEC2AC178B0CCF00D88643 /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtil.h; sourceTree = "<group>"; };
 		CACEC2AD178B0CCF00D88643 /* StringUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringUtil.m; sourceTree = "<group>"; };
+		CACEC2B4178B0DEF00D88643 /* JJService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJService.h; sourceTree = "<group>"; };
+		CACEC2B5178B0DEF00D88643 /* JJService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJService.m; sourceTree = "<group>"; };
+		CACEC2B7178B136600D88643 /* UserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserService.h; sourceTree = "<group>"; };
+		CACEC2B8178B136600D88643 /* UserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserService.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -353,6 +359,10 @@
 		CA270D1E178979390053A29C /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				CACEC2B4178B0DEF00D88643 /* JJService.h */,
+				CACEC2B5178B0DEF00D88643 /* JJService.m */,
+				CACEC2B7178B136600D88643 /* UserService.h */,
+				CACEC2B8178B136600D88643 /* UserService.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -784,6 +794,8 @@
 				CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */,
 				CACEC2B1178B0CCF00D88643 /* RectUtil.m in Sources */,
 				CACEC2B2178B0CCF00D88643 /* StringUtil.m in Sources */,
+				CACEC2B6178B0DEF00D88643 /* JJService.m in Sources */,
+				CACEC2B9178B136600D88643 /* UserService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -53,6 +53,8 @@
 @class PBUser_Builder;
 typedef enum {
   PBResultCodeSuccess = 0,
+  PBResultCodeSystemError = 1,
+  PBResultCodeParsePbError = 2,
 } PBResultCode;
 
 BOOL PBResultCodeIsValidValue(PBResultCode value);
