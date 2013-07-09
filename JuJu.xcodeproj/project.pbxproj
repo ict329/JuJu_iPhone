@@ -14,7 +14,6 @@
 		CA270D25178979390053A29C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA270D09178979390053A29C /* InfoPlist.strings */; };
 		CA270D26178979390053A29C /* JJAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D0C178979390053A29C /* JJAppDelegate.m */; };
 		CA270D27178979390053A29C /* JJMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D10178979390053A29C /* JJMenuViewController.m */; };
-		CA270D28178979390053A29C /* JJPushedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D12178979390053A29C /* JJPushedViewController.m */; };
 		CA270D29178979390053A29C /* JJRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA270D14178979390053A29C /* JJRootViewController.m */; };
 		CA270D2A178979390053A29C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D1A178979390053A29C /* Default-568h@2x.png */; };
 		CA270D2B178979390053A29C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CA270D1B178979390053A29C /* Default.png */; };
@@ -96,8 +95,6 @@
 		CA270D0C178979390053A29C /* JJAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJAppDelegate.m; sourceTree = "<group>"; };
 		CA270D0F178979390053A29C /* JJMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJMenuViewController.h; sourceTree = "<group>"; };
 		CA270D10178979390053A29C /* JJMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJMenuViewController.m; sourceTree = "<group>"; };
-		CA270D11178979390053A29C /* JJPushedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJPushedViewController.h; sourceTree = "<group>"; };
-		CA270D12178979390053A29C /* JJPushedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJPushedViewController.m; sourceTree = "<group>"; };
 		CA270D13178979390053A29C /* JJRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJRootViewController.h; sourceTree = "<group>"; };
 		CA270D14178979390053A29C /* JJRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJRootViewController.m; sourceTree = "<group>"; };
 		CA270D1A178979390053A29C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -319,8 +316,6 @@
 			children = (
 				CA270D0F178979390053A29C /* JJMenuViewController.h */,
 				CA270D10178979390053A29C /* JJMenuViewController.m */,
-				CA270D11178979390053A29C /* JJPushedViewController.h */,
-				CA270D12178979390053A29C /* JJPushedViewController.m */,
 				CA270D13178979390053A29C /* JJRootViewController.h */,
 				CA270D14178979390053A29C /* JJRootViewController.m */,
 			);
@@ -793,7 +788,6 @@
 			files = (
 				CA270D26178979390053A29C /* JJAppDelegate.m in Sources */,
 				CA270D27178979390053A29C /* JJMenuViewController.m in Sources */,
-				CA270D28178979390053A29C /* JJPushedViewController.m in Sources */,
 				CA270D29178979390053A29C /* JJRootViewController.m in Sources */,
 				CA270D2D178979390053A29C /* JJMenuCell.m in Sources */,
 				CA270D2F178979390053A29C /* main.m in Sources */,

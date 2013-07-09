@@ -6,13 +6,11 @@
 //
 
 #import "JJRootViewController.h"
-#import "JJPushedViewController.h"
 
 
 #pragma mark -
 #pragma mark Private Interface
 @interface JJRootViewController ()
-- (void)pushViewController;
 - (void)revealSidebar;
 @end
 
@@ -39,19 +37,10 @@
     [super viewDidLoad];
 	self.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.view.backgroundColor = [UIColor lightGrayColor];
-	UIButton *pushButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[pushButton setTitle:@"Push" forState:UIControlStateNormal];
-	[pushButton addTarget:self action:@selector(pushViewController) forControlEvents:UIControlEventTouchUpInside];
-	[pushButton sizeToFit];
-	[self.view addSubview:pushButton];
 }
 
 #pragma mark Private Methods
-- (void)pushViewController {
-	NSString *vcTitle = [self.title stringByAppendingString:@" - Pushed"];
-	UIViewController *vc = [[JJPushedViewController alloc] initWithTitle:vcTitle];
-	[self.navigationController pushViewController:vc animated:YES];
-}
+
 
 - (void)revealSidebar {
 	_revealBlock();

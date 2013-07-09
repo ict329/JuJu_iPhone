@@ -48,30 +48,30 @@
 	
 	NSArray *headers = @[
                       [NSNull null],
-                      @"FAVORITES"
+                      @"选项"
                       ];
 	NSArray *controllers = @[
                           @[
-                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"Profile" withRevealBlock:revealBlock]]
+                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"个人主页" withRevealBlock:revealBlock]]
                               ],
                           @[
-                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"News Feed" withRevealBlock:revealBlock]],
-                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"Messages" withRevealBlock:revealBlock]],
-                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"Nearby" withRevealBlock:revealBlock]],
-                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"Events" withRevealBlock:revealBlock]],
-                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"Friends" withRevealBlock:revealBlock]]
+                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"动态" withRevealBlock:revealBlock]],
+                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"消息" withRevealBlock:revealBlock]],
+                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"好友" withRevealBlock:revealBlock]],
+                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"广场" withRevealBlock:revealBlock]],
+                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"更多" withRevealBlock:revealBlock]]
                               ]
                           ];
 	NSArray *cellInfos = @[
                         @[
-                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Profile", @"")}
+                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"个人主页", @"")}
                             ],
                         @[
-                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"News Feed", @"")},
-                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Messages", @"")},
-                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Nearby", @"")},
-                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Events", @"")},
-                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Friends", @"")},
+                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"动态", @"")},
+                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"消息", @"")},
+                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"好友", @"")},
+                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"广场", @"")},
+                            @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"更多", @"")},
                             ]
                         ];
 	
@@ -84,7 +84,7 @@
 			[((UINavigationController *)obj2).navigationBar addGestureRecognizer:panGesture];
 		}];
 	}];
-	
+	/*
 	delegate.searchController = [[GHSidebarSearchViewController alloc] initWithSidebarViewController:delegate.revealController];
 	delegate.searchController.view.backgroundColor = [UIColor clearColor];
     delegate.searchController.searchDelegate = self;
@@ -105,9 +105,9 @@
 	[delegate.searchController.searchBar setImage:[UIImage imageNamed:@"searchBarIcon.png"] 
 							 forSearchBarIcon:UISearchBarIconSearch 
 										state:UIControlStateNormal];
-	
+	*/
 	delegate.menuController = [[JJMenuViewController alloc] initWithSidebarViewController:delegate.revealController 
-																		withSearchBar:delegate.searchController.searchBar 
+																		withSearchBar:nil
 																		  withHeaders:headers 
 																	  withControllers:controllers 
 																		withCellInfos:cellInfos];
@@ -125,7 +125,7 @@
 {
     
 }
-
+/*
 #pragma mark GHSidebarSearchViewControllerDelegate
 - (void)searchResultsForText:(NSString *)text withScope:(NSString *)scope callback:(SearchResultsBlock)callback {
 	callback(@[@"Foo", @"Bar", @"Baz"]);
@@ -146,5 +146,5 @@
 	return cell;
 }
 
-
+*/
 @end
