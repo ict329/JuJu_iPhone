@@ -1,9 +1,9 @@
-
+#import "ActionManager.h"
 @interface ActionManager() 
 
 @end
 
-#prama mark-- implementation
+
 
 @implementation ActionManager 
 

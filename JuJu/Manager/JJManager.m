@@ -1,4 +1,4 @@
-
+#import "JJManager.h"
 
 @implementation JJManager
 

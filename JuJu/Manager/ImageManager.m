@@ -1,9 +1,8 @@
-
+#import "ImageManager.h"
 @interface ImageManager() 
 
 @end
 
-#prama mark-- implementation
 
 @implementation ImageManager 
 

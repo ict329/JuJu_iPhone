@@ -76,6 +76,12 @@
 		CACEC2B2178B0CCF00D88643 /* StringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2AD178B0CCF00D88643 /* StringUtil.m */; };
 		CACEC2B6178B0DEF00D88643 /* JJService.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2B5178B0DEF00D88643 /* JJService.m */; };
 		CACEC2B9178B136600D88643 /* UserService.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2B8178B136600D88643 /* UserService.m */; };
+		CACEC375178C291D00D88643 /* JJModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC374178C291D00D88643 /* JJModel.m */; };
+		CACEC382178C293200D88643 /* ActionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC378178C293200D88643 /* ActionManager.m */; };
+		CACEC384178C293200D88643 /* ImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC37B178C293200D88643 /* ImageManager.m */; };
+		CACEC385178C293200D88643 /* JJManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC37D178C293200D88643 /* JJManager.m */; };
+		CACEC386178C293200D88643 /* RelationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC37F178C293200D88643 /* RelationManager.m */; };
+		CACEC387178C293200D88643 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC381178C293200D88643 /* UserManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -208,6 +214,18 @@
 		CACEC2B5178B0DEF00D88643 /* JJService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJService.m; sourceTree = "<group>"; };
 		CACEC2B7178B136600D88643 /* UserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserService.h; sourceTree = "<group>"; };
 		CACEC2B8178B136600D88643 /* UserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserService.m; sourceTree = "<group>"; };
+		CACEC373178C291D00D88643 /* JJModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJModel.h; sourceTree = "<group>"; };
+		CACEC374178C291D00D88643 /* JJModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJModel.m; sourceTree = "<group>"; };
+		CACEC377178C293200D88643 /* ActionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionManager.h; sourceTree = "<group>"; };
+		CACEC378178C293200D88643 /* ActionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionManager.m; sourceTree = "<group>"; };
+		CACEC37A178C293200D88643 /* ImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageManager.h; sourceTree = "<group>"; };
+		CACEC37B178C293200D88643 /* ImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageManager.m; sourceTree = "<group>"; };
+		CACEC37C178C293200D88643 /* JJManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJManager.h; sourceTree = "<group>"; };
+		CACEC37D178C293200D88643 /* JJManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJManager.m; sourceTree = "<group>"; };
+		CACEC37E178C293200D88643 /* RelationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelationManager.h; sourceTree = "<group>"; };
+		CACEC37F178C293200D88643 /* RelationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelationManager.m; sourceTree = "<group>"; };
+		CACEC380178C293200D88643 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
+		CACEC381178C293200D88643 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,6 +300,7 @@
 		CA270D0D178979390053A29C /* JuJu */ = {
 			isa = PBXGroup;
 			children = (
+				CACEC376178C293200D88643 /* Manager */,
 				CA270D0E178979390053A29C /* Controllers */,
 				CA270D15178979390053A29C /* Models */,
 				CA270D16178979390053A29C /* Network */,
@@ -308,6 +327,8 @@
 		CA270D15178979390053A29C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CACEC373178C291D00D88643 /* JJModel.h */,
+				CACEC374178C291D00D88643 /* JJModel.m */,
 				CA270FD31789865C0053A29C /* PBModels */,
 			);
 			path = Models;
@@ -671,6 +692,23 @@
 			path = UmengSDK;
 			sourceTree = "<group>";
 		};
+		CACEC376178C293200D88643 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				CACEC377178C293200D88643 /* ActionManager.h */,
+				CACEC378178C293200D88643 /* ActionManager.m */,
+				CACEC37A178C293200D88643 /* ImageManager.h */,
+				CACEC37B178C293200D88643 /* ImageManager.m */,
+				CACEC37C178C293200D88643 /* JJManager.h */,
+				CACEC37D178C293200D88643 /* JJManager.m */,
+				CACEC37E178C293200D88643 /* RelationManager.h */,
+				CACEC37F178C293200D88643 /* RelationManager.m */,
+				CACEC380178C293200D88643 /* UserManager.h */,
+				CACEC381178C293200D88643 /* UserManager.m */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -796,6 +834,12 @@
 				CACEC2B2178B0CCF00D88643 /* StringUtil.m in Sources */,
 				CACEC2B6178B0DEF00D88643 /* JJService.m in Sources */,
 				CACEC2B9178B136600D88643 /* UserService.m in Sources */,
+				CACEC375178C291D00D88643 /* JJModel.m in Sources */,
+				CACEC382178C293200D88643 /* ActionManager.m in Sources */,
+				CACEC384178C293200D88643 /* ImageManager.m in Sources */,
+				CACEC385178C293200D88643 /* JJManager.m in Sources */,
+				CACEC386178C293200D88643 /* RelationManager.m in Sources */,
+				CACEC387178C293200D88643 /* UserManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
