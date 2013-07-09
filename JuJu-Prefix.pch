@@ -21,5 +21,8 @@
     #import <MobileCoreServices/MobileCoreServices.h>
     #import "Bootstrap.h"
     #import "MobClick.h"
+    #import "User.pb.h"
+    #import "UserManager.h"
+
 
 #endif

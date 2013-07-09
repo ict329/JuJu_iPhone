@@ -82,6 +82,7 @@
 		CACEC385178C293200D88643 /* JJManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC37D178C293200D88643 /* JJManager.m */; };
 		CACEC386178C293200D88643 /* RelationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC37F178C293200D88643 /* RelationManager.m */; };
 		CACEC387178C293200D88643 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC381178C293200D88643 /* UserManager.m */; };
+		CACEC38A178C2A5300D88643 /* ConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC389178C2A5300D88643 /* ConfigManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -226,6 +227,8 @@
 		CACEC37F178C293200D88643 /* RelationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelationManager.m; sourceTree = "<group>"; };
 		CACEC380178C293200D88643 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		CACEC381178C293200D88643 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
+		CACEC388178C2A5200D88643 /* ConfigManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigManager.h; sourceTree = "<group>"; };
+		CACEC389178C2A5300D88643 /* ConfigManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -695,16 +698,18 @@
 		CACEC376178C293200D88643 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				CACEC37C178C293200D88643 /* JJManager.h */,
+				CACEC37D178C293200D88643 /* JJManager.m */,
+				CACEC380178C293200D88643 /* UserManager.h */,
+				CACEC381178C293200D88643 /* UserManager.m */,
+				CACEC388178C2A5200D88643 /* ConfigManager.h */,
+				CACEC389178C2A5300D88643 /* ConfigManager.m */,
 				CACEC377178C293200D88643 /* ActionManager.h */,
 				CACEC378178C293200D88643 /* ActionManager.m */,
 				CACEC37A178C293200D88643 /* ImageManager.h */,
 				CACEC37B178C293200D88643 /* ImageManager.m */,
-				CACEC37C178C293200D88643 /* JJManager.h */,
-				CACEC37D178C293200D88643 /* JJManager.m */,
 				CACEC37E178C293200D88643 /* RelationManager.h */,
 				CACEC37F178C293200D88643 /* RelationManager.m */,
-				CACEC380178C293200D88643 /* UserManager.h */,
-				CACEC381178C293200D88643 /* UserManager.m */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -840,6 +845,7 @@
 				CACEC385178C293200D88643 /* JJManager.m in Sources */,
 				CACEC386178C293200D88643 /* RelationManager.m in Sources */,
 				CACEC387178C293200D88643 /* UserManager.m in Sources */,
+				CACEC38A178C2A5300D88643 /* ConfigManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

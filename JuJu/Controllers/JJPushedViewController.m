@@ -63,8 +63,9 @@
 	view.backgroundColor = [UIColor redColor];
 	[self.view addSubview:view];
     
-    [self testRequest];
+//    [self testRequest];
 //    [self testPB];
+    [[UserManager user] build];
 }
 
 @end

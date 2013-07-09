@@ -1,3 +1,4 @@
+#import "JJModel.h"
 
 
 @implementation JJModel
