@@ -1,0 +1,7 @@
+
+@interface JJManager : NSObject
+{
+
+}
+
+@end

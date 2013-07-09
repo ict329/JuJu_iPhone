@@ -56,6 +56,7 @@ static NSMutableArray *requestList = nil;
         if (data) {
             @try {
                 response = [PBResponse parseFromData:data];
+                [JJService cacheData:data forKey:cachedKey];
             }
             @catch (NSException *exception) {
                 response = [JJService emptyResponseWithCode:PBResultCodeParsePbError];

@@ -1,0 +1,7 @@
+
+@interface JJModel : NSObject
+{
+
+}
+
+@end
