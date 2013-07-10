@@ -23,6 +23,6 @@
     #import "MobClick.h"
     #import "User.pb.h"
     #import "UserManager.h"
-
+    #import "GlobalManager.h"
 
 #endif

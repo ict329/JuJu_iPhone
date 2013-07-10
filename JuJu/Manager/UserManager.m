@@ -9,6 +9,20 @@
 
 @implementation UserManager 
 
++ (NSString *)uid
+{
+    return [[self briefUser] uid];
+}
++ (NSString *)uname
+{
+    return [[self briefUser] uname];
+}
++ (NSString *)nick
+{
+    return [[self briefUser] nick];
+}
+
+
 + (PBUserBasic_Builder *)briefUser
 {
     static dispatch_once_t onceToken;

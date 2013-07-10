@@ -68,6 +68,13 @@
 		CA27108B17898BC70053A29C /* WireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = CA27107517898BC60053A29C /* WireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CA2710921789D5AE0053A29C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710901789D5AE0053A29C /* libMobClickLibrary.a */; };
 		CA2710941789D5F60053A29C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA2710931789D5F60053A29C /* libz.dylib */; };
+		CA84A4F3178D6F2600AE48EC /* Buri.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4DA178D6F2600AE48EC /* Buri.mm */; };
+		CA84A4F4178D6F2600AE48EC /* BuriBucket.m in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4DC178D6F2600AE48EC /* BuriBucket.m */; };
+		CA84A4F5178D6F2600AE48EC /* BuriIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4DE178D6F2600AE48EC /* BuriIndex.m */; };
+		CA84A4F6178D6F2600AE48EC /* BuriSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4E0178D6F2600AE48EC /* BuriSerialization.m */; };
+		CA84A4F7178D6F2600AE48EC /* libleveldb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA84A4E9178D6F2600AE48EC /* libleveldb.a */; };
+		CA84A4F8178D6F2600AE48EC /* THLevelDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4F2178D6F2600AE48EC /* THLevelDB.mm */; };
+		CA84A4FB178D719D00AE48EC /* GlobalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4FA178D719D00AE48EC /* GlobalManager.m */; };
 		CAA75C541789D8750041C019 /* AppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CAA75C531789D8750041C019 /* AppManager.m */; };
 		CACEC2AF178B0CCF00D88643 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A7178B0CCF00D88643 /* DateUtil.m */; };
 		CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A9178B0CCF00D88643 /* PointUtil.m */; };
@@ -198,6 +205,32 @@
 		CA2710901789D5AE0053A29C /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		CA2710911789D5AE0053A29C /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		CA2710931789D5F60053A29C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		CA84A4D9178D6F2600AE48EC /* Buri.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buri.h; sourceTree = "<group>"; };
+		CA84A4DA178D6F2600AE48EC /* Buri.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Buri.mm; sourceTree = "<group>"; };
+		CA84A4DB178D6F2600AE48EC /* BuriBucket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuriBucket.h; sourceTree = "<group>"; };
+		CA84A4DC178D6F2600AE48EC /* BuriBucket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuriBucket.m; sourceTree = "<group>"; };
+		CA84A4DD178D6F2600AE48EC /* BuriIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuriIndex.h; sourceTree = "<group>"; };
+		CA84A4DE178D6F2600AE48EC /* BuriIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuriIndex.m; sourceTree = "<group>"; };
+		CA84A4DF178D6F2600AE48EC /* BuriSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuriSerialization.h; sourceTree = "<group>"; };
+		CA84A4E0178D6F2600AE48EC /* BuriSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuriSerialization.m; sourceTree = "<group>"; };
+		CA84A4E2178D6F2600AE48EC /* c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = c.h; sourceTree = "<group>"; };
+		CA84A4E3178D6F2600AE48EC /* cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cache.h; sourceTree = "<group>"; };
+		CA84A4E4178D6F2600AE48EC /* comparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = comparator.h; sourceTree = "<group>"; };
+		CA84A4E5178D6F2600AE48EC /* db.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = db.h; sourceTree = "<group>"; };
+		CA84A4E6178D6F2600AE48EC /* env.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = env.h; sourceTree = "<group>"; };
+		CA84A4E7178D6F2600AE48EC /* filter_policy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filter_policy.h; sourceTree = "<group>"; };
+		CA84A4E8178D6F2600AE48EC /* iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iterator.h; sourceTree = "<group>"; };
+		CA84A4E9178D6F2600AE48EC /* libleveldb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libleveldb.a; sourceTree = "<group>"; };
+		CA84A4EA178D6F2600AE48EC /* options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = options.h; sourceTree = "<group>"; };
+		CA84A4EB178D6F2600AE48EC /* slice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slice.h; sourceTree = "<group>"; };
+		CA84A4EC178D6F2600AE48EC /* status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = status.h; sourceTree = "<group>"; };
+		CA84A4ED178D6F2600AE48EC /* table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = table.h; sourceTree = "<group>"; };
+		CA84A4EE178D6F2600AE48EC /* table_builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = table_builder.h; sourceTree = "<group>"; };
+		CA84A4EF178D6F2600AE48EC /* write_batch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = write_batch.h; sourceTree = "<group>"; };
+		CA84A4F1178D6F2600AE48EC /* THLevelDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THLevelDB.h; sourceTree = "<group>"; };
+		CA84A4F2178D6F2600AE48EC /* THLevelDB.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = THLevelDB.mm; sourceTree = "<group>"; };
+		CA84A4F9178D719D00AE48EC /* GlobalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalManager.h; sourceTree = "<group>"; };
+		CA84A4FA178D719D00AE48EC /* GlobalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalManager.m; sourceTree = "<group>"; };
 		CAA75C521789D8750041C019 /* AppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManager.h; sourceTree = "<group>"; };
 		CAA75C531789D8750041C019 /* AppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManager.m; sourceTree = "<group>"; };
 		CACEC2A6178B0CCF00D88643 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
@@ -244,6 +277,7 @@
 				CA270CC5178974120053A29C /* UIKit.framework in Frameworks */,
 				CA270CC7178974120053A29C /* Foundation.framework in Frameworks */,
 				CA2710921789D5AE0053A29C /* libMobClickLibrary.a in Frameworks */,
+				CA84A4F7178D6F2600AE48EC /* libleveldb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,6 +544,7 @@
 		CA270D461789797A0053A29C /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				CA84A4D7178D6F2600AE48EC /* LevelDB */,
 				CA270E99178983030053A29C /* ProtoBuf */,
 			);
 			path = Data;
@@ -690,9 +725,66 @@
 			path = UmengSDK;
 			sourceTree = "<group>";
 		};
+		CA84A4D7178D6F2600AE48EC /* LevelDB */ = {
+			isa = PBXGroup;
+			children = (
+				CA84A4D8178D6F2600AE48EC /* Buri */,
+				CA84A4E1178D6F2600AE48EC /* leveldb */,
+				CA84A4F0178D6F2600AE48EC /* THLevelDB */,
+			);
+			path = LevelDB;
+			sourceTree = "<group>";
+		};
+		CA84A4D8178D6F2600AE48EC /* Buri */ = {
+			isa = PBXGroup;
+			children = (
+				CA84A4D9178D6F2600AE48EC /* Buri.h */,
+				CA84A4DA178D6F2600AE48EC /* Buri.mm */,
+				CA84A4DB178D6F2600AE48EC /* BuriBucket.h */,
+				CA84A4DC178D6F2600AE48EC /* BuriBucket.m */,
+				CA84A4DD178D6F2600AE48EC /* BuriIndex.h */,
+				CA84A4DE178D6F2600AE48EC /* BuriIndex.m */,
+				CA84A4DF178D6F2600AE48EC /* BuriSerialization.h */,
+				CA84A4E0178D6F2600AE48EC /* BuriSerialization.m */,
+			);
+			path = Buri;
+			sourceTree = "<group>";
+		};
+		CA84A4E1178D6F2600AE48EC /* leveldb */ = {
+			isa = PBXGroup;
+			children = (
+				CA84A4E2178D6F2600AE48EC /* c.h */,
+				CA84A4E3178D6F2600AE48EC /* cache.h */,
+				CA84A4E4178D6F2600AE48EC /* comparator.h */,
+				CA84A4E5178D6F2600AE48EC /* db.h */,
+				CA84A4E6178D6F2600AE48EC /* env.h */,
+				CA84A4E7178D6F2600AE48EC /* filter_policy.h */,
+				CA84A4E8178D6F2600AE48EC /* iterator.h */,
+				CA84A4E9178D6F2600AE48EC /* libleveldb.a */,
+				CA84A4EA178D6F2600AE48EC /* options.h */,
+				CA84A4EB178D6F2600AE48EC /* slice.h */,
+				CA84A4EC178D6F2600AE48EC /* status.h */,
+				CA84A4ED178D6F2600AE48EC /* table.h */,
+				CA84A4EE178D6F2600AE48EC /* table_builder.h */,
+				CA84A4EF178D6F2600AE48EC /* write_batch.h */,
+			);
+			path = leveldb;
+			sourceTree = "<group>";
+		};
+		CA84A4F0178D6F2600AE48EC /* THLevelDB */ = {
+			isa = PBXGroup;
+			children = (
+				CA84A4F1178D6F2600AE48EC /* THLevelDB.h */,
+				CA84A4F2178D6F2600AE48EC /* THLevelDB.mm */,
+			);
+			path = THLevelDB;
+			sourceTree = "<group>";
+		};
 		CACEC376178C293200D88643 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				CA84A4F9178D719D00AE48EC /* GlobalManager.h */,
+				CA84A4FA178D719D00AE48EC /* GlobalManager.m */,
 				CACEC37C178C293200D88643 /* JJManager.h */,
 				CACEC37D178C293200D88643 /* JJManager.m */,
 				CACEC380178C293200D88643 /* UserManager.h */,
@@ -840,6 +932,12 @@
 				CACEC386178C293200D88643 /* RelationManager.m in Sources */,
 				CACEC387178C293200D88643 /* UserManager.m in Sources */,
 				CACEC38A178C2A5300D88643 /* ConfigManager.m in Sources */,
+				CA84A4F3178D6F2600AE48EC /* Buri.mm in Sources */,
+				CA84A4F4178D6F2600AE48EC /* BuriBucket.m in Sources */,
+				CA84A4F5178D6F2600AE48EC /* BuriIndex.m in Sources */,
+				CA84A4F6178D6F2600AE48EC /* BuriSerialization.m in Sources */,
+				CA84A4F8178D6F2600AE48EC /* THLevelDB.mm in Sources */,
+				CA84A4FB178D719D00AE48EC /* GlobalManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -927,6 +1025,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../Common_iPhone/Core/Data/ProtoBuf/build/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../Common_iPhone/Core/SDK/UmengSDK\"",
+					"\"$(SRCROOT)/../Common_iPhone/Core/Data/LevelDB/leveldb\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -944,6 +1043,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../Common_iPhone/Core/Data/ProtoBuf/build/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../Common_iPhone/Core/SDK/UmengSDK\"",
+					"\"$(SRCROOT)/../Common_iPhone/Core/Data/LevelDB/leveldb\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

@@ -14,7 +14,8 @@
 #import "GHRevealViewController.h"
 #import "GHSidebarSearchViewController.h"
 #import "GHSidebarSearchViewControllerDelegate.h"
-
+#import "BuriBucket.h"
+#import  "THLevelDB.h"
 
 @implementation AppManager
 
@@ -84,28 +85,7 @@
 			[((UINavigationController *)obj2).navigationBar addGestureRecognizer:panGesture];
 		}];
 	}];
-	/*
-	delegate.searchController = [[GHSidebarSearchViewController alloc] initWithSidebarViewController:delegate.revealController];
-	delegate.searchController.view.backgroundColor = [UIColor clearColor];
-    delegate.searchController.searchDelegate = self;
-	delegate.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-	delegate.searchController.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-	delegate.searchController.searchBar.backgroundImage = [UIImage imageNamed:@"searchBarBG.png"];
-	delegate.searchController.searchBar.placeholder = NSLocalizedString(@"Search", @"");
-	delegate.searchController.searchBar.tintColor = [UIColor colorWithRed:(58.0f/255.0f) green:(67.0f/255.0f) blue:(104.0f/255.0f) alpha:1.0f];
-	for (UIView *subview in delegate.searchController.searchBar.subviews) {
-		if ([subview isKindOfClass:[UITextField class]]) {
-			UITextField *searchTextField = (UITextField *) subview;
-			searchTextField.textColor = [UIColor colorWithRed:(154.0f/255.0f) green:(162.0f/255.0f) blue:(176.0f/255.0f) alpha:1.0f];
-		}
-	}
-	[delegate.searchController.searchBar setSearchFieldBackgroundImage:[[UIImage imageNamed:@"searchTextBG.png"]
-                                                                    resizableImageWithCapInsets:UIEdgeInsetsMake(16.0f, 17.0f, 16.0f, 17.0f)]
-														  forState:UIControlStateNormal];
-	[delegate.searchController.searchBar setImage:[UIImage imageNamed:@"searchBarIcon.png"] 
-							 forSearchBarIcon:UISearchBarIconSearch 
-										state:UIControlStateNormal];
-	*/
+
 	delegate.menuController = [[JJMenuViewController alloc] initWithSidebarViewController:delegate.revealController 
 																		withSearchBar:nil
 																		  withHeaders:headers 
@@ -118,33 +98,11 @@
 }
 - (void)prepareDataWithAppDelegate:(JJAppDelegate *)delegate
 {
-    [MobClick startWithAppkey:@"51d99add56240b73a1057fcb" reportPolicy:SEND_INTERVAL channelId:@""];
+    [MobClick startWithAppkey:@"51d99add56240b73a1057fcb" reportPolicy:SEND_INTERVAL channelId:@""];    
 }
 
 - (void)saveDataBeforeExitWithAppDelegate:(JJAppDelegate *)delegate
 {
-    
-}
-/*
-#pragma mark GHSidebarSearchViewControllerDelegate
-- (void)searchResultsForText:(NSString *)text withScope:(NSString *)scope callback:(SearchResultsBlock)callback {
-	callback(@[@"Foo", @"Bar", @"Baz"]);
-}
 
-- (void)searchResult:(id)result selectedAtIndexPath:(NSIndexPath *)indexPath {
-	NSLog(@"Selected Search Result - result: %@ indexPath: %@", result, indexPath);
 }
-
-- (UITableViewCell *)searchResultCellForEntry:(id)entry atIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)tableView {
-	static NSString* identifier = @"GHSearchMenuCell";
-	JJMenuCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-	if (!cell) {
-		cell = [[JJMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-	}
-	cell.textLabel.text = (NSString *)entry;
-	cell.imageView.image = [UIImage imageNamed:@"user"];
-	return cell;
-}
-
-*/
 @end

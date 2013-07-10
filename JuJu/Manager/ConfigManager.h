@@ -1,5 +1,7 @@
 
 #import "JJManager.h"
-@interface ConfigManager : JJManager 
+
+@interface ConfigManager : JJManager
+
 
 @end

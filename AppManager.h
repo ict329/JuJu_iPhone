@@ -11,7 +11,7 @@
 
 @class JJAppDelegate;
 
-@interface AppManager : NSObject<GHSidebarSearchViewControllerDelegate>
+@interface AppManager : NSObject//<GHSidebarSearchViewControllerDelegate>
 
 + (id)sharedManager;
 
