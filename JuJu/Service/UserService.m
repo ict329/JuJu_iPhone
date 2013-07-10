@@ -7,6 +7,8 @@
 //
 
 #import "UserService.h"
+
+
 @implementation UserService
 
 + (void)registerUser:(NSString *)userName
@@ -35,6 +37,29 @@
 + (void)logout
 {
     
+}
+
++ (void)test
+{
+    
+    PBResponse_Builder *builder = [[PBResponse_Builder alloc] init];
+    [builder setCode:PBResultCodeSuccess];
+    [builder setErrorMessage:@"haha, return it!!!"];
+    PBResponse *response = [builder build];
+    NSDictionary *paras = @{@"data":[response data]};
+    
+    [JJService postPath:@"post"
+            parameters:paras
+              category:LoadCacheAndRemoteData
+             cachedKey:@""
+              isPublic:YES
+         cachedHandler:NULL
+         remoteHandler:^(PBResponse *response, BOOL fromCached) {
+             JJDebug(@"CODE = %d, MSG = %@", response.code, response.errorMessage);
+//             PBUserBasic *basic = response.user.basicInfo;
+//             JJDebug(@"<Remote>  basic user name = %@, nick = %@ ", basic.uname, basic.nick);
+
+    }];
 }
 
 @end

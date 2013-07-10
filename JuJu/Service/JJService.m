@@ -16,16 +16,30 @@ static NSMutableArray *requestList = nil;
 
 @implementation JJService
 
-//+ (void)addRequest
 
-+ (NSData *)loadDataForKey:(NSString *)key
+#pragma mark-- load && cache data
+
++ (NSData *)loadDataForKey:(NSString *)key isPublic:(BOOL)isPublic
 {
-    return nil;
+    if ([key length] == 0) {
+        return nil;
+    }
+    THLevelDB *db = isPublic ? [GlobalManager systemTHDB] : [GlobalManager userTHDB];
+    return [db dataForKey:key];
 }
-+ (void)cacheData:(NSData *)data forKey:(NSString *)key
+
++ (void)cacheData:(NSData *)data forKey:(NSString *)key isPublic:(BOOL)isPublic
 {
-    
+    if ([key length] == 0) {
+        return;
+    }
+    THLevelDB *db = isPublic ? [GlobalManager systemTHDB] : [GlobalManager userTHDB];
+    [db setData:data forKey:key];
 }
+
+
+
+#pragma mark- construct the response
 
 + (PBResponse *)emptyResponseWithCode:(PBResultCode)code
 {
@@ -44,19 +58,22 @@ static NSMutableArray *requestList = nil;
     return response;
 }
 
+
 + (void)getPath:(NSString *)path
      parameters:(NSDictionary *)parameters
-     fromCached:(BOOL)fromCached
+       category:(LoadDataCategory)category
       cachedKey:(NSString *)cachedKey
-  resultHandler:(ResultHandler)handler
+       isPublic:(BOOL)isPublic
+  cachedHandler:(ResultHandler)cachedHandler
+  remoteHandler:(ResultHandler)remoteHandler
 {
     __block PBResponse *response = nil;
-    if (fromCached) {
-        NSData *data = [JJService loadDataForKey:cachedKey];
+    if ((category | LoadCachedData) != 0) {
+        NSData *data = [JJService loadDataForKey:cachedKey isPublic:isPublic];
         if (data) {
             @try {
                 response = [PBResponse parseFromData:data];
-                [JJService cacheData:data forKey:cachedKey];
+                [JJService cacheData:data forKey:cachedKey isPublic:isPublic];
             }
             @catch (NSException *exception) {
                 response = [JJService emptyResponseWithCode:PBResultCodeParsePbError];
@@ -64,13 +81,17 @@ static NSMutableArray *requestList = nil;
         }else{
             response = [JJService emptyResponse];
         }
-        handler(response, fromCached);
-    }else{
+        if (cachedHandler != NULL) {
+            cachedHandler(response, YES);
+        }
+    }
+    if ((category | LoadRemoteData) != 0) {
         [[JJRequestClient sharedClient] getPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             if (responseObject) {
                 @try {
+                    JJDebug(@"<getPath> response = %@", responseObject);
                     response = [PBResponse parseFromData:responseObject];
-                    [JJService cacheData:responseObject forKey:cachedKey];
+                    [JJService cacheData:responseObject forKey:cachedKey isPublic:isPublic];
                 }
                 @catch (NSException *exception) {
                     response = [JJService emptyResponseWithCode:PBResultCodeParsePbError];
@@ -78,27 +99,33 @@ static NSMutableArray *requestList = nil;
             }else{
                 response = [JJService emptyResponse];
             }
-            handler(response, fromCached);
+            if (remoteHandler != NULL) {
+                remoteHandler(response, NO);
+            }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             response = [JJService emptyResponseWithCode:error.code];
-            handler(response, fromCached);
+            if (remoteHandler != NULL) {
+                remoteHandler(response, NO);
+            }
         }];
     }
-    
 }
 
 + (void)postPath:(NSString *)path
       parameters:(NSDictionary *)parameters
-      fromCached:(BOOL)fromCached
+        category:(LoadDataCategory)category
        cachedKey:(NSString *)cachedKey
-   resultHandler:(ResultHandler)handler
+        isPublic:(BOOL)isPublic
+   cachedHandler:(ResultHandler)cachedHandler
+   remoteHandler:(ResultHandler)remoteHandler
 {
     __block PBResponse *response = nil;
-    if (fromCached) {
-        NSData *data = [JJService loadDataForKey:cachedKey];
+    if ((category | LoadCachedData) != 0) {
+        NSData *data = [JJService loadDataForKey:cachedKey isPublic:isPublic];
         if (data) {
             @try {
                 response = [PBResponse parseFromData:data];
+                [JJService cacheData:data forKey:cachedKey isPublic:isPublic];
             }
             @catch (NSException *exception) {
                 response = [JJService emptyResponseWithCode:PBResultCodeParsePbError];
@@ -106,13 +133,20 @@ static NSMutableArray *requestList = nil;
         }else{
             response = [JJService emptyResponse];
         }
-        handler(response, fromCached);
-    }else{
+        if (cachedHandler != NULL) {
+            cachedHandler(response, YES);
+        }
+    }
+    
+    if ((category | LoadRemoteData) != 0) {
+        
         [[JJRequestClient sharedClient] postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
             if (responseObject) {
                 @try {
+                    JJDebug(@"<postPath> response = %@", responseObject);
                     response = [PBResponse parseFromData:responseObject];
-                    [JJService cacheData:responseObject forKey:cachedKey];
+                    [JJService cacheData:responseObject forKey:cachedKey isPublic:isPublic];
                 }
                 @catch (NSException *exception) {
                     response = [JJService emptyResponseWithCode:PBResultCodeParsePbError];
@@ -120,12 +154,19 @@ static NSMutableArray *requestList = nil;
             }else{
                 response = [JJService emptyResponse];
             }
-            handler(response, fromCached);
+            if (remoteHandler != NULL) {
+                remoteHandler(response, NO);
+            }
+            
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             response = [JJService emptyResponseWithCode:error.code];
-            handler(response, fromCached);
+            if (remoteHandler != NULL) {
+                remoteHandler(response, NO);
+            }
         }];
     }
+
 }
+
 
 @end

@@ -7,25 +7,37 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Response.pb.h"
 
 @class PBResponse;
 
 typedef void(^ResultHandler)(PBResponse *response, BOOL fromCached);
 
+typedef enum{
+    
+    LoadRemoteData = 0x1 << 0,
+    LoadCachedData = 0x1 << 1,
+    LoadCacheAndRemoteData = LoadRemoteData | LoadCachedData,
+    
+}LoadDataCategory;
+
 @interface JJService : NSObject
 
 + (void)getPath:(NSString *)path
      parameters:(NSDictionary *)parameters
-     fromCached:(BOOL)fromCached
+       category:(LoadDataCategory)category
       cachedKey:(NSString *)cachedKey
-  resultHandler:(ResultHandler)handler;
+       isPublic:(BOOL)isPublic
+  cachedHandler:(ResultHandler)cachedHandler
+  remoteHandler:(ResultHandler)remoteHandler;
 
 + (void)postPath:(NSString *)path
      parameters:(NSDictionary *)parameters
-     fromCached:(BOOL)fromCached
+       category:(LoadDataCategory)category
       cachedKey:(NSString *)cachedKey
-  resultHandler:(ResultHandler)handler;
-
+       isPublic:(BOOL)isPublic
+  cachedHandler:(ResultHandler)cachedHandler
+  remoteHandler:(ResultHandler)remoteHandler;
 
 
 @end

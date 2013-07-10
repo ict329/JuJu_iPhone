@@ -231,6 +231,7 @@
 		CA84A4F2178D6F2600AE48EC /* THLevelDB.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = THLevelDB.mm; sourceTree = "<group>"; };
 		CA84A4F9178D719D00AE48EC /* GlobalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalManager.h; sourceTree = "<group>"; };
 		CA84A4FA178D719D00AE48EC /* GlobalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalManager.m; sourceTree = "<group>"; };
+		CA84A4FC178D7CF400AE48EC /* LogUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogUtil.h; sourceTree = "<group>"; };
 		CAA75C521789D8750041C019 /* AppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManager.h; sourceTree = "<group>"; };
 		CAA75C531789D8750041C019 /* AppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManager.m; sourceTree = "<group>"; };
 		CACEC2A6178B0CCF00D88643 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
@@ -287,7 +288,6 @@
 		CA270CB8178974120053A29C = {
 			isa = PBXGroup;
 			children = (
-				CA2710931789D5F60053A29C /* libz.dylib */,
 				CA270E9517897D980053A29C /* Frameworks */,
 				CA270D30178979790053A29C /* Common_iPhone */,
 				CA270D0D178979390053A29C /* JuJu */,
@@ -568,6 +568,7 @@
 		CA270DE81789797B0053A29C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				CA84A4FC178D7CF400AE48EC /* LogUtil.h */,
 				CACEC2A6178B0CCF00D88643 /* DateUtil.h */,
 				CACEC2A7178B0CCF00D88643 /* DateUtil.m */,
 				CACEC2A8178B0CCF00D88643 /* PointUtil.h */,
@@ -616,6 +617,7 @@
 		CA270E9517897D980053A29C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CA2710931789D5F60053A29C /* libz.dylib */,
 				CA270E9317897D800053A29C /* MobileCoreServices.framework */,
 				CA270E9117897D7A0053A29C /* SystemConfiguration.framework */,
 				CA270E8F17897D6F0053A29C /* CoreLocation.framework */,

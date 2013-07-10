@@ -28,4 +28,6 @@
 + (void)logout;
 
 
++ (void)test;
+
 @end
