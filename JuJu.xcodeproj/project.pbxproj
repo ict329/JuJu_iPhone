@@ -288,7 +288,6 @@
 		CA270CB8178974120053A29C = {
 			isa = PBXGroup;
 			children = (
-				CA270E9517897D980053A29C /* Frameworks */,
 				CA270D30178979790053A29C /* Common_iPhone */,
 				CA270D0D178979390053A29C /* JuJu */,
 				CA270D22178979390053A29C /* JuJu-Info.plist */,
@@ -299,7 +298,6 @@
 				CAA75C521789D8750041C019 /* AppManager.h */,
 				CAA75C531789D8750041C019 /* AppManager.m */,
 				CA270D08178979390053A29C /* en.lproj */,
-				CA270D06178975410053A29C /* QuartzCore.framework */,
 				CA270CC3178974120053A29C /* Frameworks */,
 				CA270CC2178974120053A29C /* Products */,
 			);
@@ -316,6 +314,13 @@
 		CA270CC3178974120053A29C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CA2710931789D5F60053A29C /* libz.dylib */,
+				CA270E9317897D800053A29C /* MobileCoreServices.framework */,
+				CA270E9117897D7A0053A29C /* SystemConfiguration.framework */,
+				CA270E8F17897D6F0053A29C /* CoreLocation.framework */,
+				CA270E8D17897D650053A29C /* Security.framework */,
+				CA270E8B17897B010053A29C /* CFNetwork.framework */,
+				CA270D06178975410053A29C /* QuartzCore.framework */,
 				CA270CC4178974120053A29C /* UIKit.framework */,
 				CA270CC6178974120053A29C /* Foundation.framework */,
 				CA270CC8178974120053A29C /* CoreGraphics.framework */,
@@ -612,19 +617,6 @@
 				CA270E8117897AEE0053A29C /* UIImageView+AFNetworking.m */,
 			);
 			path = AFNetworking;
-			sourceTree = "<group>";
-		};
-		CA270E9517897D980053A29C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				CA2710931789D5F60053A29C /* libz.dylib */,
-				CA270E9317897D800053A29C /* MobileCoreServices.framework */,
-				CA270E9117897D7A0053A29C /* SystemConfiguration.framework */,
-				CA270E8F17897D6F0053A29C /* CoreLocation.framework */,
-				CA270E8D17897D650053A29C /* Security.framework */,
-				CA270E8B17897B010053A29C /* CFNetwork.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CA270E99178983030053A29C /* ProtoBuf */ = {
