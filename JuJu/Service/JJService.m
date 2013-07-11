@@ -2,7 +2,7 @@
 //  JJService.m
 //  JuJu
 //
-//  Created by gamy on 13-7-8.
+//  Created by ict on 13-7-8.
 //  Copyright (c) 2013年 ict. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  JJRequestClient.m
 //  JuJu
 //
-//  Created by gamy on 13-7-7.
+//  Created by ict on 13-7-7.
 //  Copyright (c) 2013年 ict. All rights reserved.
 //
 
