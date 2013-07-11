@@ -98,17 +98,10 @@
     [delegate.window makeKeyAndVisible];
 }
 
-- (void)handlerTimer
-{
-    [UserService test];
-    [self performSelector:@selector(handlerTimer) withObject:nil afterDelay:10];    
-}
 
 - (void)prepareDataWithAppDelegate:(JJAppDelegate *)delegate
 {
     [MobClick startWithAppkey:@"51d99add56240b73a1057fcb" reportPolicy:SEND_INTERVAL channelId:@""];
-    [UserService test];
-    [self performSelector:@selector(handlerTimer) withObject:nil afterDelay:10];
 }
 
 - (void)saveDataBeforeExitWithAppDelegate:(JJAppDelegate *)delegate
