@@ -511,7 +511,6 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
   BOOL hasGender_:1;
   BOOL hasBirthDate_:1;
   BOOL hasPbrelation_:1;
-  BOOL hasUid_:1;
   BOOL hasUname_:1;
   BOOL hasNick_:1;
   BOOL hasAvatar_:1;
@@ -522,7 +521,6 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
   BOOL gender_:1;
   int32_t birthDate;
   int32_t pbrelation;
-  NSString* uid;
   NSString* uname;
   NSString* nick;
   NSString* avatar;
@@ -533,7 +531,6 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
   NSMutableArray* mutableTagsList;
   NSMutableArray* mutablePasswordList;
 }
-- (BOOL) hasUid;
 - (BOOL) hasUname;
 - (BOOL) hasNick;
 - (BOOL) hasRole;
@@ -544,7 +541,6 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (BOOL) hasBirthDate;
 - (BOOL) hasPbrelation;
 - (BOOL) hasNoteName;
-@property (readonly, retain) NSString* uid;
 @property (readonly, retain) NSString* uname;
 @property (readonly, retain) NSString* nick;
 @property (readonly) PBUserRole role;
@@ -593,11 +589,6 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBUserBasic_Builder*) mergeFrom:(PBUserBasic*) other;
 - (PBUserBasic_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
 - (PBUserBasic_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-
-- (BOOL) hasUid;
-- (NSString*) uid;
-- (PBUserBasic_Builder*) setUid:(NSString*) value;
-- (PBUserBasic_Builder*) clearUid;
 
 - (BOOL) hasUname;
 - (NSString*) uname;
@@ -666,12 +657,14 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 
 @interface PBUser : PBGeneratedMessage {
 @private
+  BOOL hasUid_:1;
   BOOL hasBasicInfo_:1;
   BOOL hasRegistion_:1;
   BOOL hasLogInfo_:1;
   BOOL hasDeviceInfo_:1;
   BOOL hasSnsInfo_:1;
   BOOL hasStatistic_:1;
+  NSString* uid;
   PBUserBasic* basicInfo;
   PBRegistion* registion;
   PBLog* logInfo;
@@ -679,12 +672,14 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
   PBSNS* snsInfo;
   PBStatistic* statistic;
 }
+- (BOOL) hasUid;
 - (BOOL) hasBasicInfo;
 - (BOOL) hasRegistion;
 - (BOOL) hasLogInfo;
 - (BOOL) hasDeviceInfo;
 - (BOOL) hasSnsInfo;
 - (BOOL) hasStatistic;
+@property (readonly, retain) NSString* uid;
 @property (readonly, retain) PBUserBasic* basicInfo;
 @property (readonly, retain) PBRegistion* registion;
 @property (readonly, retain) PBLog* logInfo;
@@ -725,6 +720,11 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBUser_Builder*) mergeFrom:(PBUser*) other;
 - (PBUser_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
 - (PBUser_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+
+- (BOOL) hasUid;
+- (NSString*) uid;
+- (PBUser_Builder*) setUid:(NSString*) value;
+- (PBUser_Builder*) clearUid;
 
 - (BOOL) hasBasicInfo;
 - (PBUserBasic*) basicInfo;

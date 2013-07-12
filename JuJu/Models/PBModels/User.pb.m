@@ -1815,7 +1815,6 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 @end
 
 @interface PBUserBasic ()
-@property (retain) NSString* uid;
 @property (retain) NSString* uname;
 @property (retain) NSString* nick;
 @property PBUserRole role;
@@ -1832,13 +1831,6 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 
 @implementation PBUserBasic
 
-- (BOOL) hasUid {
-  return !!hasUid_;
-}
-- (void) setHasUid:(BOOL) value {
-  hasUid_ = !!value;
-}
-@synthesize uid;
 - (BOOL) hasUname {
   return !!hasUname_;
 }
@@ -1917,7 +1909,6 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 }
 @synthesize noteName;
 - (void) dealloc {
-  self.uid = nil;
   self.uname = nil;
   self.nick = nil;
   self.avatar = nil;
@@ -1929,7 +1920,6 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 }
 - (id) init {
   if ((self = [super init])) {
-    self.uid = @"";
     self.uname = @"";
     self.nick = @"";
     self.role = PBUserRoleUser;
@@ -1970,18 +1960,12 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   return value;
 }
 - (BOOL) isInitialized {
-  if (!self.hasUid) {
-    return NO;
-  }
   if (!self.hasUname) {
     return NO;
   }
   return YES;
 }
 - (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
-  if (self.hasUid) {
-    [output writeString:1 value:self.uid];
-  }
   if (self.hasUname) {
     [output writeString:2 value:self.uname];
   }
@@ -2027,9 +2011,6 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   }
 
   size = 0;
-  if (self.hasUid) {
-    size += computeStringSize(1, self.uid);
-  }
   if (self.hasUname) {
     size += computeStringSize(2, self.uname);
   }
@@ -2151,9 +2132,6 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   if (other == [PBUserBasic defaultInstance]) {
     return self;
   }
-  if (other.hasUid) {
-    [self setUid:other.uid];
-  }
   if (other.hasUname) {
     [self setUname:other.uname];
   }
@@ -2217,10 +2195,6 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
         }
         break;
       }
-      case 10: {
-        [self setUid:[input readString]];
-        break;
-      }
       case 18: {
         [self setUname:[input readString]];
         break;
@@ -2281,22 +2255,6 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
       }
     }
   }
-}
-- (BOOL) hasUid {
-  return result.hasUid;
-}
-- (NSString*) uid {
-  return result.uid;
-}
-- (PBUserBasic_Builder*) setUid:(NSString*) value {
-  result.hasUid = YES;
-  result.uid = value;
-  return self;
-}
-- (PBUserBasic_Builder*) clearUid {
-  result.hasUid = NO;
-  result.uid = @"";
-  return self;
 }
 - (BOOL) hasUname {
   return result.hasUname;
@@ -2523,6 +2481,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
 @end
 
 @interface PBUser ()
+@property (retain) NSString* uid;
 @property (retain) PBUserBasic* basicInfo;
 @property (retain) PBRegistion* registion;
 @property (retain) PBLog* logInfo;
@@ -2533,6 +2492,13 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
 
 @implementation PBUser
 
+- (BOOL) hasUid {
+  return !!hasUid_;
+}
+- (void) setHasUid:(BOOL) value {
+  hasUid_ = !!value;
+}
+@synthesize uid;
 - (BOOL) hasBasicInfo {
   return !!hasBasicInfo_;
 }
@@ -2576,6 +2542,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
 }
 @synthesize statistic;
 - (void) dealloc {
+  self.uid = nil;
   self.basicInfo = nil;
   self.registion = nil;
   self.logInfo = nil;
@@ -2586,6 +2553,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
 }
 - (id) init {
   if ((self = [super init])) {
+    self.uid = @"";
     self.basicInfo = [PBUserBasic defaultInstance];
     self.registion = [PBRegistion defaultInstance];
     self.logInfo = [PBLog defaultInstance];
@@ -2608,6 +2576,9 @@ static PBUser* defaultPBUserInstance = nil;
   return defaultPBUserInstance;
 }
 - (BOOL) isInitialized {
+  if (!self.hasUid) {
+    return NO;
+  }
   if (!self.hasBasicInfo) {
     return NO;
   }
@@ -2627,23 +2598,26 @@ static PBUser* defaultPBUserInstance = nil;
   return YES;
 }
 - (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasUid) {
+    [output writeString:1 value:self.uid];
+  }
   if (self.hasBasicInfo) {
-    [output writeMessage:1 value:self.basicInfo];
+    [output writeMessage:2 value:self.basicInfo];
   }
   if (self.hasRegistion) {
-    [output writeMessage:2 value:self.registion];
+    [output writeMessage:3 value:self.registion];
   }
   if (self.hasLogInfo) {
-    [output writeMessage:3 value:self.logInfo];
+    [output writeMessage:4 value:self.logInfo];
   }
   if (self.hasDeviceInfo) {
-    [output writeMessage:4 value:self.deviceInfo];
+    [output writeMessage:5 value:self.deviceInfo];
   }
   if (self.hasSnsInfo) {
-    [output writeMessage:5 value:self.snsInfo];
+    [output writeMessage:6 value:self.snsInfo];
   }
   if (self.hasStatistic) {
-    [output writeMessage:6 value:self.statistic];
+    [output writeMessage:7 value:self.statistic];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -2654,23 +2628,26 @@ static PBUser* defaultPBUserInstance = nil;
   }
 
   size = 0;
+  if (self.hasUid) {
+    size += computeStringSize(1, self.uid);
+  }
   if (self.hasBasicInfo) {
-    size += computeMessageSize(1, self.basicInfo);
+    size += computeMessageSize(2, self.basicInfo);
   }
   if (self.hasRegistion) {
-    size += computeMessageSize(2, self.registion);
+    size += computeMessageSize(3, self.registion);
   }
   if (self.hasLogInfo) {
-    size += computeMessageSize(3, self.logInfo);
+    size += computeMessageSize(4, self.logInfo);
   }
   if (self.hasDeviceInfo) {
-    size += computeMessageSize(4, self.deviceInfo);
+    size += computeMessageSize(5, self.deviceInfo);
   }
   if (self.hasSnsInfo) {
-    size += computeMessageSize(5, self.snsInfo);
+    size += computeMessageSize(6, self.snsInfo);
   }
   if (self.hasStatistic) {
-    size += computeMessageSize(6, self.statistic);
+    size += computeMessageSize(7, self.statistic);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -2747,6 +2724,9 @@ static PBUser* defaultPBUserInstance = nil;
   if (other == [PBUser defaultInstance]) {
     return self;
   }
+  if (other.hasUid) {
+    [self setUid:other.uid];
+  }
   if (other.hasBasicInfo) {
     [self mergeBasicInfo:other.basicInfo];
   }
@@ -2787,6 +2767,10 @@ static PBUser* defaultPBUserInstance = nil;
         break;
       }
       case 10: {
+        [self setUid:[input readString]];
+        break;
+      }
+      case 18: {
         PBUserBasic_Builder* subBuilder = [PBUserBasic builder];
         if (self.hasBasicInfo) {
           [subBuilder mergeFrom:self.basicInfo];
@@ -2795,7 +2779,7 @@ static PBUser* defaultPBUserInstance = nil;
         [self setBasicInfo:[subBuilder buildPartial]];
         break;
       }
-      case 18: {
+      case 26: {
         PBRegistion_Builder* subBuilder = [PBRegistion builder];
         if (self.hasRegistion) {
           [subBuilder mergeFrom:self.registion];
@@ -2804,7 +2788,7 @@ static PBUser* defaultPBUserInstance = nil;
         [self setRegistion:[subBuilder buildPartial]];
         break;
       }
-      case 26: {
+      case 34: {
         PBLog_Builder* subBuilder = [PBLog builder];
         if (self.hasLogInfo) {
           [subBuilder mergeFrom:self.logInfo];
@@ -2813,7 +2797,7 @@ static PBUser* defaultPBUserInstance = nil;
         [self setLogInfo:[subBuilder buildPartial]];
         break;
       }
-      case 34: {
+      case 42: {
         PBDevice_Builder* subBuilder = [PBDevice builder];
         if (self.hasDeviceInfo) {
           [subBuilder mergeFrom:self.deviceInfo];
@@ -2822,7 +2806,7 @@ static PBUser* defaultPBUserInstance = nil;
         [self setDeviceInfo:[subBuilder buildPartial]];
         break;
       }
-      case 42: {
+      case 50: {
         PBSNS_Builder* subBuilder = [PBSNS builder];
         if (self.hasSnsInfo) {
           [subBuilder mergeFrom:self.snsInfo];
@@ -2831,7 +2815,7 @@ static PBUser* defaultPBUserInstance = nil;
         [self setSnsInfo:[subBuilder buildPartial]];
         break;
       }
-      case 50: {
+      case 58: {
         PBStatistic_Builder* subBuilder = [PBStatistic builder];
         if (self.hasStatistic) {
           [subBuilder mergeFrom:self.statistic];
@@ -2842,6 +2826,22 @@ static PBUser* defaultPBUserInstance = nil;
       }
     }
   }
+}
+- (BOOL) hasUid {
+  return result.hasUid;
+}
+- (NSString*) uid {
+  return result.uid;
+}
+- (PBUser_Builder*) setUid:(NSString*) value {
+  result.hasUid = YES;
+  result.uid = value;
+  return self;
+}
+- (PBUser_Builder*) clearUid {
+  result.hasUid = NO;
+  result.uid = @"";
+  return self;
 }
 - (BOOL) hasBasicInfo {
   return result.hasBasicInfo;

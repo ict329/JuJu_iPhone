@@ -11,7 +11,7 @@
 
 + (NSString *)uid
 {
-    return [[self briefUser] uid];
+    return [self uid];
 }
 + (NSString *)uname
 {
@@ -29,7 +29,6 @@
     static PBUserBasic_Builder *basicBuilder;
     dispatch_once(&onceToken, ^{
         basicBuilder = [[PBUserBasic_Builder alloc] init];
-        [basicBuilder setUid:@"123"];
         [basicBuilder setUname:@"LALA"];
         [basicBuilder setNick:@"ICT"];
         [basicBuilder setGender:YES];
@@ -44,6 +43,7 @@
     static PBUser_Builder *builder;
     dispatch_once(&onceToken, ^{
         builder = [[PBUser_Builder alloc] init];
+        [builder setUid:@"123"];
         [builder setBasicInfoBuilder:[self briefUser]];
     });
     return builder;
