@@ -46,7 +46,7 @@ BOOL PBRegTypeIsValidValue(PBRegType value);
 
 typedef enum {
   PBUserRoleUser = 1,
-  PBUserRoleAmdin = 2,
+  PBUserRoleAdmin = 2,
   PBUserRoleVip = 3,
   PBUserRoleForbidden = 4,
 } PBUserRole;

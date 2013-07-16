@@ -28,6 +28,8 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
     case PBResultCodeSuccess:
     case PBResultCodeSystemError:
     case PBResultCodeParsePbError:
+    case PBResultCodeParameterError:
+    case PBResultCodeAuthError:
       return YES;
     default:
       return NO;

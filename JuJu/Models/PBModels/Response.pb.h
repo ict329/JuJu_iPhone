@@ -55,6 +55,8 @@ typedef enum {
   PBResultCodeSuccess = 0,
   PBResultCodeSystemError = 1,
   PBResultCodeParsePbError = 2,
+  PBResultCodeParameterError = 3,
+  PBResultCodeAuthError = 4,
 } PBResultCode;
 
 BOOL PBResultCodeIsValidValue(PBResultCode value);

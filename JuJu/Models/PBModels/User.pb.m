@@ -49,7 +49,7 @@ BOOL PBRegTypeIsValidValue(PBRegType value) {
 BOOL PBUserRoleIsValidValue(PBUserRole value) {
   switch (value) {
     case PBUserRoleUser:
-    case PBUserRoleAmdin:
+    case PBUserRoleAdmin:
     case PBUserRoleVip:
     case PBUserRoleForbidden:
       return YES;
