@@ -1825,7 +1825,7 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 @property int32_t birthDate;
 @property (retain) NSMutableArray* mutableTagsList;
 @property (retain) NSMutableArray* mutablePasswordList;
-@property int32_t pbrelation;
+@property PBRelation relation;
 @property (retain) NSString* noteName;
 @end
 
@@ -1894,13 +1894,13 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 @synthesize birthDate;
 @synthesize mutableTagsList;
 @synthesize mutablePasswordList;
-- (BOOL) hasPbrelation {
-  return !!hasPbrelation_;
+- (BOOL) hasRelation {
+  return !!hasRelation_;
 }
-- (void) setHasPbrelation:(BOOL) value {
-  hasPbrelation_ = !!value;
+- (void) setHasRelation:(BOOL) value {
+  hasRelation_ = !!value;
 }
-@synthesize pbrelation;
+@synthesize relation;
 - (BOOL) hasNoteName {
   return !!hasNoteName_;
 }
@@ -1928,7 +1928,7 @@ static PBStatistic* defaultPBStatisticInstance = nil;
     self.status = PBUserStatusOffline;
     self.introduction = @"";
     self.birthDate = 0;
-    self.pbrelation = 0;
+    self.relation = PBRelationFollow;
     self.noteName = @"";
   }
   return self;
@@ -1996,8 +1996,8 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   for (NSString* element in self.mutablePasswordList) {
     [output writeString:11 value:element];
   }
-  if (self.hasPbrelation) {
-    [output writeInt32:20 value:self.pbrelation];
+  if (self.hasRelation) {
+    [output writeEnum:20 value:self.relation];
   }
   if (self.hasNoteName) {
     [output writeString:21 value:self.noteName];
@@ -2051,8 +2051,8 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
     size += dataSize;
     size += 1 * self.mutablePasswordList.count;
   }
-  if (self.hasPbrelation) {
-    size += computeInt32Size(20, self.pbrelation);
+  if (self.hasRelation) {
+    size += computeEnumSize(20, self.relation);
   }
   if (self.hasNoteName) {
     size += computeStringSize(21, self.noteName);
@@ -2168,8 +2168,8 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
     }
     [result.mutablePasswordList addObjectsFromArray:other.mutablePasswordList];
   }
-  if (other.hasPbrelation) {
-    [self setPbrelation:other.pbrelation];
+  if (other.hasRelation) {
+    [self setRelation:other.relation];
   }
   if (other.hasNoteName) {
     [self setNoteName:other.noteName];
@@ -2246,7 +2246,12 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
         break;
       }
       case 160: {
-        [self setPbrelation:[input readInt32]];
+        int32_t value = [input readEnum];
+        if (PBRelationIsValidValue(value)) {
+          [self setRelation:value];
+        } else {
+          [unknownFields mergeVarintField:20 value:value];
+        }
         break;
       }
       case 170: {
@@ -2446,20 +2451,20 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   result.mutablePasswordList = nil;
   return self;
 }
-- (BOOL) hasPbrelation {
-  return result.hasPbrelation;
+- (BOOL) hasRelation {
+  return result.hasRelation;
 }
-- (int32_t) pbrelation {
-  return result.pbrelation;
+- (PBRelation) relation {
+  return result.relation;
 }
-- (PBUserBasic_Builder*) setPbrelation:(int32_t) value {
-  result.hasPbrelation = YES;
-  result.pbrelation = value;
+- (PBUserBasic_Builder*) setRelation:(PBRelation) value {
+  result.hasRelation = YES;
+  result.relation = value;
   return self;
 }
-- (PBUserBasic_Builder*) clearPbrelation {
-  result.hasPbrelation = NO;
-  result.pbrelation = 0;
+- (PBUserBasic_Builder*) clearRelation {
+  result.hasRelation = NO;
+  result.relation = PBRelationFollow;
   return self;
 }
 - (BOOL) hasNoteName {
