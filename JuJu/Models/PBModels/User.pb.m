@@ -22,6 +22,7 @@ static PBExtensionRegistry* extensionRegistry = nil;
 
 BOOL PBRelationIsValidValue(PBRelation value) {
   switch (value) {
+    case PBRelationStrange:
     case PBRelationFollow:
     case PBRelationFan:
     case PBRelationFriend:
@@ -520,7 +521,7 @@ static PBSNS* defaultPBSNSInstance = nil;
 
 @interface PBLog ()
 @property int32_t lastLogDate;
-@property int32_t lastLogIp;
+@property (retain) NSString* lastLogIp;
 @property Float32 lastLogLatitude;
 @property Float32 lastLogLongitude;
 @end
@@ -556,12 +557,13 @@ static PBSNS* defaultPBSNSInstance = nil;
 }
 @synthesize lastLogLongitude;
 - (void) dealloc {
+  self.lastLogIp = nil;
   [super dealloc];
 }
 - (id) init {
   if ((self = [super init])) {
     self.lastLogDate = 0;
-    self.lastLogIp = 0;
+    self.lastLogIp = @"";
     self.lastLogLatitude = 0;
     self.lastLogLongitude = 0;
   }
@@ -587,7 +589,7 @@ static PBLog* defaultPBLogInstance = nil;
     [output writeInt32:1 value:self.lastLogDate];
   }
   if (self.hasLastLogIp) {
-    [output writeInt32:2 value:self.lastLogIp];
+    [output writeString:2 value:self.lastLogIp];
   }
   if (self.hasLastLogLatitude) {
     [output writeFloat:3 value:self.lastLogLatitude];
@@ -608,7 +610,7 @@ static PBLog* defaultPBLogInstance = nil;
     size += computeInt32Size(1, self.lastLogDate);
   }
   if (self.hasLastLogIp) {
-    size += computeInt32Size(2, self.lastLogIp);
+    size += computeStringSize(2, self.lastLogIp);
   }
   if (self.hasLastLogLatitude) {
     size += computeFloatSize(3, self.lastLogLatitude);
@@ -728,8 +730,8 @@ static PBLog* defaultPBLogInstance = nil;
         [self setLastLogDate:[input readInt32]];
         break;
       }
-      case 16: {
-        [self setLastLogIp:[input readInt32]];
+      case 18: {
+        [self setLastLogIp:[input readString]];
         break;
       }
       case 29: {
@@ -762,17 +764,17 @@ static PBLog* defaultPBLogInstance = nil;
 - (BOOL) hasLastLogIp {
   return result.hasLastLogIp;
 }
-- (int32_t) lastLogIp {
+- (NSString*) lastLogIp {
   return result.lastLogIp;
 }
-- (PBLog_Builder*) setLastLogIp:(int32_t) value {
+- (PBLog_Builder*) setLastLogIp:(NSString*) value {
   result.hasLastLogIp = YES;
   result.lastLogIp = value;
   return self;
 }
 - (PBLog_Builder*) clearLastLogIp {
   result.hasLastLogIp = NO;
-  result.lastLogIp = 0;
+  result.lastLogIp = @"";
   return self;
 }
 - (BOOL) hasLastLogLatitude {
@@ -809,13 +811,13 @@ static PBLog* defaultPBLogInstance = nil;
 }
 @end
 
-@interface PBRegistion ()
+@interface PBRegistration ()
 @property int32_t regDate;
 @property PBRegType regType;
-@property int32_t regIp;
+@property (retain) NSString* regIp;
 @end
 
-@implementation PBRegistion
+@implementation PBRegistration
 
 - (BOOL) hasRegDate {
   return !!hasRegDate_;
@@ -839,27 +841,28 @@ static PBLog* defaultPBLogInstance = nil;
 }
 @synthesize regIp;
 - (void) dealloc {
+  self.regIp = nil;
   [super dealloc];
 }
 - (id) init {
   if ((self = [super init])) {
     self.regDate = 0;
     self.regType = PBRegTypeNick;
-    self.regIp = 0;
+    self.regIp = @"";
   }
   return self;
 }
-static PBRegistion* defaultPBRegistionInstance = nil;
+static PBRegistration* defaultPBRegistrationInstance = nil;
 + (void) initialize {
-  if (self == [PBRegistion class]) {
-    defaultPBRegistionInstance = [[PBRegistion alloc] init];
+  if (self == [PBRegistration class]) {
+    defaultPBRegistrationInstance = [[PBRegistration alloc] init];
   }
 }
-+ (PBRegistion*) defaultInstance {
-  return defaultPBRegistionInstance;
++ (PBRegistration*) defaultInstance {
+  return defaultPBRegistrationInstance;
 }
-- (PBRegistion*) defaultInstance {
-  return defaultPBRegistionInstance;
+- (PBRegistration*) defaultInstance {
+  return defaultPBRegistrationInstance;
 }
 - (BOOL) isInitialized {
   if (!self.hasRegDate) {
@@ -875,7 +878,7 @@ static PBRegistion* defaultPBRegistionInstance = nil;
     [output writeEnum:2 value:self.regType];
   }
   if (self.hasRegIp) {
-    [output writeInt32:3 value:self.regIp];
+    [output writeString:3 value:self.regIp];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -893,46 +896,46 @@ static PBRegistion* defaultPBRegistionInstance = nil;
     size += computeEnumSize(2, self.regType);
   }
   if (self.hasRegIp) {
-    size += computeInt32Size(3, self.regIp);
+    size += computeStringSize(3, self.regIp);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
   return size;
 }
-+ (PBRegistion*) parseFromData:(NSData*) data {
-  return (PBRegistion*)[[[PBRegistion builder] mergeFromData:data] build];
++ (PBRegistration*) parseFromData:(NSData*) data {
+  return (PBRegistration*)[[[PBRegistration builder] mergeFromData:data] build];
 }
-+ (PBRegistion*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBRegistion*)[[[PBRegistion builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
++ (PBRegistration*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBRegistration*)[[[PBRegistration builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
 }
-+ (PBRegistion*) parseFromInputStream:(NSInputStream*) input {
-  return (PBRegistion*)[[[PBRegistion builder] mergeFromInputStream:input] build];
++ (PBRegistration*) parseFromInputStream:(NSInputStream*) input {
+  return (PBRegistration*)[[[PBRegistration builder] mergeFromInputStream:input] build];
 }
-+ (PBRegistion*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBRegistion*)[[[PBRegistion builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
++ (PBRegistration*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBRegistration*)[[[PBRegistration builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
 }
-+ (PBRegistion*) parseFromCodedInputStream:(PBCodedInputStream*) input {
-  return (PBRegistion*)[[[PBRegistion builder] mergeFromCodedInputStream:input] build];
++ (PBRegistration*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (PBRegistration*)[[[PBRegistration builder] mergeFromCodedInputStream:input] build];
 }
-+ (PBRegistion*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBRegistion*)[[[PBRegistion builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
++ (PBRegistration*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBRegistration*)[[[PBRegistration builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
 }
-+ (PBRegistion_Builder*) builder {
-  return [[[PBRegistion_Builder alloc] init] autorelease];
++ (PBRegistration_Builder*) builder {
+  return [[[PBRegistration_Builder alloc] init] autorelease];
 }
-+ (PBRegistion_Builder*) builderWithPrototype:(PBRegistion*) prototype {
-  return [[PBRegistion builder] mergeFrom:prototype];
++ (PBRegistration_Builder*) builderWithPrototype:(PBRegistration*) prototype {
+  return [[PBRegistration builder] mergeFrom:prototype];
 }
-- (PBRegistion_Builder*) builder {
-  return [PBRegistion builder];
+- (PBRegistration_Builder*) builder {
+  return [PBRegistration builder];
 }
 @end
 
-@interface PBRegistion_Builder()
-@property (retain) PBRegistion* result;
+@interface PBRegistration_Builder()
+@property (retain) PBRegistration* result;
 @end
 
-@implementation PBRegistion_Builder
+@implementation PBRegistration_Builder
 @synthesize result;
 - (void) dealloc {
   self.result = nil;
@@ -940,34 +943,34 @@ static PBRegistion* defaultPBRegistionInstance = nil;
 }
 - (id) init {
   if ((self = [super init])) {
-    self.result = [[[PBRegistion alloc] init] autorelease];
+    self.result = [[[PBRegistration alloc] init] autorelease];
   }
   return self;
 }
 - (PBGeneratedMessage*) internalGetResult {
   return result;
 }
-- (PBRegistion_Builder*) clear {
-  self.result = [[[PBRegistion alloc] init] autorelease];
+- (PBRegistration_Builder*) clear {
+  self.result = [[[PBRegistration alloc] init] autorelease];
   return self;
 }
-- (PBRegistion_Builder*) clone {
-  return [PBRegistion builderWithPrototype:result];
+- (PBRegistration_Builder*) clone {
+  return [PBRegistration builderWithPrototype:result];
 }
-- (PBRegistion*) defaultInstance {
-  return [PBRegistion defaultInstance];
+- (PBRegistration*) defaultInstance {
+  return [PBRegistration defaultInstance];
 }
-- (PBRegistion*) build {
+- (PBRegistration*) build {
   [self checkInitialized];
   return [self buildPartial];
 }
-- (PBRegistion*) buildPartial {
-  PBRegistion* returnMe = [[result retain] autorelease];
+- (PBRegistration*) buildPartial {
+  PBRegistration* returnMe = [[result retain] autorelease];
   self.result = nil;
   return returnMe;
 }
-- (PBRegistion_Builder*) mergeFrom:(PBRegistion*) other {
-  if (other == [PBRegistion defaultInstance]) {
+- (PBRegistration_Builder*) mergeFrom:(PBRegistration*) other {
+  if (other == [PBRegistration defaultInstance]) {
     return self;
   }
   if (other.hasRegDate) {
@@ -982,10 +985,10 @@ static PBRegistion* defaultPBRegistionInstance = nil;
   [self mergeUnknownFields:other.unknownFields];
   return self;
 }
-- (PBRegistion_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+- (PBRegistration_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
   return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
 }
-- (PBRegistion_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+- (PBRegistration_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
   PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
   while (YES) {
     int32_t tag = [input readTag];
@@ -1013,8 +1016,8 @@ static PBRegistion* defaultPBRegistionInstance = nil;
         }
         break;
       }
-      case 24: {
-        [self setRegIp:[input readInt32]];
+      case 26: {
+        [self setRegIp:[input readString]];
         break;
       }
     }
@@ -1026,12 +1029,12 @@ static PBRegistion* defaultPBRegistionInstance = nil;
 - (int32_t) regDate {
   return result.regDate;
 }
-- (PBRegistion_Builder*) setRegDate:(int32_t) value {
+- (PBRegistration_Builder*) setRegDate:(int32_t) value {
   result.hasRegDate = YES;
   result.regDate = value;
   return self;
 }
-- (PBRegistion_Builder*) clearRegDate {
+- (PBRegistration_Builder*) clearRegDate {
   result.hasRegDate = NO;
   result.regDate = 0;
   return self;
@@ -1042,12 +1045,12 @@ static PBRegistion* defaultPBRegistionInstance = nil;
 - (PBRegType) regType {
   return result.regType;
 }
-- (PBRegistion_Builder*) setRegType:(PBRegType) value {
+- (PBRegistration_Builder*) setRegType:(PBRegType) value {
   result.hasRegType = YES;
   result.regType = value;
   return self;
 }
-- (PBRegistion_Builder*) clearRegType {
+- (PBRegistration_Builder*) clearRegType {
   result.hasRegType = NO;
   result.regType = PBRegTypeNick;
   return self;
@@ -1055,17 +1058,17 @@ static PBRegistion* defaultPBRegistionInstance = nil;
 - (BOOL) hasRegIp {
   return result.hasRegIp;
 }
-- (int32_t) regIp {
+- (NSString*) regIp {
   return result.regIp;
 }
-- (PBRegistion_Builder*) setRegIp:(int32_t) value {
+- (PBRegistration_Builder*) setRegIp:(NSString*) value {
   result.hasRegIp = YES;
   result.regIp = value;
   return self;
 }
-- (PBRegistion_Builder*) clearRegIp {
+- (PBRegistration_Builder*) clearRegIp {
   result.hasRegIp = NO;
-  result.regIp = 0;
+  result.regIp = @"";
   return self;
 }
 @end
@@ -1136,12 +1139,6 @@ static PBDevice* defaultPBDeviceInstance = nil;
   return defaultPBDeviceInstance;
 }
 - (BOOL) isInitialized {
-  if (!self.hasDeviceId) {
-    return NO;
-  }
-  if (!self.hasDeviceOs) {
-    return NO;
-  }
   return YES;
 }
 - (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
@@ -1928,7 +1925,7 @@ static PBStatistic* defaultPBStatisticInstance = nil;
     self.status = PBUserStatusOffline;
     self.introduction = @"";
     self.birthDate = 0;
-    self.relation = PBRelationFollow;
+    self.relation = PBRelationStrange;
     self.noteName = @"";
   }
   return self;
@@ -2464,7 +2461,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
 }
 - (PBUserBasic_Builder*) clearRelation {
   result.hasRelation = NO;
-  result.relation = PBRelationFollow;
+  result.relation = PBRelationStrange;
   return self;
 }
 - (BOOL) hasNoteName {
@@ -2488,7 +2485,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
 @interface PBUser ()
 @property (retain) NSString* uid;
 @property (retain) PBUserBasic* basicInfo;
-@property (retain) PBRegistion* registion;
+@property (retain) PBRegistration* regInfo;
 @property (retain) PBLog* logInfo;
 @property (retain) PBDevice* deviceInfo;
 @property (retain) PBSNS* snsInfo;
@@ -2511,13 +2508,13 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   hasBasicInfo_ = !!value;
 }
 @synthesize basicInfo;
-- (BOOL) hasRegistion {
-  return !!hasRegistion_;
+- (BOOL) hasRegInfo {
+  return !!hasRegInfo_;
 }
-- (void) setHasRegistion:(BOOL) value {
-  hasRegistion_ = !!value;
+- (void) setHasRegInfo:(BOOL) value {
+  hasRegInfo_ = !!value;
 }
-@synthesize registion;
+@synthesize regInfo;
 - (BOOL) hasLogInfo {
   return !!hasLogInfo_;
 }
@@ -2549,7 +2546,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
 - (void) dealloc {
   self.uid = nil;
   self.basicInfo = nil;
-  self.registion = nil;
+  self.regInfo = nil;
   self.logInfo = nil;
   self.deviceInfo = nil;
   self.snsInfo = nil;
@@ -2560,7 +2557,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   if ((self = [super init])) {
     self.uid = @"";
     self.basicInfo = [PBUserBasic defaultInstance];
-    self.registion = [PBRegistion defaultInstance];
+    self.regInfo = [PBRegistration defaultInstance];
     self.logInfo = [PBLog defaultInstance];
     self.deviceInfo = [PBDevice defaultInstance];
     self.snsInfo = [PBSNS defaultInstance];
@@ -2590,13 +2587,8 @@ static PBUser* defaultPBUserInstance = nil;
   if (!self.basicInfo.isInitialized) {
     return NO;
   }
-  if (self.hasRegistion) {
-    if (!self.registion.isInitialized) {
-      return NO;
-    }
-  }
-  if (self.hasDeviceInfo) {
-    if (!self.deviceInfo.isInitialized) {
+  if (self.hasRegInfo) {
+    if (!self.regInfo.isInitialized) {
       return NO;
     }
   }
@@ -2609,8 +2601,8 @@ static PBUser* defaultPBUserInstance = nil;
   if (self.hasBasicInfo) {
     [output writeMessage:2 value:self.basicInfo];
   }
-  if (self.hasRegistion) {
-    [output writeMessage:3 value:self.registion];
+  if (self.hasRegInfo) {
+    [output writeMessage:3 value:self.regInfo];
   }
   if (self.hasLogInfo) {
     [output writeMessage:4 value:self.logInfo];
@@ -2639,8 +2631,8 @@ static PBUser* defaultPBUserInstance = nil;
   if (self.hasBasicInfo) {
     size += computeMessageSize(2, self.basicInfo);
   }
-  if (self.hasRegistion) {
-    size += computeMessageSize(3, self.registion);
+  if (self.hasRegInfo) {
+    size += computeMessageSize(3, self.regInfo);
   }
   if (self.hasLogInfo) {
     size += computeMessageSize(4, self.logInfo);
@@ -2735,8 +2727,8 @@ static PBUser* defaultPBUserInstance = nil;
   if (other.hasBasicInfo) {
     [self mergeBasicInfo:other.basicInfo];
   }
-  if (other.hasRegistion) {
-    [self mergeRegistion:other.registion];
+  if (other.hasRegInfo) {
+    [self mergeRegInfo:other.regInfo];
   }
   if (other.hasLogInfo) {
     [self mergeLogInfo:other.logInfo];
@@ -2785,12 +2777,12 @@ static PBUser* defaultPBUserInstance = nil;
         break;
       }
       case 26: {
-        PBRegistion_Builder* subBuilder = [PBRegistion builder];
-        if (self.hasRegistion) {
-          [subBuilder mergeFrom:self.registion];
+        PBRegistration_Builder* subBuilder = [PBRegistration builder];
+        if (self.hasRegInfo) {
+          [subBuilder mergeFrom:self.regInfo];
         }
         [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setRegistion:[subBuilder buildPartial]];
+        [self setRegInfo:[subBuilder buildPartial]];
         break;
       }
       case 34: {
@@ -2878,34 +2870,34 @@ static PBUser* defaultPBUserInstance = nil;
   result.basicInfo = [PBUserBasic defaultInstance];
   return self;
 }
-- (BOOL) hasRegistion {
-  return result.hasRegistion;
+- (BOOL) hasRegInfo {
+  return result.hasRegInfo;
 }
-- (PBRegistion*) registion {
-  return result.registion;
+- (PBRegistration*) regInfo {
+  return result.regInfo;
 }
-- (PBUser_Builder*) setRegistion:(PBRegistion*) value {
-  result.hasRegistion = YES;
-  result.registion = value;
+- (PBUser_Builder*) setRegInfo:(PBRegistration*) value {
+  result.hasRegInfo = YES;
+  result.regInfo = value;
   return self;
 }
-- (PBUser_Builder*) setRegistionBuilder:(PBRegistion_Builder*) builderForValue {
-  return [self setRegistion:[builderForValue build]];
+- (PBUser_Builder*) setRegInfoBuilder:(PBRegistration_Builder*) builderForValue {
+  return [self setRegInfo:[builderForValue build]];
 }
-- (PBUser_Builder*) mergeRegistion:(PBRegistion*) value {
-  if (result.hasRegistion &&
-      result.registion != [PBRegistion defaultInstance]) {
-    result.registion =
-      [[[PBRegistion builderWithPrototype:result.registion] mergeFrom:value] buildPartial];
+- (PBUser_Builder*) mergeRegInfo:(PBRegistration*) value {
+  if (result.hasRegInfo &&
+      result.regInfo != [PBRegistration defaultInstance]) {
+    result.regInfo =
+      [[[PBRegistration builderWithPrototype:result.regInfo] mergeFrom:value] buildPartial];
   } else {
-    result.registion = value;
+    result.regInfo = value;
   }
-  result.hasRegistion = YES;
+  result.hasRegInfo = YES;
   return self;
 }
-- (PBUser_Builder*) clearRegistion {
-  result.hasRegistion = NO;
-  result.registion = [PBRegistion defaultInstance];
+- (PBUser_Builder*) clearRegInfo {
+  result.hasRegInfo = NO;
+  result.regInfo = [PBRegistration defaultInstance];
   return self;
 }
 - (BOOL) hasLogInfo {

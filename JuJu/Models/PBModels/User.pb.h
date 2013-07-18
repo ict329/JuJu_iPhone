@@ -12,8 +12,8 @@
 @class PBLocation_Builder;
 @class PBLog;
 @class PBLog_Builder;
-@class PBRegistion;
-@class PBRegistion_Builder;
+@class PBRegistration;
+@class PBRegistration_Builder;
 @class PBSNS;
 @class PBSNS_Builder;
 @class PBStatistic;
@@ -23,6 +23,7 @@
 @class PBUserBasic_Builder;
 @class PBUser_Builder;
 typedef enum {
+  PBRelationStrange = 0,
   PBRelationFollow = 1,
   PBRelationFan = 2,
   PBRelationFriend = 3,
@@ -188,14 +189,14 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
   Float32 lastLogLatitude;
   Float32 lastLogLongitude;
   int32_t lastLogDate;
-  int32_t lastLogIp;
+  NSString* lastLogIp;
 }
 - (BOOL) hasLastLogDate;
 - (BOOL) hasLastLogIp;
 - (BOOL) hasLastLogLatitude;
 - (BOOL) hasLastLogLongitude;
 @property (readonly) int32_t lastLogDate;
-@property (readonly) int32_t lastLogIp;
+@property (readonly, retain) NSString* lastLogIp;
 @property (readonly) Float32 lastLogLatitude;
 @property (readonly) Float32 lastLogLongitude;
 
@@ -239,8 +240,8 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBLog_Builder*) clearLastLogDate;
 
 - (BOOL) hasLastLogIp;
-- (int32_t) lastLogIp;
-- (PBLog_Builder*) setLastLogIp:(int32_t) value;
+- (NSString*) lastLogIp;
+- (PBLog_Builder*) setLastLogIp:(NSString*) value;
 - (PBLog_Builder*) clearLastLogIp;
 
 - (BOOL) hasLastLogLatitude;
@@ -254,13 +255,13 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBLog_Builder*) clearLastLogLongitude;
 @end
 
-@interface PBRegistion : PBGeneratedMessage {
+@interface PBRegistration : PBGeneratedMessage {
 @private
   BOOL hasRegDate_:1;
   BOOL hasRegIp_:1;
   BOOL hasRegType_:1;
   int32_t regDate;
-  int32_t regIp;
+  NSString* regIp;
   PBRegType regType;
 }
 - (BOOL) hasRegDate;
@@ -268,56 +269,56 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (BOOL) hasRegIp;
 @property (readonly) int32_t regDate;
 @property (readonly) PBRegType regType;
-@property (readonly) int32_t regIp;
+@property (readonly, retain) NSString* regIp;
 
-+ (PBRegistion*) defaultInstance;
-- (PBRegistion*) defaultInstance;
++ (PBRegistration*) defaultInstance;
+- (PBRegistration*) defaultInstance;
 
 - (BOOL) isInitialized;
 - (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
-- (PBRegistion_Builder*) builder;
-+ (PBRegistion_Builder*) builder;
-+ (PBRegistion_Builder*) builderWithPrototype:(PBRegistion*) prototype;
+- (PBRegistration_Builder*) builder;
++ (PBRegistration_Builder*) builder;
++ (PBRegistration_Builder*) builderWithPrototype:(PBRegistration*) prototype;
 
-+ (PBRegistion*) parseFromData:(NSData*) data;
-+ (PBRegistion*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBRegistion*) parseFromInputStream:(NSInputStream*) input;
-+ (PBRegistion*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBRegistion*) parseFromCodedInputStream:(PBCodedInputStream*) input;
-+ (PBRegistion*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (PBRegistration*) parseFromData:(NSData*) data;
++ (PBRegistration*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (PBRegistration*) parseFromInputStream:(NSInputStream*) input;
++ (PBRegistration*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (PBRegistration*) parseFromCodedInputStream:(PBCodedInputStream*) input;
++ (PBRegistration*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
 @end
 
-@interface PBRegistion_Builder : PBGeneratedMessage_Builder {
+@interface PBRegistration_Builder : PBGeneratedMessage_Builder {
 @private
-  PBRegistion* result;
+  PBRegistration* result;
 }
 
-- (PBRegistion*) defaultInstance;
+- (PBRegistration*) defaultInstance;
 
-- (PBRegistion_Builder*) clear;
-- (PBRegistion_Builder*) clone;
+- (PBRegistration_Builder*) clear;
+- (PBRegistration_Builder*) clone;
 
-- (PBRegistion*) build;
-- (PBRegistion*) buildPartial;
+- (PBRegistration*) build;
+- (PBRegistration*) buildPartial;
 
-- (PBRegistion_Builder*) mergeFrom:(PBRegistion*) other;
-- (PBRegistion_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
-- (PBRegistion_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+- (PBRegistration_Builder*) mergeFrom:(PBRegistration*) other;
+- (PBRegistration_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
+- (PBRegistration_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
 
 - (BOOL) hasRegDate;
 - (int32_t) regDate;
-- (PBRegistion_Builder*) setRegDate:(int32_t) value;
-- (PBRegistion_Builder*) clearRegDate;
+- (PBRegistration_Builder*) setRegDate:(int32_t) value;
+- (PBRegistration_Builder*) clearRegDate;
 
 - (BOOL) hasRegType;
 - (PBRegType) regType;
-- (PBRegistion_Builder*) setRegType:(PBRegType) value;
-- (PBRegistion_Builder*) clearRegType;
+- (PBRegistration_Builder*) setRegType:(PBRegType) value;
+- (PBRegistration_Builder*) clearRegType;
 
 - (BOOL) hasRegIp;
-- (int32_t) regIp;
-- (PBRegistion_Builder*) setRegIp:(int32_t) value;
-- (PBRegistion_Builder*) clearRegIp;
+- (NSString*) regIp;
+- (PBRegistration_Builder*) setRegIp:(NSString*) value;
+- (PBRegistration_Builder*) clearRegIp;
 @end
 
 @interface PBDevice : PBGeneratedMessage {
@@ -659,14 +660,14 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 @private
   BOOL hasUid_:1;
   BOOL hasBasicInfo_:1;
-  BOOL hasRegistion_:1;
+  BOOL hasRegInfo_:1;
   BOOL hasLogInfo_:1;
   BOOL hasDeviceInfo_:1;
   BOOL hasSnsInfo_:1;
   BOOL hasStatistic_:1;
   NSString* uid;
   PBUserBasic* basicInfo;
-  PBRegistion* registion;
+  PBRegistration* regInfo;
   PBLog* logInfo;
   PBDevice* deviceInfo;
   PBSNS* snsInfo;
@@ -674,14 +675,14 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 }
 - (BOOL) hasUid;
 - (BOOL) hasBasicInfo;
-- (BOOL) hasRegistion;
+- (BOOL) hasRegInfo;
 - (BOOL) hasLogInfo;
 - (BOOL) hasDeviceInfo;
 - (BOOL) hasSnsInfo;
 - (BOOL) hasStatistic;
 @property (readonly, retain) NSString* uid;
 @property (readonly, retain) PBUserBasic* basicInfo;
-@property (readonly, retain) PBRegistion* registion;
+@property (readonly, retain) PBRegistration* regInfo;
 @property (readonly, retain) PBLog* logInfo;
 @property (readonly, retain) PBDevice* deviceInfo;
 @property (readonly, retain) PBSNS* snsInfo;
@@ -733,12 +734,12 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBUser_Builder*) mergeBasicInfo:(PBUserBasic*) value;
 - (PBUser_Builder*) clearBasicInfo;
 
-- (BOOL) hasRegistion;
-- (PBRegistion*) registion;
-- (PBUser_Builder*) setRegistion:(PBRegistion*) value;
-- (PBUser_Builder*) setRegistionBuilder:(PBRegistion_Builder*) builderForValue;
-- (PBUser_Builder*) mergeRegistion:(PBRegistion*) value;
-- (PBUser_Builder*) clearRegistion;
+- (BOOL) hasRegInfo;
+- (PBRegistration*) regInfo;
+- (PBUser_Builder*) setRegInfo:(PBRegistration*) value;
+- (PBUser_Builder*) setRegInfoBuilder:(PBRegistration_Builder*) builderForValue;
+- (PBUser_Builder*) mergeRegInfo:(PBRegistration*) value;
+- (PBUser_Builder*) clearRegInfo;
 
 - (BOOL) hasLogInfo;
 - (PBLog*) logInfo;

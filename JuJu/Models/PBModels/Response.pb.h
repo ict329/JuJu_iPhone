@@ -33,8 +33,8 @@
 @class PBParty_Builder;
 @class PBPromotion;
 @class PBPromotion_Builder;
-@class PBRegistion;
-@class PBRegistion_Builder;
+@class PBRegistration;
+@class PBRegistration_Builder;
 @class PBResponse;
 @class PBResponse_Builder;
 @class PBSNS;
@@ -52,11 +52,19 @@
 @class PBUserBasic_Builder;
 @class PBUser_Builder;
 typedef enum {
+  PBResultCodeUnknowError = -1,
   PBResultCodeSuccess = 0,
   PBResultCodeSystemError = 1,
   PBResultCodeParsePbError = 2,
   PBResultCodeParameterError = 3,
   PBResultCodeAuthError = 4,
+  PBResultCodeNetworkError = 5,
+  PBResultCodeTimeoutError = 6,
+  PBResultCodeUserNotExistsError = 10001,
+  PBResultCodePasswordIncorrectError = 10002,
+  PBResultCodeUserStatusExceptionError = 10003,
+  PBResultCodeActionNotExistsError = 20001,
+  PBResultCodeActionStatusExceptionError = 20002,
 } PBResultCode;
 
 BOOL PBResultCodeIsValidValue(PBResultCode value);

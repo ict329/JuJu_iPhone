@@ -29,8 +29,8 @@
 @class PBParty_Builder;
 @class PBPromotion;
 @class PBPromotion_Builder;
-@class PBRegistion;
-@class PBRegistion_Builder;
+@class PBRegistration;
+@class PBRegistration_Builder;
 @class PBSNS;
 @class PBSNS_Builder;
 @class PBShare;

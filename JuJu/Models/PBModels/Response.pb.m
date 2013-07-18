@@ -25,11 +25,19 @@ static PBExtensionRegistry* extensionRegistry = nil;
 
 BOOL PBResultCodeIsValidValue(PBResultCode value) {
   switch (value) {
+    case PBResultCodeUnknowError:
     case PBResultCodeSuccess:
     case PBResultCodeSystemError:
     case PBResultCodeParsePbError:
     case PBResultCodeParameterError:
     case PBResultCodeAuthError:
+    case PBResultCodeNetworkError:
+    case PBResultCodeTimeoutError:
+    case PBResultCodeUserNotExistsError:
+    case PBResultCodePasswordIncorrectError:
+    case PBResultCodeUserStatusExceptionError:
+    case PBResultCodeActionNotExistsError:
+    case PBResultCodeActionStatusExceptionError:
       return YES;
     default:
       return NO;
@@ -104,7 +112,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
 }
 - (id) init {
   if ((self = [super init])) {
-    self.code = PBResultCodeSuccess;
+    self.code = PBResultCodeUnknowError;
     self.errorMessage = @"";
     self.user = [PBUser defaultInstance];
     self.action = [PBAction defaultInstance];
@@ -502,7 +510,7 @@ static PBResponse* defaultPBResponseInstance = nil;
 }
 - (PBResponse_Builder*) clearCode {
   result.hasCode = NO;
-  result.code = PBResultCodeSuccess;
+  result.code = PBResultCodeUnknowError;
   return self;
 }
 - (BOOL) hasErrorMessage {
