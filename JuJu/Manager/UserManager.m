@@ -34,6 +34,9 @@
         [basicBuilder setGender:YES];
         [basicBuilder setAvatar:@"http://image.test.com/1.png"];
     });
+    
+    
+    
     return basicBuilder;
 }
 

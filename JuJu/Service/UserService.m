@@ -15,7 +15,12 @@
             password:(NSString *)password
              handler:(ResultHandler)handler
 {
-    
+    [JJService getPath:@"api/users/register"
+            parameters:@{@"uname":userName, @"password":password}
+              category:LoadRemoteData cachedKey:nil
+              isPublic:NO
+         cachedHandler:NULL
+         remoteHandler:handler];
 }
 
 + (void)loginWithUserName:(NSString *)userName
