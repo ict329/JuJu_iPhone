@@ -77,6 +77,8 @@
 		CA84A4FB178D719D00AE48EC /* GlobalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4FA178D719D00AE48EC /* GlobalManager.m */; };
 		CA8569FF179FF49200486CB3 /* RelationService.m in Sources */ = {isa = PBXBuildFile; fileRef = CA8569FE179FF49200486CB3 /* RelationService.m */; };
 		CA856A0317A02C1E00486CB3 /* PBResponse_Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = CA856A0217A02C1E00486CB3 /* PBResponse_Ext.m */; };
+		CA856A0C17A0322B00486CB3 /* ProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA856A0A17A0322B00486CB3 /* ProfileController.m */; };
+		CA856A0D17A0322B00486CB3 /* ProfileController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA856A0B17A0322B00486CB3 /* ProfileController.xib */; };
 		CAA75C541789D8750041C019 /* AppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CAA75C531789D8750041C019 /* AppManager.m */; };
 		CACEC2AF178B0CCF00D88643 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A7178B0CCF00D88643 /* DateUtil.m */; };
 		CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A9178B0CCF00D88643 /* PointUtil.m */; };
@@ -239,6 +241,9 @@
 		CA8569FE179FF49200486CB3 /* RelationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelationService.m; sourceTree = "<group>"; };
 		CA856A0017A02BDF00486CB3 /* PBResponse_Ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBResponse_Ext.h; sourceTree = "<group>"; };
 		CA856A0217A02C1E00486CB3 /* PBResponse_Ext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBResponse_Ext.m; sourceTree = "<group>"; };
+		CA856A0917A0322B00486CB3 /* ProfileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileController.h; sourceTree = "<group>"; };
+		CA856A0A17A0322B00486CB3 /* ProfileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileController.m; sourceTree = "<group>"; };
+		CA856A0B17A0322B00486CB3 /* ProfileController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileController.xib; sourceTree = "<group>"; };
 		CAA75C521789D8750041C019 /* AppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManager.h; sourceTree = "<group>"; };
 		CAA75C531789D8750041C019 /* AppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManager.m; sourceTree = "<group>"; };
 		CACEC2A6178B0CCF00D88643 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
@@ -360,6 +365,11 @@
 		CA270D0E178979390053A29C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				CA856A0417A0320E00486CB3 /* Action */,
+				CA856A0517A0320E00486CB3 /* Message */,
+				CA856A0617A0320E00486CB3 /* More */,
+				CA856A0717A0320E00486CB3 /* Relation */,
+				CA856A0817A0320E00486CB3 /* User */,
 				CA270D0F178979390053A29C /* JJMenuViewController.h */,
 				CA270D10178979390053A29C /* JJMenuViewController.m */,
 				CA270D13178979390053A29C /* JJRootViewController.h */,
@@ -786,6 +796,44 @@
 			path = THLevelDB;
 			sourceTree = "<group>";
 		};
+		CA856A0417A0320E00486CB3 /* Action */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Action;
+			sourceTree = "<group>";
+		};
+		CA856A0517A0320E00486CB3 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		CA856A0617A0320E00486CB3 /* More */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
+		CA856A0717A0320E00486CB3 /* Relation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Relation;
+			sourceTree = "<group>";
+		};
+		CA856A0817A0320E00486CB3 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				CA856A0917A0322B00486CB3 /* ProfileController.h */,
+				CA856A0A17A0322B00486CB3 /* ProfileController.m */,
+				CA856A0B17A0322B00486CB3 /* ProfileController.xib */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		CACEC376178C293200D88643 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -874,6 +922,7 @@
 				CA270DEF1789797B0053A29C /* searchBarIcon@2x.png in Resources */,
 				CA270DF01789797B0053A29C /* searchTextBG.png in Resources */,
 				CA270DF11789797B0053A29C /* user.png in Resources */,
+				CA856A0D17A0322B00486CB3 /* ProfileController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -946,6 +995,7 @@
 				CA84A4FB178D719D00AE48EC /* GlobalManager.m in Sources */,
 				CA8569FF179FF49200486CB3 /* RelationService.m in Sources */,
 				CA856A0317A02C1E00486CB3 /* PBResponse_Ext.m in Sources */,
+				CA856A0C17A0322B00486CB3 /* ProfileController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

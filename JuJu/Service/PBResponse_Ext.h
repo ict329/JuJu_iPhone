@@ -14,4 +14,8 @@
 + (PBResponse *)networkErrorResponse;
 + (PBResponse *)timeoutResponse;
 
+- (BOOL)isSuccess;
+
+- (NSString *)message;
+
 @end

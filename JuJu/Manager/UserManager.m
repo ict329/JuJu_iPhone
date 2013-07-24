@@ -5,9 +5,18 @@
 
 @end
 
+static PBUser_Builder *_user;
 
 
 @implementation UserManager 
+
+
++ (void)setUser:(PBUser *)user
+{
+    if (user) {
+       _user = [PBUser builderWithPrototype:user];
+    }
+}
 
 + (BOOL)unLogin
 {
@@ -16,46 +25,25 @@
 
 + (NSString *)uid
 {
-    return [self uid];
+    return [[self user] uid];
 }
 + (NSString *)uname
 {
-    return [[self briefUser] uname];
+    return [[[self user] basicInfo] uname];
 }
 + (NSString *)nick
 {
-    return [[self briefUser] nick];
-}
-
-
-+ (PBUserBasic_Builder *)briefUser
-{
-    static dispatch_once_t onceToken;
-    static PBUserBasic_Builder *basicBuilder;
-    dispatch_once(&onceToken, ^{
-        basicBuilder = [[PBUserBasic_Builder alloc] init];
-        [basicBuilder setUname:@"LALA"];
-        [basicBuilder setNick:@"ICT"];
-        [basicBuilder setGender:YES];
-        [basicBuilder setAvatar:@"http://image.test.com/1.png"];
-    });
-    
-    
-    
-    return basicBuilder;
+    return [[[self user] basicInfo] nick];
 }
 
 + (PBUser_Builder *)user
 {
-    static dispatch_once_t onceToken;
-    static PBUser_Builder *builder;
-    dispatch_once(&onceToken, ^{
-        builder = [[PBUser_Builder alloc] init];
-        [builder setUid:@"123"];
-        [builder setBasicInfoBuilder:[self briefUser]];
-    });
-    return builder;
+    return _user;
 }
 
++ (void)logout
+{
+    _user = nil;
+}
 @end
 

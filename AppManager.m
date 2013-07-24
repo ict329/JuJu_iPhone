@@ -18,6 +18,9 @@
 #import "THLevelDB.h"
 #import "UserService.h"
 
+#import "ProfileController.h"
+
+
 @implementation AppManager
 
 + (id)sharedManager
@@ -54,7 +57,8 @@
                       ];
 	NSArray *controllers = @[
                           @[
-                              [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"个人主页" withRevealBlock:revealBlock]]
+                              [[UINavigationController alloc] initWithRootViewController:
+                               [[ProfileController alloc] initWithTitle:@"个人主页" withRevealBlock:revealBlock]]
                               ],
                           @[
                               [[UINavigationController alloc] initWithRootViewController:[[JJRootViewController alloc] initWithTitle:@"动态" withRevealBlock:revealBlock]],
@@ -101,7 +105,7 @@
 
 - (void)prepareDataWithAppDelegate:(JJAppDelegate *)delegate
 {
-    [MobClick startWithAppkey:@"51d99add56240b73a1057fcb" reportPolicy:SEND_INTERVAL channelId:@""];
+    [MobClick startWithAppkey:@"51eb9e9956240bc7e807335f" reportPolicy:SEND_INTERVAL channelId:@""];
 }
 
 - (void)saveDataBeforeExitWithAppDelegate:(JJAppDelegate *)delegate

@@ -32,5 +32,13 @@
     return [self responseWithCode:PBResultCodeTimeoutError message:@"Time Out."];    
 }
 
+- (BOOL)isSuccess
+{
+    return self.code == PBResultCodeSuccess;
+}
 
+- (NSString *)message
+{
+    return [NSString stringWithFormat:@"response = [code = %d, message = %@]", self.code, self.errorMessage];
+}
 @end

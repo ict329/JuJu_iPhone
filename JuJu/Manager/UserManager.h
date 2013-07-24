@@ -1,5 +1,6 @@
 
 #import "JJManager.h"
+#import "User.pb.h"
 
 @interface UserManager : JJManager
 
@@ -9,5 +10,8 @@
 + (NSString *)nick;
 
 + (PBUser_Builder *)user;
-+ (PBUserBasic_Builder *)briefUser;
++ (void)setUser:(PBUser *)user;
+
++ (void)logout;
+
 @end
