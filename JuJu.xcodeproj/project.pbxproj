@@ -75,6 +75,8 @@
 		CA84A4F7178D6F2600AE48EC /* libleveldb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA84A4E9178D6F2600AE48EC /* libleveldb.a */; };
 		CA84A4F8178D6F2600AE48EC /* THLevelDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4F2178D6F2600AE48EC /* THLevelDB.mm */; };
 		CA84A4FB178D719D00AE48EC /* GlobalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CA84A4FA178D719D00AE48EC /* GlobalManager.m */; };
+		CA8569FF179FF49200486CB3 /* RelationService.m in Sources */ = {isa = PBXBuildFile; fileRef = CA8569FE179FF49200486CB3 /* RelationService.m */; };
+		CA856A0317A02C1E00486CB3 /* PBResponse_Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = CA856A0217A02C1E00486CB3 /* PBResponse_Ext.m */; };
 		CAA75C541789D8750041C019 /* AppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CAA75C531789D8750041C019 /* AppManager.m */; };
 		CACEC2AF178B0CCF00D88643 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A7178B0CCF00D88643 /* DateUtil.m */; };
 		CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A9178B0CCF00D88643 /* PointUtil.m */; };
@@ -232,6 +234,11 @@
 		CA84A4F9178D719D00AE48EC /* GlobalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalManager.h; sourceTree = "<group>"; };
 		CA84A4FA178D719D00AE48EC /* GlobalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalManager.m; sourceTree = "<group>"; };
 		CA84A4FC178D7CF400AE48EC /* LogUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogUtil.h; sourceTree = "<group>"; };
+		CA8569FA179FEDDA00486CB3 /* ServiceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceConstants.h; sourceTree = "<group>"; };
+		CA8569FD179FF49200486CB3 /* RelationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelationService.h; sourceTree = "<group>"; };
+		CA8569FE179FF49200486CB3 /* RelationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelationService.m; sourceTree = "<group>"; };
+		CA856A0017A02BDF00486CB3 /* PBResponse_Ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBResponse_Ext.h; sourceTree = "<group>"; };
+		CA856A0217A02C1E00486CB3 /* PBResponse_Ext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBResponse_Ext.m; sourceTree = "<group>"; };
 		CAA75C521789D8750041C019 /* AppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManager.h; sourceTree = "<group>"; };
 		CAA75C531789D8750041C019 /* AppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManager.m; sourceTree = "<group>"; };
 		CACEC2A6178B0CCF00D88643 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
@@ -421,6 +428,11 @@
 				CACEC2B5178B0DEF00D88643 /* JJService.m */,
 				CACEC2B7178B136600D88643 /* UserService.h */,
 				CACEC2B8178B136600D88643 /* UserService.m */,
+				CA8569FA179FEDDA00486CB3 /* ServiceConstants.h */,
+				CA8569FD179FF49200486CB3 /* RelationService.h */,
+				CA8569FE179FF49200486CB3 /* RelationService.m */,
+				CA856A0017A02BDF00486CB3 /* PBResponse_Ext.h */,
+				CA856A0217A02C1E00486CB3 /* PBResponse_Ext.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -932,6 +944,8 @@
 				CA84A4F6178D6F2600AE48EC /* BuriSerialization.m in Sources */,
 				CA84A4F8178D6F2600AE48EC /* THLevelDB.mm in Sources */,
 				CA84A4FB178D719D00AE48EC /* GlobalManager.m in Sources */,
+				CA8569FF179FF49200486CB3 /* RelationService.m in Sources */,
+				CA856A0317A02C1E00486CB3 /* PBResponse_Ext.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

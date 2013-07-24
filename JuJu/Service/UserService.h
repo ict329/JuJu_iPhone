@@ -11,6 +11,11 @@
 
 @interface UserService : JJService
 
+/*
+#define UPDATE_PROFILE  @"api/users/update_profile"
+#define BIND_SNS  @"api/users/bind_sns"
+*/
+
 + (void)registerUser:(NSString *)userName
             password:(NSString *)password
              handler:(ResultHandler)handler;
@@ -25,9 +30,11 @@
                token:(NSString *)token
              handler:(ResultHandler)handler;
 
-+ (void)logout;
++ (void)logoutWithHandler:(ResultHandler)handler;;
 
++ (void)getProfile:(NSString *)fid
+           handler:(ResultHandler)handler;
 
-+ (void)test;
++ (void)updateDeviceWithHandler:(ResultHandler)handler;
 
 @end

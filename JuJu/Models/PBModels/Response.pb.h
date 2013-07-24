@@ -60,6 +60,7 @@ typedef enum {
   PBResultCodeAuthError = 4,
   PBResultCodeNetworkError = 5,
   PBResultCodeTimeoutError = 6,
+  PBResultCodeUnloginError = 7,
   PBResultCodeUserNotExistsError = 10001,
   PBResultCodePasswordIncorrectError = 10002,
   PBResultCodeUserStatusExceptionError = 10003,
@@ -109,7 +110,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
 - (NSArray*) messagesList;
 - (PBMessage*) messagesAtIndex:(int32_t) index;
 - (NSArray*) usersList;
-- (PBUserBasic*) usersAtIndex:(int32_t) index;
+- (PBUser*) usersAtIndex:(int32_t) index;
 - (NSArray*) activitysList;
 - (PBActivity*) activitysAtIndex:(int32_t) index;
 - (NSArray*) commentsList;
@@ -174,9 +175,9 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
 - (PBResponse_Builder*) clearMessagesList;
 
 - (NSArray*) usersList;
-- (PBUserBasic*) usersAtIndex:(int32_t) index;
-- (PBResponse_Builder*) replaceUsersAtIndex:(int32_t) index with:(PBUserBasic*) value;
-- (PBResponse_Builder*) addUsers:(PBUserBasic*) value;
+- (PBUser*) usersAtIndex:(int32_t) index;
+- (PBResponse_Builder*) replaceUsersAtIndex:(int32_t) index with:(PBUser*) value;
+- (PBResponse_Builder*) addUsers:(PBUser*) value;
 - (PBResponse_Builder*) addAllUsers:(NSArray*) values;
 - (PBResponse_Builder*) clearUsersList;
 

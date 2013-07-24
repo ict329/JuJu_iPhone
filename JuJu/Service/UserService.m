@@ -7,7 +7,7 @@
 //
 
 #import "UserService.h"
-
+#import "ServiceConstants.h"
 
 @implementation UserService
 
@@ -15,11 +15,8 @@
             password:(NSString *)password
              handler:(ResultHandler)handler
 {
-    [JJService getPath:@"api/users/register"
-            parameters:@{@"uname":userName, @"password":password}
-              category:LoadRemoteData cachedKey:nil
-              isPublic:NO
-         cachedHandler:NULL
+    [JJService getPath:REGISTER
+            parameters:@{UNAME:userName, PASSWORD:password}
          remoteHandler:handler];
 }
 
@@ -27,7 +24,9 @@
                  password:(NSString *)password
                   handler:(ResultHandler)handler
 {
-    
+    [JJService getPath:LOGIN
+            parameters:@{UNAME:userName, PASSWORD:password}
+         remoteHandler:handler];
 }
 
 + (void)loginWithSNS:(PBRegType)type //sns type not include nick and email
@@ -39,10 +38,21 @@
     
 }
 
-+ (void)logout
++ (void)logoutWithHandler:(ResultHandler)handler
+{
+    [JJService getPath:LOGOUT parameters:nil remoteHandler:handler];
+}
+
++ (void)getProfile:(NSString *)fid
+           handler:(ResultHandler)handler
+{
+    [JJService getPath:GET_PROFILE parameters:@{FID: fid} remoteHandler:handler];
+}
+
++ (void)updateDeviceWithHandler:(ResultHandler)handler
 {
     
 }
 
-
 @end
+

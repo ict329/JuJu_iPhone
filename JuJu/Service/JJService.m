@@ -166,5 +166,42 @@ static NSMutableArray *requestList = nil;
 
 }
 
++ (void)getPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+  remoteHandler:(ResultHandler)remoteHandler
+{
+    [self getPath:path parameters:parameters
+         category:LoadRemoteData
+        cachedKey:nil
+         isPublic:NO
+    cachedHandler:NULL
+    remoteHandler:remoteHandler];
+}
+
+
++ (void)postPath:(NSString *)path
+      parameters:(NSDictionary *)parameters
+   remoteHandler:(ResultHandler)remoteHandler
+{
+    [self postPath:path parameters:parameters
+         category:LoadRemoteData
+        cachedKey:nil
+         isPublic:NO
+    cachedHandler:NULL
+    remoteHandler:remoteHandler];
+}
+
+
+
++ (BOOL)checkLoginWithHandler:(ResultHandler)handler
+{
+    if ([UserManager unLogin]) {
+        if (handler != NULL) {
+            handler([PBResponse unloginResponse], NO);
+        }
+        return NO;
+    }
+    return YES;
+}
 
 @end

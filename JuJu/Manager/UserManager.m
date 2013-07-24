@@ -9,6 +9,11 @@
 
 @implementation UserManager 
 
++ (BOOL)unLogin
+{
+    return [[self uid] length] == 0;
+}
+
 + (NSString *)uid
 {
     return [self uid];

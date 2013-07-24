@@ -33,6 +33,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
     case PBResultCodeAuthError:
     case PBResultCodeNetworkError:
     case PBResultCodeTimeoutError:
+    case PBResultCodeUnloginError:
     case PBResultCodeUserNotExistsError:
     case PBResultCodePasswordIncorrectError:
     case PBResultCodeUserStatusExceptionError:
@@ -149,7 +150,7 @@ static PBResponse* defaultPBResponseInstance = nil;
 - (NSArray*) usersList {
   return mutableUsersList;
 }
-- (PBUserBasic*) usersAtIndex:(int32_t) index {
+- (PBUser*) usersAtIndex:(int32_t) index {
   id value = [mutableUsersList objectAtIndex:index];
   return value;
 }
@@ -181,7 +182,7 @@ static PBResponse* defaultPBResponseInstance = nil;
       return NO;
     }
   }
-  for (PBUserBasic* element in self.usersList) {
+  for (PBUser* element in self.usersList) {
     if (!element.isInitialized) {
       return NO;
     }
@@ -226,7 +227,7 @@ static PBResponse* defaultPBResponseInstance = nil;
   for (PBMessage* element in self.messagesList) {
     [output writeMessage:11 value:element];
   }
-  for (PBUserBasic* element in self.usersList) {
+  for (PBUser* element in self.usersList) {
     [output writeMessage:12 value:element];
   }
   for (PBActivity* element in self.activitysList) {
@@ -265,7 +266,7 @@ static PBResponse* defaultPBResponseInstance = nil;
   for (PBMessage* element in self.messagesList) {
     size += computeMessageSize(11, element);
   }
-  for (PBUserBasic* element in self.usersList) {
+  for (PBUser* element in self.usersList) {
     size += computeMessageSize(12, element);
   }
   for (PBActivity* element in self.activitysList) {
@@ -450,7 +451,7 @@ static PBResponse* defaultPBResponseInstance = nil;
         break;
       }
       case 98: {
-        PBUserBasic_Builder* subBuilder = [PBUserBasic builder];
+        PBUser_Builder* subBuilder = [PBUser builder];
         [input readMessage:subBuilder extensionRegistry:extensionRegistry];
         [self addUsers:[subBuilder buildPartial]];
         break;
@@ -591,10 +592,10 @@ static PBResponse* defaultPBResponseInstance = nil;
   if (result.mutableUsersList == nil) { return [NSArray array]; }
   return result.mutableUsersList;
 }
-- (PBUserBasic*) usersAtIndex:(int32_t) index {
+- (PBUser*) usersAtIndex:(int32_t) index {
   return [result usersAtIndex:index];
 }
-- (PBResponse_Builder*) replaceUsersAtIndex:(int32_t) index with:(PBUserBasic*) value {
+- (PBResponse_Builder*) replaceUsersAtIndex:(int32_t) index with:(PBUser*) value {
   [result.mutableUsersList replaceObjectAtIndex:index withObject:value];
   return self;
 }
@@ -609,7 +610,7 @@ static PBResponse* defaultPBResponseInstance = nil;
   result.mutableUsersList = nil;
   return self;
 }
-- (PBResponse_Builder*) addUsers:(PBUserBasic*) value {
+- (PBResponse_Builder*) addUsers:(PBUser*) value {
   if (result.mutableUsersList == nil) {
     result.mutableUsersList = [NSMutableArray array];
   }

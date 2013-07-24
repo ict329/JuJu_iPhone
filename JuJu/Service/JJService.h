@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Response.pb.h"
+#import "PBResponse_Ext.h"
+#import "ServiceConstants.h"
 
 @class PBResponse;
 
@@ -31,6 +32,17 @@ typedef enum{
   cachedHandler:(ResultHandler)cachedHandler
   remoteHandler:(ResultHandler)remoteHandler;
 
+
++ (void)getPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+  remoteHandler:(ResultHandler)remoteHandler;
+
+
++ (void)postPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+  remoteHandler:(ResultHandler)remoteHandler;
+
+
 + (void)postPath:(NSString *)path
      parameters:(NSDictionary *)parameters
        category:(LoadDataCategory)category
@@ -39,5 +51,6 @@ typedef enum{
   cachedHandler:(ResultHandler)cachedHandler
   remoteHandler:(ResultHandler)remoteHandler;
 
++ (BOOL)checkLoginWithHandler:(ResultHandler)handler;
 
 @end

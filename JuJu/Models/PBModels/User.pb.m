@@ -1823,7 +1823,7 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 @property (retain) NSMutableArray* mutableTagsList;
 @property (retain) NSMutableArray* mutablePasswordList;
 @property PBRelation relation;
-@property (retain) NSString* noteName;
+@property (retain) NSString* mark;
 @end
 
 @implementation PBUserBasic
@@ -1898,13 +1898,13 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   hasRelation_ = !!value;
 }
 @synthesize relation;
-- (BOOL) hasNoteName {
-  return !!hasNoteName_;
+- (BOOL) hasMark {
+  return !!hasMark_;
 }
-- (void) setHasNoteName:(BOOL) value {
-  hasNoteName_ = !!value;
+- (void) setHasMark:(BOOL) value {
+  hasMark_ = !!value;
 }
-@synthesize noteName;
+@synthesize mark;
 - (void) dealloc {
   self.uname = nil;
   self.nick = nil;
@@ -1912,7 +1912,7 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   self.introduction = nil;
   self.mutableTagsList = nil;
   self.mutablePasswordList = nil;
-  self.noteName = nil;
+  self.mark = nil;
   [super dealloc];
 }
 - (id) init {
@@ -1926,7 +1926,7 @@ static PBStatistic* defaultPBStatisticInstance = nil;
     self.introduction = @"";
     self.birthDate = 0;
     self.relation = PBRelationStrange;
-    self.noteName = @"";
+    self.mark = @"";
   }
   return self;
 }
@@ -1996,8 +1996,8 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   if (self.hasRelation) {
     [output writeEnum:20 value:self.relation];
   }
-  if (self.hasNoteName) {
-    [output writeString:21 value:self.noteName];
+  if (self.hasMark) {
+    [output writeString:21 value:self.mark];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -2051,8 +2051,8 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   if (self.hasRelation) {
     size += computeEnumSize(20, self.relation);
   }
-  if (self.hasNoteName) {
-    size += computeStringSize(21, self.noteName);
+  if (self.hasMark) {
+    size += computeStringSize(21, self.mark);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -2168,8 +2168,8 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   if (other.hasRelation) {
     [self setRelation:other.relation];
   }
-  if (other.hasNoteName) {
-    [self setNoteName:other.noteName];
+  if (other.hasMark) {
+    [self setMark:other.mark];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -2252,7 +2252,7 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
         break;
       }
       case 170: {
-        [self setNoteName:[input readString]];
+        [self setMark:[input readString]];
         break;
       }
     }
@@ -2464,20 +2464,20 @@ static PBUserBasic* defaultPBUserBasicInstance = nil;
   result.relation = PBRelationStrange;
   return self;
 }
-- (BOOL) hasNoteName {
-  return result.hasNoteName;
+- (BOOL) hasMark {
+  return result.hasMark;
 }
-- (NSString*) noteName {
-  return result.noteName;
+- (NSString*) mark {
+  return result.mark;
 }
-- (PBUserBasic_Builder*) setNoteName:(NSString*) value {
-  result.hasNoteName = YES;
-  result.noteName = value;
+- (PBUserBasic_Builder*) setMark:(NSString*) value {
+  result.hasMark = YES;
+  result.mark = value;
   return self;
 }
-- (PBUserBasic_Builder*) clearNoteName {
-  result.hasNoteName = NO;
-  result.noteName = @"";
+- (PBUserBasic_Builder*) clearMark {
+  result.hasMark = NO;
+  result.mark = @"";
   return self;
 }
 @end

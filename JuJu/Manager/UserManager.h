@@ -3,6 +3,7 @@
 
 @interface UserManager : JJManager
 
++ (BOOL)unLogin;
 + (NSString *)uid;
 + (NSString *)uname;
 + (NSString *)nick;
