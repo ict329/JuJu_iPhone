@@ -37,6 +37,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
     case PBResultCodeUserNotExistsError:
     case PBResultCodePasswordIncorrectError:
     case PBResultCodeUserStatusExceptionError:
+    case PBResultCodeUnameExistsError:
     case PBResultCodeActionNotExistsError:
     case PBResultCodeActionStatusExceptionError:
       return YES;

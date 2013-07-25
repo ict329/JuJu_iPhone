@@ -67,6 +67,8 @@ static NSMutableArray *requestList = nil;
   cachedHandler:(ResultHandler)cachedHandler
   remoteHandler:(ResultHandler)remoteHandler
 {
+    
+    JJDebug(@"<getPath> path = %@, parameters = %@", path, parameters);
     __block PBResponse *response = nil;
     if ((category | LoadCachedData) != 0) {
         NSData *data = [JJService loadDataForKey:cachedKey isPublic:isPublic];
@@ -86,9 +88,10 @@ static NSMutableArray *requestList = nil;
     }
     if ((category | LoadRemoteData) != 0) {
         [[JJRequestClient sharedClient] getPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+ 
+            JJDebug(@"<getPath> path = %@, response length = %d", path, [responseObject length]);
             if (responseObject) {
                 @try {
-                    JJDebug(@"<getPath> response = %@", responseObject);
                     response = [PBResponse parseFromData:responseObject];
                     [JJService cacheData:responseObject forKey:cachedKey isPublic:isPublic];
                 }
@@ -118,6 +121,8 @@ static NSMutableArray *requestList = nil;
    cachedHandler:(ResultHandler)cachedHandler
    remoteHandler:(ResultHandler)remoteHandler
 {
+ 
+    JJDebug(@"<postPath> path = %@, parameters = %@", path, parameters);
     __block PBResponse *response = nil;
     if ((category | LoadCachedData) != 0) {
         NSData *data = [JJService loadDataForKey:cachedKey isPublic:isPublic];
@@ -139,12 +144,13 @@ static NSMutableArray *requestList = nil;
     if ((category | LoadRemoteData) != 0) {
         
         [[JJRequestClient sharedClient] postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
+ 
+            JJDebug(@"<postPath> path = %@, response length = %d", path, [responseObject length]);
             if (responseObject) {
                 @try {
-                    JJDebug(@"<postPath> response = %@", responseObject);
                     response = [PBResponse parseFromData:responseObject];
                     [JJService cacheData:responseObject forKey:cachedKey isPublic:isPublic];
+                    
                 }
                 @catch (NSException *exception) {
                     response = [JJService emptyResponseWithCode:PBResultCodeParsePbError];

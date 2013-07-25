@@ -10,6 +10,7 @@
 #import "UserService.h"
 #import "UserManager.h"
 
+
 @interface ProfileController ()
 
 @end
@@ -28,6 +29,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    [[AppManager sharedManager] updateLocation];
+//    [[AppManager sharedManager] performSelector:@selector(updateLocation) withObject:nil afterDelay:3];
+//    [[AppManager sharedManager] performSelectorOnMainThread:@selector(updateLocation) withObject:nil waitUntilDone:YES];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -73,4 +77,7 @@
         }
     }];
 }
+
+
+
 @end

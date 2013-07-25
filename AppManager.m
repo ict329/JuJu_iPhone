@@ -106,10 +106,34 @@
 - (void)prepareDataWithAppDelegate:(JJAppDelegate *)delegate
 {
     [MobClick startWithAppkey:@"51eb9e9956240bc7e807335f" reportPolicy:SEND_INTERVAL channelId:@""];
+    [self updateLocation];
 }
 
 - (void)saveDataBeforeExitWithAppDelegate:(JJAppDelegate *)delegate
 {
 
+}
+
+- (void)updateLocation
+{
+    locationManager = [[CLLocationManager alloc] init];//创建位置管理器
+    locationManager.delegate=self;//设置代理
+    locationManager.desiredAccuracy=kCLLocationAccuracyBest;//指定需要的精度级别
+    locationManager.distanceFilter=1000.0f;//设置距离筛选器
+    [locationManager startUpdatingLocation];//启动位置管理器
+
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+    didUpdateToLocation:(CLLocation *)newLocation
+           fromLocation:(CLLocation *)oldLocation
+{
+    JJDebug(@"<didUpdateToLocation>, lat = %f, long = %f", newLocation.coordinate.latitude, newLocation.coordinate.longitude);
+    [GlobalManager setLocation:newLocation.coordinate];
+}
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error
+{
+    JJDebug(@"<didFailWithError> %@", error);
 }
 @end

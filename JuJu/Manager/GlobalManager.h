@@ -12,5 +12,7 @@
 + (THLevelDB *)systemTHDB;
 + (THLevelDB *)userTHDB;
 
++ (CLLocationCoordinate2D)location;
++ (void)setLocation:(CLLocationCoordinate2D)location;
 
 @end

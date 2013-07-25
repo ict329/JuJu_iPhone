@@ -66,6 +66,7 @@ typedef enum {
   PBResultCodeUserNotExistsError = 10001,
   PBResultCodePasswordIncorrectError = 10002,
   PBResultCodeUserStatusExceptionError = 10003,
+  PBResultCodeUnameExistsError = 10004,
   PBResultCodeActionNotExistsError = 20001,
   PBResultCodeActionStatusExceptionError = 20002,
 } PBResultCode;

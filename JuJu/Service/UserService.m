@@ -16,7 +16,10 @@
              handler:(ResultHandler)handler
 {
     [JJService getPath:REGISTER
-            parameters:@{UNAME:userName, PASSWORD:password}
+            parameters:@{UNAME:userName, PASSWORD:password,
+              LATITUDE:@([GlobalManager location].latitude),
+             LONGITUDE:@([GlobalManager location].longitude)}
+     
          remoteHandler:handler];
 }
 
@@ -25,7 +28,10 @@
                   handler:(ResultHandler)handler
 {
     [JJService getPath:LOGIN
-            parameters:@{UNAME:userName, PASSWORD:password}
+            parameters:@{UNAME:userName,
+              PASSWORD:password,
+              LATITUDE:@([GlobalManager location].latitude),
+              LONGITUDE:@([GlobalManager location].longitude)}
          remoteHandler:handler];
 }
 

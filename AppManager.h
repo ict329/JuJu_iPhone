@@ -11,7 +11,10 @@
 
 @class JJAppDelegate;
 
-@interface AppManager : NSObject//<GHSidebarSearchViewControllerDelegate>
+@interface AppManager : NSObject<CLLocationManagerDelegate>//<GHSidebarSearchViewControllerDelegate>
+{
+    __strong CLLocationManager *locationManager;
+}
 
 + (id)sharedManager;
 
@@ -20,4 +23,7 @@
 - (void)prepareDataWithAppDelegate:(JJAppDelegate *)delegate;
 - (void)saveDataBeforeExitWithAppDelegate:(JJAppDelegate *)delegate;
 
+
+//public methods
+- (void)updateLocation;
 @end

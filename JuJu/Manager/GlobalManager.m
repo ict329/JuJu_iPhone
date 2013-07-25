@@ -15,6 +15,8 @@ static Buri *_userBuri = nil;
 static NSString *_uid = nil;
 static THLevelDB *_userTHDB = nil;
 
+static CLLocationCoordinate2D _location;
+
 
 + (Buri *)systemBuri
 {
@@ -63,6 +65,14 @@ static THLevelDB *_userTHDB = nil;
     return _userTHDB;
 }
 
++ (CLLocationCoordinate2D)location
+{
+    return _location;
+}
++ (void)setLocation:(CLLocationCoordinate2D)location
+{
+    _location = location;
+}
 
 @end
 
