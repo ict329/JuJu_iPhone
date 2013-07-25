@@ -96,6 +96,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
   NSMutableArray* mutableUsersList;
   NSMutableArray* mutableActivitysList;
   NSMutableArray* mutableCommentsList;
+  NSMutableArray* mutableBriefUsersList;
 }
 - (BOOL) hasCode;
 - (BOOL) hasErrorMessage;
@@ -117,6 +118,8 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
 - (PBActivity*) activitysAtIndex:(int32_t) index;
 - (NSArray*) commentsList;
 - (PBComment*) commentsAtIndex:(int32_t) index;
+- (NSArray*) briefUsersList;
+- (PBBriefUser*) briefUsersAtIndex:(int32_t) index;
 
 + (PBResponse*) defaultInstance;
 - (PBResponse*) defaultInstance;
@@ -196,6 +199,13 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
 - (PBResponse_Builder*) addComments:(PBComment*) value;
 - (PBResponse_Builder*) addAllComments:(NSArray*) values;
 - (PBResponse_Builder*) clearCommentsList;
+
+- (NSArray*) briefUsersList;
+- (PBBriefUser*) briefUsersAtIndex:(int32_t) index;
+- (PBResponse_Builder*) replaceBriefUsersAtIndex:(int32_t) index with:(PBBriefUser*) value;
+- (PBResponse_Builder*) addBriefUsers:(PBBriefUser*) value;
+- (PBResponse_Builder*) addAllBriefUsers:(NSArray*) values;
+- (PBResponse_Builder*) clearBriefUsersList;
 
 - (BOOL) hasUser;
 - (PBUser*) user;

@@ -5075,7 +5075,7 @@ static PBShare* defaultPBShareInstance = nil;
 @property (retain) NSString* actionId;
 @property PBActionType type;
 @property int32_t cDate;
-@property (retain) PBUserBasic* user;
+@property (retain) PBBriefUser* user;
 @property (retain) PBActivity* activity;
 @property (retain) PBShare* share;
 @property (retain) PBJoin* join;
@@ -5145,7 +5145,7 @@ static PBShare* defaultPBShareInstance = nil;
     self.actionId = @"";
     self.type = PBActionTypeActivity;
     self.cDate = 0;
-    self.user = [PBUserBasic defaultInstance];
+    self.user = [PBBriefUser defaultInstance];
     self.activity = [PBActivity defaultInstance];
     self.share = [PBShare defaultInstance];
     self.join = [PBJoin defaultInstance];
@@ -5384,7 +5384,7 @@ static PBAction* defaultPBActionInstance = nil;
         break;
       }
       case 34: {
-        PBUserBasic_Builder* subBuilder = [PBUserBasic builder];
+        PBBriefUser_Builder* subBuilder = [PBBriefUser builder];
         if (self.hasUser) {
           [subBuilder mergeFrom:self.user];
         }
@@ -5473,22 +5473,22 @@ static PBAction* defaultPBActionInstance = nil;
 - (BOOL) hasUser {
   return result.hasUser;
 }
-- (PBUserBasic*) user {
+- (PBBriefUser*) user {
   return result.user;
 }
-- (PBAction_Builder*) setUser:(PBUserBasic*) value {
+- (PBAction_Builder*) setUser:(PBBriefUser*) value {
   result.hasUser = YES;
   result.user = value;
   return self;
 }
-- (PBAction_Builder*) setUserBuilder:(PBUserBasic_Builder*) builderForValue {
+- (PBAction_Builder*) setUserBuilder:(PBBriefUser_Builder*) builderForValue {
   return [self setUser:[builderForValue build]];
 }
-- (PBAction_Builder*) mergeUser:(PBUserBasic*) value {
+- (PBAction_Builder*) mergeUser:(PBBriefUser*) value {
   if (result.hasUser &&
-      result.user != [PBUserBasic defaultInstance]) {
+      result.user != [PBBriefUser defaultInstance]) {
     result.user =
-      [[[PBUserBasic builderWithPrototype:result.user] mergeFrom:value] buildPartial];
+      [[[PBBriefUser builderWithPrototype:result.user] mergeFrom:value] buildPartial];
   } else {
     result.user = value;
   }
@@ -5497,7 +5497,7 @@ static PBAction* defaultPBActionInstance = nil;
 }
 - (PBAction_Builder*) clearUser {
   result.hasUser = NO;
-  result.user = [PBUserBasic defaultInstance];
+  result.user = [PBBriefUser defaultInstance];
   return self;
 }
 - (BOOL) hasActivity {

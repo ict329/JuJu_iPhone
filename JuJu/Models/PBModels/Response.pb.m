@@ -52,6 +52,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
 @property (retain) NSMutableArray* mutableUsersList;
 @property (retain) NSMutableArray* mutableActivitysList;
 @property (retain) NSMutableArray* mutableCommentsList;
+@property (retain) NSMutableArray* mutableBriefUsersList;
 @property (retain) PBUser* user;
 @property (retain) PBAction* action;
 @property (retain) PBMerchant* merchant;
@@ -78,6 +79,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
 @synthesize mutableUsersList;
 @synthesize mutableActivitysList;
 @synthesize mutableCommentsList;
+@synthesize mutableBriefUsersList;
 - (BOOL) hasUser {
   return !!hasUser_;
 }
@@ -106,6 +108,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
   self.mutableUsersList = nil;
   self.mutableActivitysList = nil;
   self.mutableCommentsList = nil;
+  self.mutableBriefUsersList = nil;
   self.user = nil;
   self.action = nil;
   self.merchant = nil;
@@ -168,6 +171,13 @@ static PBResponse* defaultPBResponseInstance = nil;
   id value = [mutableCommentsList objectAtIndex:index];
   return value;
 }
+- (NSArray*) briefUsersList {
+  return mutableBriefUsersList;
+}
+- (PBBriefUser*) briefUsersAtIndex:(int32_t) index {
+  id value = [mutableBriefUsersList objectAtIndex:index];
+  return value;
+}
 - (BOOL) isInitialized {
   if (!self.hasCode) {
     return NO;
@@ -193,6 +203,11 @@ static PBResponse* defaultPBResponseInstance = nil;
     }
   }
   for (PBComment* element in self.commentsList) {
+    if (!element.isInitialized) {
+      return NO;
+    }
+  }
+  for (PBBriefUser* element in self.briefUsersList) {
     if (!element.isInitialized) {
       return NO;
     }
@@ -236,6 +251,9 @@ static PBResponse* defaultPBResponseInstance = nil;
   for (PBComment* element in self.commentsList) {
     [output writeMessage:14 value:element];
   }
+  for (PBBriefUser* element in self.briefUsersList) {
+    [output writeMessage:15 value:element];
+  }
   if (self.hasUser) {
     [output writeMessage:50 value:self.user];
   }
@@ -274,6 +292,9 @@ static PBResponse* defaultPBResponseInstance = nil;
   }
   for (PBComment* element in self.commentsList) {
     size += computeMessageSize(14, element);
+  }
+  for (PBBriefUser* element in self.briefUsersList) {
+    size += computeMessageSize(15, element);
   }
   if (self.hasUser) {
     size += computeMessageSize(50, self.user);
@@ -395,6 +416,12 @@ static PBResponse* defaultPBResponseInstance = nil;
     }
     [result.mutableCommentsList addObjectsFromArray:other.mutableCommentsList];
   }
+  if (other.mutableBriefUsersList.count > 0) {
+    if (result.mutableBriefUsersList == nil) {
+      result.mutableBriefUsersList = [NSMutableArray array];
+    }
+    [result.mutableBriefUsersList addObjectsFromArray:other.mutableBriefUsersList];
+  }
   if (other.hasUser) {
     [self mergeUser:other.user];
   }
@@ -466,6 +493,12 @@ static PBResponse* defaultPBResponseInstance = nil;
         PBComment_Builder* subBuilder = [PBComment builder];
         [input readMessage:subBuilder extensionRegistry:extensionRegistry];
         [self addComments:[subBuilder buildPartial]];
+        break;
+      }
+      case 122: {
+        PBBriefUser_Builder* subBuilder = [PBBriefUser builder];
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self addBriefUsers:[subBuilder buildPartial]];
         break;
       }
       case 402: {
@@ -673,6 +706,35 @@ static PBResponse* defaultPBResponseInstance = nil;
     result.mutableCommentsList = [NSMutableArray array];
   }
   [result.mutableCommentsList addObject:value];
+  return self;
+}
+- (NSArray*) briefUsersList {
+  if (result.mutableBriefUsersList == nil) { return [NSArray array]; }
+  return result.mutableBriefUsersList;
+}
+- (PBBriefUser*) briefUsersAtIndex:(int32_t) index {
+  return [result briefUsersAtIndex:index];
+}
+- (PBResponse_Builder*) replaceBriefUsersAtIndex:(int32_t) index with:(PBBriefUser*) value {
+  [result.mutableBriefUsersList replaceObjectAtIndex:index withObject:value];
+  return self;
+}
+- (PBResponse_Builder*) addAllBriefUsers:(NSArray*) values {
+  if (result.mutableBriefUsersList == nil) {
+    result.mutableBriefUsersList = [NSMutableArray array];
+  }
+  [result.mutableBriefUsersList addObjectsFromArray:values];
+  return self;
+}
+- (PBResponse_Builder*) clearBriefUsersList {
+  result.mutableBriefUsersList = nil;
+  return self;
+}
+- (PBResponse_Builder*) addBriefUsers:(PBBriefUser*) value {
+  if (result.mutableBriefUsersList == nil) {
+    result.mutableBriefUsersList = [NSMutableArray array];
+  }
+  [result.mutableBriefUsersList addObject:value];
   return self;
 }
 - (BOOL) hasUser {
