@@ -4,6 +4,8 @@
 
 #import "Basic.pb.h"
 
+@class PBBriefUser;
+@class PBBriefUser_Builder;
 @class PBContact;
 @class PBContact_Builder;
 @class PBDevice;
@@ -58,6 +60,8 @@ typedef enum {
   PBUserStatusOffline = 1,
   PBUserStatusOnline = 2,
   PBUserStatusHidden = 3,
+  PBUserStatusAway = 4,
+  PBUserStatusUnlogin = 10,
 } PBUserStatus;
 
 BOOL PBUserStatusIsValidValue(PBUserStatus value);
@@ -768,5 +772,107 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBUser_Builder*) setStatisticBuilder:(PBStatistic_Builder*) builderForValue;
 - (PBUser_Builder*) mergeStatistic:(PBStatistic*) value;
 - (PBUser_Builder*) clearStatistic;
+@end
+
+@interface PBBriefUser : PBGeneratedMessage {
+@private
+  BOOL hasGender_:1;
+  BOOL hasUid_:1;
+  BOOL hasUname_:1;
+  BOOL hasNick_:1;
+  BOOL hasAvatar_:1;
+  BOOL hasRole_:1;
+  BOOL hasStatus_:1;
+  BOOL gender_:1;
+  NSString* uid;
+  NSString* uname;
+  NSString* nick;
+  NSString* avatar;
+  PBUserRole role;
+  PBUserStatus status;
+}
+- (BOOL) hasUid;
+- (BOOL) hasUname;
+- (BOOL) hasNick;
+- (BOOL) hasRole;
+- (BOOL) hasGender;
+- (BOOL) hasAvatar;
+- (BOOL) hasStatus;
+@property (readonly, retain) NSString* uid;
+@property (readonly, retain) NSString* uname;
+@property (readonly, retain) NSString* nick;
+@property (readonly) PBUserRole role;
+- (BOOL) gender;
+@property (readonly, retain) NSString* avatar;
+@property (readonly) PBUserStatus status;
+
++ (PBBriefUser*) defaultInstance;
+- (PBBriefUser*) defaultInstance;
+
+- (BOOL) isInitialized;
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
+- (PBBriefUser_Builder*) builder;
++ (PBBriefUser_Builder*) builder;
++ (PBBriefUser_Builder*) builderWithPrototype:(PBBriefUser*) prototype;
+
++ (PBBriefUser*) parseFromData:(NSData*) data;
++ (PBBriefUser*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (PBBriefUser*) parseFromInputStream:(NSInputStream*) input;
++ (PBBriefUser*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (PBBriefUser*) parseFromCodedInputStream:(PBCodedInputStream*) input;
++ (PBBriefUser*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+@end
+
+@interface PBBriefUser_Builder : PBGeneratedMessage_Builder {
+@private
+  PBBriefUser* result;
+}
+
+- (PBBriefUser*) defaultInstance;
+
+- (PBBriefUser_Builder*) clear;
+- (PBBriefUser_Builder*) clone;
+
+- (PBBriefUser*) build;
+- (PBBriefUser*) buildPartial;
+
+- (PBBriefUser_Builder*) mergeFrom:(PBBriefUser*) other;
+- (PBBriefUser_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
+- (PBBriefUser_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+
+- (BOOL) hasUid;
+- (NSString*) uid;
+- (PBBriefUser_Builder*) setUid:(NSString*) value;
+- (PBBriefUser_Builder*) clearUid;
+
+- (BOOL) hasUname;
+- (NSString*) uname;
+- (PBBriefUser_Builder*) setUname:(NSString*) value;
+- (PBBriefUser_Builder*) clearUname;
+
+- (BOOL) hasNick;
+- (NSString*) nick;
+- (PBBriefUser_Builder*) setNick:(NSString*) value;
+- (PBBriefUser_Builder*) clearNick;
+
+- (BOOL) hasRole;
+- (PBUserRole) role;
+- (PBBriefUser_Builder*) setRole:(PBUserRole) value;
+- (PBBriefUser_Builder*) clearRole;
+
+- (BOOL) hasGender;
+- (BOOL) gender;
+- (PBBriefUser_Builder*) setGender:(BOOL) value;
+- (PBBriefUser_Builder*) clearGender;
+
+- (BOOL) hasAvatar;
+- (NSString*) avatar;
+- (PBBriefUser_Builder*) setAvatar:(NSString*) value;
+- (PBBriefUser_Builder*) clearAvatar;
+
+- (BOOL) hasStatus;
+- (PBUserStatus) status;
+- (PBBriefUser_Builder*) setStatus:(PBUserStatus) value;
+- (PBBriefUser_Builder*) clearStatus;
 @end
 

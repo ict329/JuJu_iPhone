@@ -63,6 +63,8 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value) {
     case PBUserStatusOffline:
     case PBUserStatusOnline:
     case PBUserStatusHidden:
+    case PBUserStatusAway:
+    case PBUserStatusUnlogin:
       return YES;
     default:
       return NO;
@@ -3018,6 +3020,436 @@ static PBUser* defaultPBUserInstance = nil;
 - (PBUser_Builder*) clearStatistic {
   result.hasStatistic = NO;
   result.statistic = [PBStatistic defaultInstance];
+  return self;
+}
+@end
+
+@interface PBBriefUser ()
+@property (retain) NSString* uid;
+@property (retain) NSString* uname;
+@property (retain) NSString* nick;
+@property PBUserRole role;
+@property BOOL gender;
+@property (retain) NSString* avatar;
+@property PBUserStatus status;
+@end
+
+@implementation PBBriefUser
+
+- (BOOL) hasUid {
+  return !!hasUid_;
+}
+- (void) setHasUid:(BOOL) value {
+  hasUid_ = !!value;
+}
+@synthesize uid;
+- (BOOL) hasUname {
+  return !!hasUname_;
+}
+- (void) setHasUname:(BOOL) value {
+  hasUname_ = !!value;
+}
+@synthesize uname;
+- (BOOL) hasNick {
+  return !!hasNick_;
+}
+- (void) setHasNick:(BOOL) value {
+  hasNick_ = !!value;
+}
+@synthesize nick;
+- (BOOL) hasRole {
+  return !!hasRole_;
+}
+- (void) setHasRole:(BOOL) value {
+  hasRole_ = !!value;
+}
+@synthesize role;
+- (BOOL) hasGender {
+  return !!hasGender_;
+}
+- (void) setHasGender:(BOOL) value {
+  hasGender_ = !!value;
+}
+- (BOOL) gender {
+  return !!gender_;
+}
+- (void) setGender:(BOOL) value {
+  gender_ = !!value;
+}
+- (BOOL) hasAvatar {
+  return !!hasAvatar_;
+}
+- (void) setHasAvatar:(BOOL) value {
+  hasAvatar_ = !!value;
+}
+@synthesize avatar;
+- (BOOL) hasStatus {
+  return !!hasStatus_;
+}
+- (void) setHasStatus:(BOOL) value {
+  hasStatus_ = !!value;
+}
+@synthesize status;
+- (void) dealloc {
+  self.uid = nil;
+  self.uname = nil;
+  self.nick = nil;
+  self.avatar = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.uid = @"";
+    self.uname = @"";
+    self.nick = @"";
+    self.role = PBUserRoleUser;
+    self.gender = NO;
+    self.avatar = @"";
+    self.status = PBUserStatusOffline;
+  }
+  return self;
+}
+static PBBriefUser* defaultPBBriefUserInstance = nil;
++ (void) initialize {
+  if (self == [PBBriefUser class]) {
+    defaultPBBriefUserInstance = [[PBBriefUser alloc] init];
+  }
+}
++ (PBBriefUser*) defaultInstance {
+  return defaultPBBriefUserInstance;
+}
+- (PBBriefUser*) defaultInstance {
+  return defaultPBBriefUserInstance;
+}
+- (BOOL) isInitialized {
+  if (!self.hasUid) {
+    return NO;
+  }
+  if (!self.hasUname) {
+    return NO;
+  }
+  return YES;
+}
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasUid) {
+    [output writeString:1 value:self.uid];
+  }
+  if (self.hasUname) {
+    [output writeString:2 value:self.uname];
+  }
+  if (self.hasNick) {
+    [output writeString:3 value:self.nick];
+  }
+  if (self.hasRole) {
+    [output writeEnum:4 value:self.role];
+  }
+  if (self.hasGender) {
+    [output writeBool:5 value:self.gender];
+  }
+  if (self.hasAvatar) {
+    [output writeString:6 value:self.avatar];
+  }
+  if (self.hasStatus) {
+    [output writeEnum:7 value:self.status];
+  }
+  [self.unknownFields writeToCodedOutputStream:output];
+}
+- (int32_t) serializedSize {
+  int32_t size = memoizedSerializedSize;
+  if (size != -1) {
+    return size;
+  }
+
+  size = 0;
+  if (self.hasUid) {
+    size += computeStringSize(1, self.uid);
+  }
+  if (self.hasUname) {
+    size += computeStringSize(2, self.uname);
+  }
+  if (self.hasNick) {
+    size += computeStringSize(3, self.nick);
+  }
+  if (self.hasRole) {
+    size += computeEnumSize(4, self.role);
+  }
+  if (self.hasGender) {
+    size += computeBoolSize(5, self.gender);
+  }
+  if (self.hasAvatar) {
+    size += computeStringSize(6, self.avatar);
+  }
+  if (self.hasStatus) {
+    size += computeEnumSize(7, self.status);
+  }
+  size += self.unknownFields.serializedSize;
+  memoizedSerializedSize = size;
+  return size;
+}
++ (PBBriefUser*) parseFromData:(NSData*) data {
+  return (PBBriefUser*)[[[PBBriefUser builder] mergeFromData:data] build];
+}
++ (PBBriefUser*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBBriefUser*)[[[PBBriefUser builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
+}
++ (PBBriefUser*) parseFromInputStream:(NSInputStream*) input {
+  return (PBBriefUser*)[[[PBBriefUser builder] mergeFromInputStream:input] build];
+}
++ (PBBriefUser*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBBriefUser*)[[[PBBriefUser builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (PBBriefUser*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (PBBriefUser*)[[[PBBriefUser builder] mergeFromCodedInputStream:input] build];
+}
++ (PBBriefUser*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBBriefUser*)[[[PBBriefUser builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (PBBriefUser_Builder*) builder {
+  return [[[PBBriefUser_Builder alloc] init] autorelease];
+}
++ (PBBriefUser_Builder*) builderWithPrototype:(PBBriefUser*) prototype {
+  return [[PBBriefUser builder] mergeFrom:prototype];
+}
+- (PBBriefUser_Builder*) builder {
+  return [PBBriefUser builder];
+}
+@end
+
+@interface PBBriefUser_Builder()
+@property (retain) PBBriefUser* result;
+@end
+
+@implementation PBBriefUser_Builder
+@synthesize result;
+- (void) dealloc {
+  self.result = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.result = [[[PBBriefUser alloc] init] autorelease];
+  }
+  return self;
+}
+- (PBGeneratedMessage*) internalGetResult {
+  return result;
+}
+- (PBBriefUser_Builder*) clear {
+  self.result = [[[PBBriefUser alloc] init] autorelease];
+  return self;
+}
+- (PBBriefUser_Builder*) clone {
+  return [PBBriefUser builderWithPrototype:result];
+}
+- (PBBriefUser*) defaultInstance {
+  return [PBBriefUser defaultInstance];
+}
+- (PBBriefUser*) build {
+  [self checkInitialized];
+  return [self buildPartial];
+}
+- (PBBriefUser*) buildPartial {
+  PBBriefUser* returnMe = [[result retain] autorelease];
+  self.result = nil;
+  return returnMe;
+}
+- (PBBriefUser_Builder*) mergeFrom:(PBBriefUser*) other {
+  if (other == [PBBriefUser defaultInstance]) {
+    return self;
+  }
+  if (other.hasUid) {
+    [self setUid:other.uid];
+  }
+  if (other.hasUname) {
+    [self setUname:other.uname];
+  }
+  if (other.hasNick) {
+    [self setNick:other.nick];
+  }
+  if (other.hasRole) {
+    [self setRole:other.role];
+  }
+  if (other.hasGender) {
+    [self setGender:other.gender];
+  }
+  if (other.hasAvatar) {
+    [self setAvatar:other.avatar];
+  }
+  if (other.hasStatus) {
+    [self setStatus:other.status];
+  }
+  [self mergeUnknownFields:other.unknownFields];
+  return self;
+}
+- (PBBriefUser_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
+}
+- (PBBriefUser_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
+  while (YES) {
+    int32_t tag = [input readTag];
+    switch (tag) {
+      case 0:
+        [self setUnknownFields:[unknownFields build]];
+        return self;
+      default: {
+        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
+          [self setUnknownFields:[unknownFields build]];
+          return self;
+        }
+        break;
+      }
+      case 10: {
+        [self setUid:[input readString]];
+        break;
+      }
+      case 18: {
+        [self setUname:[input readString]];
+        break;
+      }
+      case 26: {
+        [self setNick:[input readString]];
+        break;
+      }
+      case 32: {
+        int32_t value = [input readEnum];
+        if (PBUserRoleIsValidValue(value)) {
+          [self setRole:value];
+        } else {
+          [unknownFields mergeVarintField:4 value:value];
+        }
+        break;
+      }
+      case 40: {
+        [self setGender:[input readBool]];
+        break;
+      }
+      case 50: {
+        [self setAvatar:[input readString]];
+        break;
+      }
+      case 56: {
+        int32_t value = [input readEnum];
+        if (PBUserStatusIsValidValue(value)) {
+          [self setStatus:value];
+        } else {
+          [unknownFields mergeVarintField:7 value:value];
+        }
+        break;
+      }
+    }
+  }
+}
+- (BOOL) hasUid {
+  return result.hasUid;
+}
+- (NSString*) uid {
+  return result.uid;
+}
+- (PBBriefUser_Builder*) setUid:(NSString*) value {
+  result.hasUid = YES;
+  result.uid = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearUid {
+  result.hasUid = NO;
+  result.uid = @"";
+  return self;
+}
+- (BOOL) hasUname {
+  return result.hasUname;
+}
+- (NSString*) uname {
+  return result.uname;
+}
+- (PBBriefUser_Builder*) setUname:(NSString*) value {
+  result.hasUname = YES;
+  result.uname = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearUname {
+  result.hasUname = NO;
+  result.uname = @"";
+  return self;
+}
+- (BOOL) hasNick {
+  return result.hasNick;
+}
+- (NSString*) nick {
+  return result.nick;
+}
+- (PBBriefUser_Builder*) setNick:(NSString*) value {
+  result.hasNick = YES;
+  result.nick = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearNick {
+  result.hasNick = NO;
+  result.nick = @"";
+  return self;
+}
+- (BOOL) hasRole {
+  return result.hasRole;
+}
+- (PBUserRole) role {
+  return result.role;
+}
+- (PBBriefUser_Builder*) setRole:(PBUserRole) value {
+  result.hasRole = YES;
+  result.role = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearRole {
+  result.hasRole = NO;
+  result.role = PBUserRoleUser;
+  return self;
+}
+- (BOOL) hasGender {
+  return result.hasGender;
+}
+- (BOOL) gender {
+  return result.gender;
+}
+- (PBBriefUser_Builder*) setGender:(BOOL) value {
+  result.hasGender = YES;
+  result.gender = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearGender {
+  result.hasGender = NO;
+  result.gender = NO;
+  return self;
+}
+- (BOOL) hasAvatar {
+  return result.hasAvatar;
+}
+- (NSString*) avatar {
+  return result.avatar;
+}
+- (PBBriefUser_Builder*) setAvatar:(NSString*) value {
+  result.hasAvatar = YES;
+  result.avatar = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearAvatar {
+  result.hasAvatar = NO;
+  result.avatar = @"";
+  return self;
+}
+- (BOOL) hasStatus {
+  return result.hasStatus;
+}
+- (PBUserStatus) status {
+  return result.status;
+}
+- (PBBriefUser_Builder*) setStatus:(PBUserStatus) value {
+  result.hasStatus = YES;
+  result.status = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearStatus {
+  result.hasStatus = NO;
+  result.status = PBUserStatusOffline;
   return self;
 }
 @end

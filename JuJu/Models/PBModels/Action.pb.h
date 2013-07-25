@@ -11,6 +11,8 @@
 @class PBActivity_Builder;
 @class PBAlbum;
 @class PBAlbum_Builder;
+@class PBBriefUser;
+@class PBBriefUser_Builder;
 @class PBComment;
 @class PBComment_Builder;
 @class PBContact;
