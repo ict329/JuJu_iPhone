@@ -57,7 +57,7 @@
 
 + (void)updateDeviceWithHandler:(ResultHandler)handler
 {
-    
+//    [MobClick ]
 }
 
 @end

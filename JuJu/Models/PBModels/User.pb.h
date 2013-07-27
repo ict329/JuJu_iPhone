@@ -404,37 +404,57 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 @private
   BOOL hasFanCount_:1;
   BOOL hasFollowCount_:1;
-  BOOL hasMyActivity_:1;
+  BOOL hasActivityCount_:1;
+  BOOL hasShareCount_:1;
+  BOOL hasJoinCount_:1;
+  BOOL hasFavorCount_:1;
+  BOOL hasInvitedCount_:1;
   BOOL hasNewFanCount_:1;
   BOOL hasNewFollowCount_:1;
   BOOL hasNewMessageCount_:1;
   BOOL hasNewFeedCount_:1;
   BOOL hasNewNoticeCount_:1;
+  BOOL hasNewInvitedCount_:1;
   int32_t fanCount;
   int32_t followCount;
-  int32_t myActivity;
+  int32_t activityCount;
+  int32_t shareCount;
+  int32_t joinCount;
+  int32_t favorCount;
+  int32_t invitedCount;
   int32_t newFanCount;
   int32_t newFollowCount;
   int32_t newMessageCount;
   int32_t newFeedCount;
   int32_t newNoticeCount;
+  int32_t newInvitedCount;
 }
 - (BOOL) hasFanCount;
 - (BOOL) hasFollowCount;
-- (BOOL) hasMyActivity;
+- (BOOL) hasActivityCount;
+- (BOOL) hasShareCount;
+- (BOOL) hasJoinCount;
+- (BOOL) hasFavorCount;
+- (BOOL) hasInvitedCount;
 - (BOOL) hasNewFanCount;
 - (BOOL) hasNewFollowCount;
 - (BOOL) hasNewMessageCount;
 - (BOOL) hasNewFeedCount;
 - (BOOL) hasNewNoticeCount;
+- (BOOL) hasNewInvitedCount;
 @property (readonly) int32_t fanCount;
 @property (readonly) int32_t followCount;
-@property (readonly) int32_t myActivity;
+@property (readonly) int32_t activityCount;
+@property (readonly) int32_t shareCount;
+@property (readonly) int32_t joinCount;
+@property (readonly) int32_t favorCount;
+@property (readonly) int32_t invitedCount;
 @property (readonly) int32_t newFanCount;
 @property (readonly) int32_t newFollowCount;
 @property (readonly) int32_t newMessageCount;
 @property (readonly) int32_t newFeedCount;
 @property (readonly) int32_t newNoticeCount;
+@property (readonly) int32_t newInvitedCount;
 
 + (PBStatistic*) defaultInstance;
 - (PBStatistic*) defaultInstance;
@@ -480,10 +500,30 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBStatistic_Builder*) setFollowCount:(int32_t) value;
 - (PBStatistic_Builder*) clearFollowCount;
 
-- (BOOL) hasMyActivity;
-- (int32_t) myActivity;
-- (PBStatistic_Builder*) setMyActivity:(int32_t) value;
-- (PBStatistic_Builder*) clearMyActivity;
+- (BOOL) hasActivityCount;
+- (int32_t) activityCount;
+- (PBStatistic_Builder*) setActivityCount:(int32_t) value;
+- (PBStatistic_Builder*) clearActivityCount;
+
+- (BOOL) hasShareCount;
+- (int32_t) shareCount;
+- (PBStatistic_Builder*) setShareCount:(int32_t) value;
+- (PBStatistic_Builder*) clearShareCount;
+
+- (BOOL) hasJoinCount;
+- (int32_t) joinCount;
+- (PBStatistic_Builder*) setJoinCount:(int32_t) value;
+- (PBStatistic_Builder*) clearJoinCount;
+
+- (BOOL) hasFavorCount;
+- (int32_t) favorCount;
+- (PBStatistic_Builder*) setFavorCount:(int32_t) value;
+- (PBStatistic_Builder*) clearFavorCount;
+
+- (BOOL) hasInvitedCount;
+- (int32_t) invitedCount;
+- (PBStatistic_Builder*) setInvitedCount:(int32_t) value;
+- (PBStatistic_Builder*) clearInvitedCount;
 
 - (BOOL) hasNewFanCount;
 - (int32_t) newFanCount;
@@ -509,6 +549,11 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (int32_t) newNoticeCount;
 - (PBStatistic_Builder*) setNewNoticeCount:(int32_t) value;
 - (PBStatistic_Builder*) clearNewNoticeCount;
+
+- (BOOL) hasNewInvitedCount;
+- (int32_t) newInvitedCount;
+- (PBStatistic_Builder*) setNewInvitedCount:(int32_t) value;
+- (PBStatistic_Builder*) clearNewInvitedCount;
 @end
 
 @interface PBUserBasic : PBGeneratedMessage {
@@ -777,6 +822,9 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 @interface PBBriefUser : PBGeneratedMessage {
 @private
   BOOL hasGender_:1;
+  BOOL hasFollowCount_:1;
+  BOOL hasFanCount_:1;
+  BOOL hasActivityCount_:1;
   BOOL hasUid_:1;
   BOOL hasUname_:1;
   BOOL hasNick_:1;
@@ -784,6 +832,9 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
   BOOL hasRole_:1;
   BOOL hasStatus_:1;
   BOOL gender_:1;
+  int32_t followCount;
+  int32_t fanCount;
+  int32_t activityCount;
   NSString* uid;
   NSString* uname;
   NSString* nick;
@@ -798,6 +849,9 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (BOOL) hasGender;
 - (BOOL) hasAvatar;
 - (BOOL) hasStatus;
+- (BOOL) hasFollowCount;
+- (BOOL) hasFanCount;
+- (BOOL) hasActivityCount;
 @property (readonly, retain) NSString* uid;
 @property (readonly, retain) NSString* uname;
 @property (readonly, retain) NSString* nick;
@@ -805,6 +859,9 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (BOOL) gender;
 @property (readonly, retain) NSString* avatar;
 @property (readonly) PBUserStatus status;
+@property (readonly) int32_t followCount;
+@property (readonly) int32_t fanCount;
+@property (readonly) int32_t activityCount;
 
 + (PBBriefUser*) defaultInstance;
 - (PBBriefUser*) defaultInstance;
@@ -874,5 +931,20 @@ BOOL PBUserStatusIsValidValue(PBUserStatus value);
 - (PBUserStatus) status;
 - (PBBriefUser_Builder*) setStatus:(PBUserStatus) value;
 - (PBBriefUser_Builder*) clearStatus;
+
+- (BOOL) hasFollowCount;
+- (int32_t) followCount;
+- (PBBriefUser_Builder*) setFollowCount:(int32_t) value;
+- (PBBriefUser_Builder*) clearFollowCount;
+
+- (BOOL) hasFanCount;
+- (int32_t) fanCount;
+- (PBBriefUser_Builder*) setFanCount:(int32_t) value;
+- (PBBriefUser_Builder*) clearFanCount;
+
+- (BOOL) hasActivityCount;
+- (int32_t) activityCount;
+- (PBBriefUser_Builder*) setActivityCount:(int32_t) value;
+- (PBBriefUser_Builder*) clearActivityCount;
 @end
 

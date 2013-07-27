@@ -1373,12 +1373,17 @@ static PBDevice* defaultPBDeviceInstance = nil;
 @interface PBStatistic ()
 @property int32_t fanCount;
 @property int32_t followCount;
-@property int32_t myActivity;
+@property int32_t activityCount;
+@property int32_t shareCount;
+@property int32_t joinCount;
+@property int32_t favorCount;
+@property int32_t invitedCount;
 @property int32_t newFanCount;
 @property int32_t newFollowCount;
 @property int32_t newMessageCount;
 @property int32_t newFeedCount;
 @property int32_t newNoticeCount;
+@property int32_t newInvitedCount;
 @end
 
 @implementation PBStatistic
@@ -1397,13 +1402,41 @@ static PBDevice* defaultPBDeviceInstance = nil;
   hasFollowCount_ = !!value;
 }
 @synthesize followCount;
-- (BOOL) hasMyActivity {
-  return !!hasMyActivity_;
+- (BOOL) hasActivityCount {
+  return !!hasActivityCount_;
 }
-- (void) setHasMyActivity:(BOOL) value {
-  hasMyActivity_ = !!value;
+- (void) setHasActivityCount:(BOOL) value {
+  hasActivityCount_ = !!value;
 }
-@synthesize myActivity;
+@synthesize activityCount;
+- (BOOL) hasShareCount {
+  return !!hasShareCount_;
+}
+- (void) setHasShareCount:(BOOL) value {
+  hasShareCount_ = !!value;
+}
+@synthesize shareCount;
+- (BOOL) hasJoinCount {
+  return !!hasJoinCount_;
+}
+- (void) setHasJoinCount:(BOOL) value {
+  hasJoinCount_ = !!value;
+}
+@synthesize joinCount;
+- (BOOL) hasFavorCount {
+  return !!hasFavorCount_;
+}
+- (void) setHasFavorCount:(BOOL) value {
+  hasFavorCount_ = !!value;
+}
+@synthesize favorCount;
+- (BOOL) hasInvitedCount {
+  return !!hasInvitedCount_;
+}
+- (void) setHasInvitedCount:(BOOL) value {
+  hasInvitedCount_ = !!value;
+}
+@synthesize invitedCount;
 - (BOOL) hasNewFanCount {
   return !!hasNewFanCount_;
 }
@@ -1439,6 +1472,13 @@ static PBDevice* defaultPBDeviceInstance = nil;
   hasNewNoticeCount_ = !!value;
 }
 @synthesize newNoticeCount;
+- (BOOL) hasNewInvitedCount {
+  return !!hasNewInvitedCount_;
+}
+- (void) setHasNewInvitedCount:(BOOL) value {
+  hasNewInvitedCount_ = !!value;
+}
+@synthesize newInvitedCount;
 - (void) dealloc {
   [super dealloc];
 }
@@ -1446,12 +1486,17 @@ static PBDevice* defaultPBDeviceInstance = nil;
   if ((self = [super init])) {
     self.fanCount = 0;
     self.followCount = 0;
-    self.myActivity = 0;
+    self.activityCount = 0;
+    self.shareCount = 0;
+    self.joinCount = 0;
+    self.favorCount = 0;
+    self.invitedCount = 0;
     self.newFanCount = 0;
     self.newFollowCount = 0;
     self.newMessageCount = 0;
     self.newFeedCount = 0;
     self.newNoticeCount = 0;
+    self.newInvitedCount = 0;
   }
   return self;
 }
@@ -1477,8 +1522,20 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   if (self.hasFollowCount) {
     [output writeInt32:2 value:self.followCount];
   }
-  if (self.hasMyActivity) {
-    [output writeInt32:3 value:self.myActivity];
+  if (self.hasActivityCount) {
+    [output writeInt32:3 value:self.activityCount];
+  }
+  if (self.hasShareCount) {
+    [output writeInt32:4 value:self.shareCount];
+  }
+  if (self.hasJoinCount) {
+    [output writeInt32:5 value:self.joinCount];
+  }
+  if (self.hasFavorCount) {
+    [output writeInt32:6 value:self.favorCount];
+  }
+  if (self.hasInvitedCount) {
+    [output writeInt32:7 value:self.invitedCount];
   }
   if (self.hasNewFanCount) {
     [output writeInt32:20 value:self.newFanCount];
@@ -1495,6 +1552,9 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   if (self.hasNewNoticeCount) {
     [output writeInt32:25 value:self.newNoticeCount];
   }
+  if (self.hasNewInvitedCount) {
+    [output writeInt32:26 value:self.newInvitedCount];
+  }
   [self.unknownFields writeToCodedOutputStream:output];
 }
 - (int32_t) serializedSize {
@@ -1510,8 +1570,20 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   if (self.hasFollowCount) {
     size += computeInt32Size(2, self.followCount);
   }
-  if (self.hasMyActivity) {
-    size += computeInt32Size(3, self.myActivity);
+  if (self.hasActivityCount) {
+    size += computeInt32Size(3, self.activityCount);
+  }
+  if (self.hasShareCount) {
+    size += computeInt32Size(4, self.shareCount);
+  }
+  if (self.hasJoinCount) {
+    size += computeInt32Size(5, self.joinCount);
+  }
+  if (self.hasFavorCount) {
+    size += computeInt32Size(6, self.favorCount);
+  }
+  if (self.hasInvitedCount) {
+    size += computeInt32Size(7, self.invitedCount);
   }
   if (self.hasNewFanCount) {
     size += computeInt32Size(20, self.newFanCount);
@@ -1527,6 +1599,9 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   }
   if (self.hasNewNoticeCount) {
     size += computeInt32Size(25, self.newNoticeCount);
+  }
+  if (self.hasNewInvitedCount) {
+    size += computeInt32Size(26, self.newInvitedCount);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -1609,8 +1684,20 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   if (other.hasFollowCount) {
     [self setFollowCount:other.followCount];
   }
-  if (other.hasMyActivity) {
-    [self setMyActivity:other.myActivity];
+  if (other.hasActivityCount) {
+    [self setActivityCount:other.activityCount];
+  }
+  if (other.hasShareCount) {
+    [self setShareCount:other.shareCount];
+  }
+  if (other.hasJoinCount) {
+    [self setJoinCount:other.joinCount];
+  }
+  if (other.hasFavorCount) {
+    [self setFavorCount:other.favorCount];
+  }
+  if (other.hasInvitedCount) {
+    [self setInvitedCount:other.invitedCount];
   }
   if (other.hasNewFanCount) {
     [self setNewFanCount:other.newFanCount];
@@ -1626,6 +1713,9 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   }
   if (other.hasNewNoticeCount) {
     [self setNewNoticeCount:other.newNoticeCount];
+  }
+  if (other.hasNewInvitedCount) {
+    [self setNewInvitedCount:other.newInvitedCount];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -1657,7 +1747,23 @@ static PBStatistic* defaultPBStatisticInstance = nil;
         break;
       }
       case 24: {
-        [self setMyActivity:[input readInt32]];
+        [self setActivityCount:[input readInt32]];
+        break;
+      }
+      case 32: {
+        [self setShareCount:[input readInt32]];
+        break;
+      }
+      case 40: {
+        [self setJoinCount:[input readInt32]];
+        break;
+      }
+      case 48: {
+        [self setFavorCount:[input readInt32]];
+        break;
+      }
+      case 56: {
+        [self setInvitedCount:[input readInt32]];
         break;
       }
       case 160: {
@@ -1678,6 +1784,10 @@ static PBStatistic* defaultPBStatisticInstance = nil;
       }
       case 200: {
         [self setNewNoticeCount:[input readInt32]];
+        break;
+      }
+      case 208: {
+        [self setNewInvitedCount:[input readInt32]];
         break;
       }
     }
@@ -1715,20 +1825,84 @@ static PBStatistic* defaultPBStatisticInstance = nil;
   result.followCount = 0;
   return self;
 }
-- (BOOL) hasMyActivity {
-  return result.hasMyActivity;
+- (BOOL) hasActivityCount {
+  return result.hasActivityCount;
 }
-- (int32_t) myActivity {
-  return result.myActivity;
+- (int32_t) activityCount {
+  return result.activityCount;
 }
-- (PBStatistic_Builder*) setMyActivity:(int32_t) value {
-  result.hasMyActivity = YES;
-  result.myActivity = value;
+- (PBStatistic_Builder*) setActivityCount:(int32_t) value {
+  result.hasActivityCount = YES;
+  result.activityCount = value;
   return self;
 }
-- (PBStatistic_Builder*) clearMyActivity {
-  result.hasMyActivity = NO;
-  result.myActivity = 0;
+- (PBStatistic_Builder*) clearActivityCount {
+  result.hasActivityCount = NO;
+  result.activityCount = 0;
+  return self;
+}
+- (BOOL) hasShareCount {
+  return result.hasShareCount;
+}
+- (int32_t) shareCount {
+  return result.shareCount;
+}
+- (PBStatistic_Builder*) setShareCount:(int32_t) value {
+  result.hasShareCount = YES;
+  result.shareCount = value;
+  return self;
+}
+- (PBStatistic_Builder*) clearShareCount {
+  result.hasShareCount = NO;
+  result.shareCount = 0;
+  return self;
+}
+- (BOOL) hasJoinCount {
+  return result.hasJoinCount;
+}
+- (int32_t) joinCount {
+  return result.joinCount;
+}
+- (PBStatistic_Builder*) setJoinCount:(int32_t) value {
+  result.hasJoinCount = YES;
+  result.joinCount = value;
+  return self;
+}
+- (PBStatistic_Builder*) clearJoinCount {
+  result.hasJoinCount = NO;
+  result.joinCount = 0;
+  return self;
+}
+- (BOOL) hasFavorCount {
+  return result.hasFavorCount;
+}
+- (int32_t) favorCount {
+  return result.favorCount;
+}
+- (PBStatistic_Builder*) setFavorCount:(int32_t) value {
+  result.hasFavorCount = YES;
+  result.favorCount = value;
+  return self;
+}
+- (PBStatistic_Builder*) clearFavorCount {
+  result.hasFavorCount = NO;
+  result.favorCount = 0;
+  return self;
+}
+- (BOOL) hasInvitedCount {
+  return result.hasInvitedCount;
+}
+- (int32_t) invitedCount {
+  return result.invitedCount;
+}
+- (PBStatistic_Builder*) setInvitedCount:(int32_t) value {
+  result.hasInvitedCount = YES;
+  result.invitedCount = value;
+  return self;
+}
+- (PBStatistic_Builder*) clearInvitedCount {
+  result.hasInvitedCount = NO;
+  result.invitedCount = 0;
   return self;
 }
 - (BOOL) hasNewFanCount {
@@ -1809,6 +1983,22 @@ static PBStatistic* defaultPBStatisticInstance = nil;
 - (PBStatistic_Builder*) clearNewNoticeCount {
   result.hasNewNoticeCount = NO;
   result.newNoticeCount = 0;
+  return self;
+}
+- (BOOL) hasNewInvitedCount {
+  return result.hasNewInvitedCount;
+}
+- (int32_t) newInvitedCount {
+  return result.newInvitedCount;
+}
+- (PBStatistic_Builder*) setNewInvitedCount:(int32_t) value {
+  result.hasNewInvitedCount = YES;
+  result.newInvitedCount = value;
+  return self;
+}
+- (PBStatistic_Builder*) clearNewInvitedCount {
+  result.hasNewInvitedCount = NO;
+  result.newInvitedCount = 0;
   return self;
 }
 @end
@@ -3032,6 +3222,9 @@ static PBUser* defaultPBUserInstance = nil;
 @property BOOL gender;
 @property (retain) NSString* avatar;
 @property PBUserStatus status;
+@property int32_t followCount;
+@property int32_t fanCount;
+@property int32_t activityCount;
 @end
 
 @implementation PBBriefUser
@@ -3090,6 +3283,27 @@ static PBUser* defaultPBUserInstance = nil;
   hasStatus_ = !!value;
 }
 @synthesize status;
+- (BOOL) hasFollowCount {
+  return !!hasFollowCount_;
+}
+- (void) setHasFollowCount:(BOOL) value {
+  hasFollowCount_ = !!value;
+}
+@synthesize followCount;
+- (BOOL) hasFanCount {
+  return !!hasFanCount_;
+}
+- (void) setHasFanCount:(BOOL) value {
+  hasFanCount_ = !!value;
+}
+@synthesize fanCount;
+- (BOOL) hasActivityCount {
+  return !!hasActivityCount_;
+}
+- (void) setHasActivityCount:(BOOL) value {
+  hasActivityCount_ = !!value;
+}
+@synthesize activityCount;
 - (void) dealloc {
   self.uid = nil;
   self.uname = nil;
@@ -3106,6 +3320,9 @@ static PBUser* defaultPBUserInstance = nil;
     self.gender = NO;
     self.avatar = @"";
     self.status = PBUserStatusOffline;
+    self.followCount = 0;
+    self.fanCount = 0;
+    self.activityCount = 0;
   }
   return self;
 }
@@ -3152,6 +3369,15 @@ static PBBriefUser* defaultPBBriefUserInstance = nil;
   if (self.hasStatus) {
     [output writeEnum:7 value:self.status];
   }
+  if (self.hasFollowCount) {
+    [output writeInt32:10 value:self.followCount];
+  }
+  if (self.hasFanCount) {
+    [output writeInt32:11 value:self.fanCount];
+  }
+  if (self.hasActivityCount) {
+    [output writeInt32:12 value:self.activityCount];
+  }
   [self.unknownFields writeToCodedOutputStream:output];
 }
 - (int32_t) serializedSize {
@@ -3181,6 +3407,15 @@ static PBBriefUser* defaultPBBriefUserInstance = nil;
   }
   if (self.hasStatus) {
     size += computeEnumSize(7, self.status);
+  }
+  if (self.hasFollowCount) {
+    size += computeInt32Size(10, self.followCount);
+  }
+  if (self.hasFanCount) {
+    size += computeInt32Size(11, self.fanCount);
+  }
+  if (self.hasActivityCount) {
+    size += computeInt32Size(12, self.activityCount);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -3278,6 +3513,15 @@ static PBBriefUser* defaultPBBriefUserInstance = nil;
   if (other.hasStatus) {
     [self setStatus:other.status];
   }
+  if (other.hasFollowCount) {
+    [self setFollowCount:other.followCount];
+  }
+  if (other.hasFanCount) {
+    [self setFanCount:other.fanCount];
+  }
+  if (other.hasActivityCount) {
+    [self setActivityCount:other.activityCount];
+  }
   [self mergeUnknownFields:other.unknownFields];
   return self;
 }
@@ -3335,6 +3579,18 @@ static PBBriefUser* defaultPBBriefUserInstance = nil;
         } else {
           [unknownFields mergeVarintField:7 value:value];
         }
+        break;
+      }
+      case 80: {
+        [self setFollowCount:[input readInt32]];
+        break;
+      }
+      case 88: {
+        [self setFanCount:[input readInt32]];
+        break;
+      }
+      case 96: {
+        [self setActivityCount:[input readInt32]];
         break;
       }
     }
@@ -3450,6 +3706,54 @@ static PBBriefUser* defaultPBBriefUserInstance = nil;
 - (PBBriefUser_Builder*) clearStatus {
   result.hasStatus = NO;
   result.status = PBUserStatusOffline;
+  return self;
+}
+- (BOOL) hasFollowCount {
+  return result.hasFollowCount;
+}
+- (int32_t) followCount {
+  return result.followCount;
+}
+- (PBBriefUser_Builder*) setFollowCount:(int32_t) value {
+  result.hasFollowCount = YES;
+  result.followCount = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearFollowCount {
+  result.hasFollowCount = NO;
+  result.followCount = 0;
+  return self;
+}
+- (BOOL) hasFanCount {
+  return result.hasFanCount;
+}
+- (int32_t) fanCount {
+  return result.fanCount;
+}
+- (PBBriefUser_Builder*) setFanCount:(int32_t) value {
+  result.hasFanCount = YES;
+  result.fanCount = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearFanCount {
+  result.hasFanCount = NO;
+  result.fanCount = 0;
+  return self;
+}
+- (BOOL) hasActivityCount {
+  return result.hasActivityCount;
+}
+- (int32_t) activityCount {
+  return result.activityCount;
+}
+- (PBBriefUser_Builder*) setActivityCount:(int32_t) value {
+  result.hasActivityCount = YES;
+  result.activityCount = value;
+  return self;
+}
+- (PBBriefUser_Builder*) clearActivityCount {
+  result.hasActivityCount = NO;
+  result.activityCount = 0;
   return self;
 }
 @end

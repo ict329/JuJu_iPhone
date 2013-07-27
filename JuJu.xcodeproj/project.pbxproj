@@ -79,6 +79,7 @@
 		CA856A0317A02C1E00486CB3 /* PBResponse_Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = CA856A0217A02C1E00486CB3 /* PBResponse_Ext.m */; };
 		CA856A0C17A0322B00486CB3 /* ProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA856A0A17A0322B00486CB3 /* ProfileController.m */; };
 		CA856A0D17A0322B00486CB3 /* ProfileController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA856A0B17A0322B00486CB3 /* ProfileController.xib */; };
+		CA856A1B17A169A000486CB3 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = CA856A1A17A169A000486CB3 /* OpenUDID.m */; };
 		CAA75C541789D8750041C019 /* AppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CAA75C531789D8750041C019 /* AppManager.m */; };
 		CACEC2AF178B0CCF00D88643 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A7178B0CCF00D88643 /* DateUtil.m */; };
 		CACEC2B0178B0CCF00D88643 /* PointUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CACEC2A9178B0CCF00D88643 /* PointUtil.m */; };
@@ -244,6 +245,8 @@
 		CA856A0917A0322B00486CB3 /* ProfileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileController.h; sourceTree = "<group>"; };
 		CA856A0A17A0322B00486CB3 /* ProfileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileController.m; sourceTree = "<group>"; };
 		CA856A0B17A0322B00486CB3 /* ProfileController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileController.xib; sourceTree = "<group>"; };
+		CA856A1917A169A000486CB3 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
+		CA856A1A17A169A000486CB3 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
 		CAA75C521789D8750041C019 /* AppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManager.h; sourceTree = "<group>"; };
 		CAA75C531789D8750041C019 /* AppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManager.m; sourceTree = "<group>"; };
 		CACEC2A6178B0CCF00D88643 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
@@ -580,6 +583,7 @@
 		CA270D471789797A0053A29C /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				CA856A1817A169A000486CB3 /* OpenUDID */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -834,6 +838,15 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		CA856A1817A169A000486CB3 /* OpenUDID */ = {
+			isa = PBXGroup;
+			children = (
+				CA856A1917A169A000486CB3 /* OpenUDID.h */,
+				CA856A1A17A169A000486CB3 /* OpenUDID.m */,
+			);
+			path = OpenUDID;
+			sourceTree = "<group>";
+		};
 		CACEC376178C293200D88643 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -996,6 +1009,7 @@
 				CA8569FF179FF49200486CB3 /* RelationService.m in Sources */,
 				CA856A0317A02C1E00486CB3 /* PBResponse_Ext.m in Sources */,
 				CA856A0C17A0322B00486CB3 /* ProfileController.m in Sources */,
+				CA856A1B17A169A000486CB3 /* OpenUDID.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

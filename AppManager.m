@@ -130,6 +130,7 @@
 {
     JJDebug(@"<didUpdateToLocation>, lat = %f, long = %f", newLocation.coordinate.latitude, newLocation.coordinate.longitude);
     [GlobalManager setLocation:newLocation.coordinate];
+    [MobClick setLocation:newLocation];
 }
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error

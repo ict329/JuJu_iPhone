@@ -2,3 +2,6 @@
 .DS_Store
 
 build_protobuf.sh
+change_author.sh
+task.txt
+idea.txt
