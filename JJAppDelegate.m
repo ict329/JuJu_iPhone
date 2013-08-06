@@ -11,6 +11,8 @@
 
 #import "JJRequestClient.h"
 
+#import <ShareSDK/ShareSDK.h>
+
 #pragma mark -
 #pragma mark Private Interface
 @interface JJAppDelegate () 
@@ -45,7 +47,16 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return YES;
+    return [ShareSDK handleOpenURL:url
+                 sourceApplication:sourceApplication
+                        annotation:annotation
+                        wxDelegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return [ShareSDK handleOpenURL:url
+                        wxDelegate:self];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -82,8 +93,5 @@
 {
     
 }
-
-
-
 
 @end
