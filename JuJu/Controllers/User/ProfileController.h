@@ -15,4 +15,6 @@
 - (IBAction)login:(id)sender;
 - (IBAction)reg:(id)sender;
 - (IBAction)logout:(id)sender;
+- (IBAction)share:(id)sender;
+
 @end

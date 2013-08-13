@@ -17,9 +17,12 @@
 #import "BuriBucket.h"
 #import "THLevelDB.h"
 #import "UserService.h"
-
 #import "ProfileController.h"
 
+#import <ShareSDK/ShareSDK.h>
+#import "WXApi.h"
+#import "WBApi.h"
+#import "GlobalConstants.h"
 
 @implementation AppManager
 
@@ -31,6 +34,18 @@
         _sharedManager = [[AppManager alloc] init];
     });
     return _sharedManager;
+}
+
+- (void)initializePlat
+{
+    //添加新浪微博应用
+    [ShareSDK connectSinaWeiboWithAppKey:kWeiboAppKey
+                               appSecret:kWeiboAppSecret
+                             redirectUri:kWeiboRedirectUri];
+    //添加微信应用
+    [ShareSDK connectWeChatWithAppId:kWeChatAppId
+                           wechatCls:[WXApi class]];
+    
 }
 
 
@@ -107,6 +122,8 @@
 {
     [MobClick startWithAppkey:@"51eb9e9956240bc7e807335f" reportPolicy:SEND_INTERVAL channelId:@""];
     [self updateLocation];
+    [ShareSDK registerApp:@"6d43dc5f938"];
+    [self initializePlat];
 }
 
 - (void)saveDataBeforeExitWithAppDelegate:(JJAppDelegate *)delegate
