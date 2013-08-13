@@ -51,6 +51,16 @@ BOOL PBActionStatusIsValidValue(PBActionStatus value) {
       return NO;
   }
 }
+BOOL PBPromotionStatusIsValidValue(PBPromotionStatus value) {
+  switch (value) {
+    case PBPromotionStatusRunning:
+    case PBPromotionStatusEnd:
+    case PBPromotionStatusPendding:
+      return YES;
+    default:
+      return NO;
+  }
+}
 BOOL PBPayTypeIsValidValue(PBPayType value) {
   switch (value) {
     case PBPayTypeAa:
@@ -63,7 +73,7 @@ BOOL PBPayTypeIsValidValue(PBPayType value) {
 }
 @interface PBAlbum ()
 @property (retain) NSString* albumId;
-@property (retain) NSString* uid;
+@property (retain) PBBriefUser* user;
 @property (retain) NSString* name;
 @property (retain) NSMutableArray* mutableImageListList;
 @end
@@ -77,13 +87,13 @@ BOOL PBPayTypeIsValidValue(PBPayType value) {
   hasAlbumId_ = !!value;
 }
 @synthesize albumId;
-- (BOOL) hasUid {
-  return !!hasUid_;
+- (BOOL) hasUser {
+  return !!hasUser_;
 }
-- (void) setHasUid:(BOOL) value {
-  hasUid_ = !!value;
+- (void) setHasUser:(BOOL) value {
+  hasUser_ = !!value;
 }
-@synthesize uid;
+@synthesize user;
 - (BOOL) hasName {
   return !!hasName_;
 }
@@ -94,7 +104,7 @@ BOOL PBPayTypeIsValidValue(PBPayType value) {
 @synthesize mutableImageListList;
 - (void) dealloc {
   self.albumId = nil;
-  self.uid = nil;
+  self.user = nil;
   self.name = nil;
   self.mutableImageListList = nil;
   [super dealloc];
@@ -102,7 +112,7 @@ BOOL PBPayTypeIsValidValue(PBPayType value) {
 - (id) init {
   if ((self = [super init])) {
     self.albumId = @"";
-    self.uid = @"";
+    self.user = [PBBriefUser defaultInstance];
     self.name = @"";
   }
   return self;
@@ -130,8 +140,10 @@ static PBAlbum* defaultPBAlbumInstance = nil;
   if (!self.hasAlbumId) {
     return NO;
   }
-  if (!self.hasUid) {
-    return NO;
+  if (self.hasUser) {
+    if (!self.user.isInitialized) {
+      return NO;
+    }
   }
   return YES;
 }
@@ -139,8 +151,8 @@ static PBAlbum* defaultPBAlbumInstance = nil;
   if (self.hasAlbumId) {
     [output writeString:1 value:self.albumId];
   }
-  if (self.hasUid) {
-    [output writeString:2 value:self.uid];
+  if (self.hasUser) {
+    [output writeMessage:2 value:self.user];
   }
   if (self.hasName) {
     [output writeString:3 value:self.name];
@@ -160,8 +172,8 @@ static PBAlbum* defaultPBAlbumInstance = nil;
   if (self.hasAlbumId) {
     size += computeStringSize(1, self.albumId);
   }
-  if (self.hasUid) {
-    size += computeStringSize(2, self.uid);
+  if (self.hasUser) {
+    size += computeMessageSize(2, self.user);
   }
   if (self.hasName) {
     size += computeStringSize(3, self.name);
@@ -252,8 +264,8 @@ static PBAlbum* defaultPBAlbumInstance = nil;
   if (other.hasAlbumId) {
     [self setAlbumId:other.albumId];
   }
-  if (other.hasUid) {
-    [self setUid:other.uid];
+  if (other.hasUser) {
+    [self mergeUser:other.user];
   }
   if (other.hasName) {
     [self setName:other.name];
@@ -290,7 +302,12 @@ static PBAlbum* defaultPBAlbumInstance = nil;
         break;
       }
       case 18: {
-        [self setUid:[input readString]];
+        PBBriefUser_Builder* subBuilder = [PBBriefUser builder];
+        if (self.hasUser) {
+          [subBuilder mergeFrom:self.user];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setUser:[subBuilder buildPartial]];
         break;
       }
       case 26: {
@@ -320,20 +337,34 @@ static PBAlbum* defaultPBAlbumInstance = nil;
   result.albumId = @"";
   return self;
 }
-- (BOOL) hasUid {
-  return result.hasUid;
+- (BOOL) hasUser {
+  return result.hasUser;
 }
-- (NSString*) uid {
-  return result.uid;
+- (PBBriefUser*) user {
+  return result.user;
 }
-- (PBAlbum_Builder*) setUid:(NSString*) value {
-  result.hasUid = YES;
-  result.uid = value;
+- (PBAlbum_Builder*) setUser:(PBBriefUser*) value {
+  result.hasUser = YES;
+  result.user = value;
   return self;
 }
-- (PBAlbum_Builder*) clearUid {
-  result.hasUid = NO;
-  result.uid = @"";
+- (PBAlbum_Builder*) setUserBuilder:(PBBriefUser_Builder*) builderForValue {
+  return [self setUser:[builderForValue build]];
+}
+- (PBAlbum_Builder*) mergeUser:(PBBriefUser*) value {
+  if (result.hasUser &&
+      result.user != [PBBriefUser defaultInstance]) {
+    result.user =
+      [[[PBBriefUser builderWithPrototype:result.user] mergeFrom:value] buildPartial];
+  } else {
+    result.user = value;
+  }
+  result.hasUser = YES;
+  return self;
+}
+- (PBAlbum_Builder*) clearUser {
+  result.hasUser = NO;
+  result.user = [PBBriefUser defaultInstance];
   return self;
 }
 - (BOOL) hasName {
@@ -385,518 +416,25 @@ static PBAlbum* defaultPBAlbumInstance = nil;
 }
 @end
 
-@interface PBComment ()
-@property (retain) NSString* commentId;
-@property (retain) NSString* stringId;
-@property (retain) NSString* uid;
-@property int32_t cDate;
-@property (retain) NSString* content;
-@property int32_t star;
-@property BOOL isReply;
-@property (retain) NSString* replyId;
-@property (retain) NSString* digest;
-@end
-
-@implementation PBComment
-
-- (BOOL) hasCommentId {
-  return !!hasCommentId_;
-}
-- (void) setHasCommentId:(BOOL) value {
-  hasCommentId_ = !!value;
-}
-@synthesize commentId;
-- (BOOL) hasStringId {
-  return !!hasStringId_;
-}
-- (void) setHasStringId:(BOOL) value {
-  hasStringId_ = !!value;
-}
-@synthesize stringId;
-- (BOOL) hasUid {
-  return !!hasUid_;
-}
-- (void) setHasUid:(BOOL) value {
-  hasUid_ = !!value;
-}
-@synthesize uid;
-- (BOOL) hasCDate {
-  return !!hasCDate_;
-}
-- (void) setHasCDate:(BOOL) value {
-  hasCDate_ = !!value;
-}
-@synthesize cDate;
-- (BOOL) hasContent {
-  return !!hasContent_;
-}
-- (void) setHasContent:(BOOL) value {
-  hasContent_ = !!value;
-}
-@synthesize content;
-- (BOOL) hasStar {
-  return !!hasStar_;
-}
-- (void) setHasStar:(BOOL) value {
-  hasStar_ = !!value;
-}
-@synthesize star;
-- (BOOL) hasIsReply {
-  return !!hasIsReply_;
-}
-- (void) setHasIsReply:(BOOL) value {
-  hasIsReply_ = !!value;
-}
-- (BOOL) isReply {
-  return !!isReply_;
-}
-- (void) setIsReply:(BOOL) value {
-  isReply_ = !!value;
-}
-- (BOOL) hasReplyId {
-  return !!hasReplyId_;
-}
-- (void) setHasReplyId:(BOOL) value {
-  hasReplyId_ = !!value;
-}
-@synthesize replyId;
-- (BOOL) hasDigest {
-  return !!hasDigest_;
-}
-- (void) setHasDigest:(BOOL) value {
-  hasDigest_ = !!value;
-}
-@synthesize digest;
-- (void) dealloc {
-  self.commentId = nil;
-  self.stringId = nil;
-  self.uid = nil;
-  self.content = nil;
-  self.replyId = nil;
-  self.digest = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.commentId = @"";
-    self.stringId = @"";
-    self.uid = @"";
-    self.cDate = 0;
-    self.content = @"";
-    self.star = 0;
-    self.isReply = NO;
-    self.replyId = @"";
-    self.digest = @"";
-  }
-  return self;
-}
-static PBComment* defaultPBCommentInstance = nil;
-+ (void) initialize {
-  if (self == [PBComment class]) {
-    defaultPBCommentInstance = [[PBComment alloc] init];
-  }
-}
-+ (PBComment*) defaultInstance {
-  return defaultPBCommentInstance;
-}
-- (PBComment*) defaultInstance {
-  return defaultPBCommentInstance;
-}
-- (BOOL) isInitialized {
-  if (!self.hasCommentId) {
-    return NO;
-  }
-  if (!self.hasStringId) {
-    return NO;
-  }
-  if (!self.hasUid) {
-    return NO;
-  }
-  if (!self.hasCDate) {
-    return NO;
-  }
-  return YES;
-}
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
-  if (self.hasCommentId) {
-    [output writeString:1 value:self.commentId];
-  }
-  if (self.hasStringId) {
-    [output writeString:2 value:self.stringId];
-  }
-  if (self.hasUid) {
-    [output writeString:3 value:self.uid];
-  }
-  if (self.hasCDate) {
-    [output writeInt32:4 value:self.cDate];
-  }
-  if (self.hasContent) {
-    [output writeString:5 value:self.content];
-  }
-  if (self.hasStar) {
-    [output writeInt32:6 value:self.star];
-  }
-  if (self.hasIsReply) {
-    [output writeBool:7 value:self.isReply];
-  }
-  if (self.hasReplyId) {
-    [output writeString:8 value:self.replyId];
-  }
-  if (self.hasDigest) {
-    [output writeString:9 value:self.digest];
-  }
-  [self.unknownFields writeToCodedOutputStream:output];
-}
-- (int32_t) serializedSize {
-  int32_t size = memoizedSerializedSize;
-  if (size != -1) {
-    return size;
-  }
-
-  size = 0;
-  if (self.hasCommentId) {
-    size += computeStringSize(1, self.commentId);
-  }
-  if (self.hasStringId) {
-    size += computeStringSize(2, self.stringId);
-  }
-  if (self.hasUid) {
-    size += computeStringSize(3, self.uid);
-  }
-  if (self.hasCDate) {
-    size += computeInt32Size(4, self.cDate);
-  }
-  if (self.hasContent) {
-    size += computeStringSize(5, self.content);
-  }
-  if (self.hasStar) {
-    size += computeInt32Size(6, self.star);
-  }
-  if (self.hasIsReply) {
-    size += computeBoolSize(7, self.isReply);
-  }
-  if (self.hasReplyId) {
-    size += computeStringSize(8, self.replyId);
-  }
-  if (self.hasDigest) {
-    size += computeStringSize(9, self.digest);
-  }
-  size += self.unknownFields.serializedSize;
-  memoizedSerializedSize = size;
-  return size;
-}
-+ (PBComment*) parseFromData:(NSData*) data {
-  return (PBComment*)[[[PBComment builder] mergeFromData:data] build];
-}
-+ (PBComment*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBComment*)[[[PBComment builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
-}
-+ (PBComment*) parseFromInputStream:(NSInputStream*) input {
-  return (PBComment*)[[[PBComment builder] mergeFromInputStream:input] build];
-}
-+ (PBComment*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBComment*)[[[PBComment builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input {
-  return (PBComment*)[[[PBComment builder] mergeFromCodedInputStream:input] build];
-}
-+ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBComment*)[[[PBComment builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBComment_Builder*) builder {
-  return [[[PBComment_Builder alloc] init] autorelease];
-}
-+ (PBComment_Builder*) builderWithPrototype:(PBComment*) prototype {
-  return [[PBComment builder] mergeFrom:prototype];
-}
-- (PBComment_Builder*) builder {
-  return [PBComment builder];
-}
-@end
-
-@interface PBComment_Builder()
-@property (retain) PBComment* result;
-@end
-
-@implementation PBComment_Builder
-@synthesize result;
-- (void) dealloc {
-  self.result = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.result = [[[PBComment alloc] init] autorelease];
-  }
-  return self;
-}
-- (PBGeneratedMessage*) internalGetResult {
-  return result;
-}
-- (PBComment_Builder*) clear {
-  self.result = [[[PBComment alloc] init] autorelease];
-  return self;
-}
-- (PBComment_Builder*) clone {
-  return [PBComment builderWithPrototype:result];
-}
-- (PBComment*) defaultInstance {
-  return [PBComment defaultInstance];
-}
-- (PBComment*) build {
-  [self checkInitialized];
-  return [self buildPartial];
-}
-- (PBComment*) buildPartial {
-  PBComment* returnMe = [[result retain] autorelease];
-  self.result = nil;
-  return returnMe;
-}
-- (PBComment_Builder*) mergeFrom:(PBComment*) other {
-  if (other == [PBComment defaultInstance]) {
-    return self;
-  }
-  if (other.hasCommentId) {
-    [self setCommentId:other.commentId];
-  }
-  if (other.hasStringId) {
-    [self setStringId:other.stringId];
-  }
-  if (other.hasUid) {
-    [self setUid:other.uid];
-  }
-  if (other.hasCDate) {
-    [self setCDate:other.cDate];
-  }
-  if (other.hasContent) {
-    [self setContent:other.content];
-  }
-  if (other.hasStar) {
-    [self setStar:other.star];
-  }
-  if (other.hasIsReply) {
-    [self setIsReply:other.isReply];
-  }
-  if (other.hasReplyId) {
-    [self setReplyId:other.replyId];
-  }
-  if (other.hasDigest) {
-    [self setDigest:other.digest];
-  }
-  [self mergeUnknownFields:other.unknownFields];
-  return self;
-}
-- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
-  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
-}
-- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
-  while (YES) {
-    int32_t tag = [input readTag];
-    switch (tag) {
-      case 0:
-        [self setUnknownFields:[unknownFields build]];
-        return self;
-      default: {
-        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
-          [self setUnknownFields:[unknownFields build]];
-          return self;
-        }
-        break;
-      }
-      case 10: {
-        [self setCommentId:[input readString]];
-        break;
-      }
-      case 18: {
-        [self setStringId:[input readString]];
-        break;
-      }
-      case 26: {
-        [self setUid:[input readString]];
-        break;
-      }
-      case 32: {
-        [self setCDate:[input readInt32]];
-        break;
-      }
-      case 42: {
-        [self setContent:[input readString]];
-        break;
-      }
-      case 48: {
-        [self setStar:[input readInt32]];
-        break;
-      }
-      case 56: {
-        [self setIsReply:[input readBool]];
-        break;
-      }
-      case 66: {
-        [self setReplyId:[input readString]];
-        break;
-      }
-      case 74: {
-        [self setDigest:[input readString]];
-        break;
-      }
-    }
-  }
-}
-- (BOOL) hasCommentId {
-  return result.hasCommentId;
-}
-- (NSString*) commentId {
-  return result.commentId;
-}
-- (PBComment_Builder*) setCommentId:(NSString*) value {
-  result.hasCommentId = YES;
-  result.commentId = value;
-  return self;
-}
-- (PBComment_Builder*) clearCommentId {
-  result.hasCommentId = NO;
-  result.commentId = @"";
-  return self;
-}
-- (BOOL) hasStringId {
-  return result.hasStringId;
-}
-- (NSString*) stringId {
-  return result.stringId;
-}
-- (PBComment_Builder*) setStringId:(NSString*) value {
-  result.hasStringId = YES;
-  result.stringId = value;
-  return self;
-}
-- (PBComment_Builder*) clearStringId {
-  result.hasStringId = NO;
-  result.stringId = @"";
-  return self;
-}
-- (BOOL) hasUid {
-  return result.hasUid;
-}
-- (NSString*) uid {
-  return result.uid;
-}
-- (PBComment_Builder*) setUid:(NSString*) value {
-  result.hasUid = YES;
-  result.uid = value;
-  return self;
-}
-- (PBComment_Builder*) clearUid {
-  result.hasUid = NO;
-  result.uid = @"";
-  return self;
-}
-- (BOOL) hasCDate {
-  return result.hasCDate;
-}
-- (int32_t) cDate {
-  return result.cDate;
-}
-- (PBComment_Builder*) setCDate:(int32_t) value {
-  result.hasCDate = YES;
-  result.cDate = value;
-  return self;
-}
-- (PBComment_Builder*) clearCDate {
-  result.hasCDate = NO;
-  result.cDate = 0;
-  return self;
-}
-- (BOOL) hasContent {
-  return result.hasContent;
-}
-- (NSString*) content {
-  return result.content;
-}
-- (PBComment_Builder*) setContent:(NSString*) value {
-  result.hasContent = YES;
-  result.content = value;
-  return self;
-}
-- (PBComment_Builder*) clearContent {
-  result.hasContent = NO;
-  result.content = @"";
-  return self;
-}
-- (BOOL) hasStar {
-  return result.hasStar;
-}
-- (int32_t) star {
-  return result.star;
-}
-- (PBComment_Builder*) setStar:(int32_t) value {
-  result.hasStar = YES;
-  result.star = value;
-  return self;
-}
-- (PBComment_Builder*) clearStar {
-  result.hasStar = NO;
-  result.star = 0;
-  return self;
-}
-- (BOOL) hasIsReply {
-  return result.hasIsReply;
-}
-- (BOOL) isReply {
-  return result.isReply;
-}
-- (PBComment_Builder*) setIsReply:(BOOL) value {
-  result.hasIsReply = YES;
-  result.isReply = value;
-  return self;
-}
-- (PBComment_Builder*) clearIsReply {
-  result.hasIsReply = NO;
-  result.isReply = NO;
-  return self;
-}
-- (BOOL) hasReplyId {
-  return result.hasReplyId;
-}
-- (NSString*) replyId {
-  return result.replyId;
-}
-- (PBComment_Builder*) setReplyId:(NSString*) value {
-  result.hasReplyId = YES;
-  result.replyId = value;
-  return self;
-}
-- (PBComment_Builder*) clearReplyId {
-  result.hasReplyId = NO;
-  result.replyId = @"";
-  return self;
-}
-- (BOOL) hasDigest {
-  return result.hasDigest;
-}
-- (NSString*) digest {
-  return result.digest;
-}
-- (PBComment_Builder*) setDigest:(NSString*) value {
-  result.hasDigest = YES;
-  result.digest = value;
-  return self;
-}
-- (PBComment_Builder*) clearDigest {
-  result.hasDigest = NO;
-  result.digest = @"";
-  return self;
-}
-@end
-
 @interface PBPromotion ()
+@property (retain) NSString* promotionId;
 @property int32_t startDate;
 @property int32_t endDate;
+@property (retain) NSString* title;
 @property (retain) NSString* content;
+@property PBPromotionStatus status;
+@property (retain) NSString* merchantId;
 @end
 
 @implementation PBPromotion
 
+- (BOOL) hasPromotionId {
+  return !!hasPromotionId_;
+}
+- (void) setHasPromotionId:(BOOL) value {
+  hasPromotionId_ = !!value;
+}
+@synthesize promotionId;
 - (BOOL) hasStartDate {
   return !!hasStartDate_;
 }
@@ -911,6 +449,13 @@ static PBComment* defaultPBCommentInstance = nil;
   hasEndDate_ = !!value;
 }
 @synthesize endDate;
+- (BOOL) hasTitle {
+  return !!hasTitle_;
+}
+- (void) setHasTitle:(BOOL) value {
+  hasTitle_ = !!value;
+}
+@synthesize title;
 - (BOOL) hasContent {
   return !!hasContent_;
 }
@@ -918,15 +463,36 @@ static PBComment* defaultPBCommentInstance = nil;
   hasContent_ = !!value;
 }
 @synthesize content;
+- (BOOL) hasStatus {
+  return !!hasStatus_;
+}
+- (void) setHasStatus:(BOOL) value {
+  hasStatus_ = !!value;
+}
+@synthesize status;
+- (BOOL) hasMerchantId {
+  return !!hasMerchantId_;
+}
+- (void) setHasMerchantId:(BOOL) value {
+  hasMerchantId_ = !!value;
+}
+@synthesize merchantId;
 - (void) dealloc {
+  self.promotionId = nil;
+  self.title = nil;
   self.content = nil;
+  self.merchantId = nil;
   [super dealloc];
 }
 - (id) init {
   if ((self = [super init])) {
+    self.promotionId = @"";
     self.startDate = 0;
     self.endDate = 0;
+    self.title = @"";
     self.content = @"";
+    self.status = PBPromotionStatusRunning;
+    self.merchantId = @"";
   }
   return self;
 }
@@ -943,26 +509,47 @@ static PBPromotion* defaultPBPromotionInstance = nil;
   return defaultPBPromotionInstance;
 }
 - (BOOL) isInitialized {
+  if (!self.hasPromotionId) {
+    return NO;
+  }
   if (!self.hasStartDate) {
     return NO;
   }
   if (!self.hasEndDate) {
     return NO;
   }
+  if (!self.hasTitle) {
+    return NO;
+  }
   if (!self.hasContent) {
+    return NO;
+  }
+  if (!self.hasStatus) {
     return NO;
   }
   return YES;
 }
 - (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasPromotionId) {
+    [output writeString:1 value:self.promotionId];
+  }
   if (self.hasStartDate) {
-    [output writeInt32:1 value:self.startDate];
+    [output writeInt32:2 value:self.startDate];
   }
   if (self.hasEndDate) {
-    [output writeInt32:2 value:self.endDate];
+    [output writeInt32:3 value:self.endDate];
+  }
+  if (self.hasTitle) {
+    [output writeString:4 value:self.title];
   }
   if (self.hasContent) {
-    [output writeString:3 value:self.content];
+    [output writeString:5 value:self.content];
+  }
+  if (self.hasStatus) {
+    [output writeEnum:6 value:self.status];
+  }
+  if (self.hasMerchantId) {
+    [output writeString:7 value:self.merchantId];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -973,14 +560,26 @@ static PBPromotion* defaultPBPromotionInstance = nil;
   }
 
   size = 0;
+  if (self.hasPromotionId) {
+    size += computeStringSize(1, self.promotionId);
+  }
   if (self.hasStartDate) {
-    size += computeInt32Size(1, self.startDate);
+    size += computeInt32Size(2, self.startDate);
   }
   if (self.hasEndDate) {
-    size += computeInt32Size(2, self.endDate);
+    size += computeInt32Size(3, self.endDate);
+  }
+  if (self.hasTitle) {
+    size += computeStringSize(4, self.title);
   }
   if (self.hasContent) {
-    size += computeStringSize(3, self.content);
+    size += computeStringSize(5, self.content);
+  }
+  if (self.hasStatus) {
+    size += computeEnumSize(6, self.status);
+  }
+  if (self.hasMerchantId) {
+    size += computeStringSize(7, self.merchantId);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -1057,14 +656,26 @@ static PBPromotion* defaultPBPromotionInstance = nil;
   if (other == [PBPromotion defaultInstance]) {
     return self;
   }
+  if (other.hasPromotionId) {
+    [self setPromotionId:other.promotionId];
+  }
   if (other.hasStartDate) {
     [self setStartDate:other.startDate];
   }
   if (other.hasEndDate) {
     [self setEndDate:other.endDate];
   }
+  if (other.hasTitle) {
+    [self setTitle:other.title];
+  }
   if (other.hasContent) {
     [self setContent:other.content];
+  }
+  if (other.hasStatus) {
+    [self setStatus:other.status];
+  }
+  if (other.hasMerchantId) {
+    [self setMerchantId:other.merchantId];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -1087,20 +698,57 @@ static PBPromotion* defaultPBPromotionInstance = nil;
         }
         break;
       }
-      case 8: {
-        [self setStartDate:[input readInt32]];
+      case 10: {
+        [self setPromotionId:[input readString]];
         break;
       }
       case 16: {
+        [self setStartDate:[input readInt32]];
+        break;
+      }
+      case 24: {
         [self setEndDate:[input readInt32]];
         break;
       }
-      case 26: {
+      case 34: {
+        [self setTitle:[input readString]];
+        break;
+      }
+      case 42: {
         [self setContent:[input readString]];
+        break;
+      }
+      case 48: {
+        int32_t value = [input readEnum];
+        if (PBPromotionStatusIsValidValue(value)) {
+          [self setStatus:value];
+        } else {
+          [unknownFields mergeVarintField:6 value:value];
+        }
+        break;
+      }
+      case 58: {
+        [self setMerchantId:[input readString]];
         break;
       }
     }
   }
+}
+- (BOOL) hasPromotionId {
+  return result.hasPromotionId;
+}
+- (NSString*) promotionId {
+  return result.promotionId;
+}
+- (PBPromotion_Builder*) setPromotionId:(NSString*) value {
+  result.hasPromotionId = YES;
+  result.promotionId = value;
+  return self;
+}
+- (PBPromotion_Builder*) clearPromotionId {
+  result.hasPromotionId = NO;
+  result.promotionId = @"";
+  return self;
 }
 - (BOOL) hasStartDate {
   return result.hasStartDate;
@@ -1134,6 +782,22 @@ static PBPromotion* defaultPBPromotionInstance = nil;
   result.endDate = 0;
   return self;
 }
+- (BOOL) hasTitle {
+  return result.hasTitle;
+}
+- (NSString*) title {
+  return result.title;
+}
+- (PBPromotion_Builder*) setTitle:(NSString*) value {
+  result.hasTitle = YES;
+  result.title = value;
+  return self;
+}
+- (PBPromotion_Builder*) clearTitle {
+  result.hasTitle = NO;
+  result.title = @"";
+  return self;
+}
 - (BOOL) hasContent {
   return result.hasContent;
 }
@@ -1148,6 +812,38 @@ static PBPromotion* defaultPBPromotionInstance = nil;
 - (PBPromotion_Builder*) clearContent {
   result.hasContent = NO;
   result.content = @"";
+  return self;
+}
+- (BOOL) hasStatus {
+  return result.hasStatus;
+}
+- (PBPromotionStatus) status {
+  return result.status;
+}
+- (PBPromotion_Builder*) setStatus:(PBPromotionStatus) value {
+  result.hasStatus = YES;
+  result.status = value;
+  return self;
+}
+- (PBPromotion_Builder*) clearStatus {
+  result.hasStatus = NO;
+  result.status = PBPromotionStatusRunning;
+  return self;
+}
+- (BOOL) hasMerchantId {
+  return result.hasMerchantId;
+}
+- (NSString*) merchantId {
+  return result.merchantId;
+}
+- (PBPromotion_Builder*) setMerchantId:(NSString*) value {
+  result.hasMerchantId = YES;
+  result.merchantId = value;
+  return self;
+}
+- (PBPromotion_Builder*) clearMerchantId {
+  result.hasMerchantId = NO;
+  result.merchantId = @"";
   return self;
 }
 @end
@@ -1171,6 +867,7 @@ static PBPromotion* defaultPBPromotionInstance = nil;
 @property (retain) NSString* wapUrl;
 @property (retain) NSString* imgUrl;
 @property (retain) NSMutableArray* mutablePromotionsList;
+@property (retain) NSMutableArray* mutablePromotionIdsList;
 @end
 
 @implementation PBMerchant
@@ -1295,6 +992,7 @@ static PBPromotion* defaultPBPromotionInstance = nil;
 }
 @synthesize imgUrl;
 @synthesize mutablePromotionsList;
+@synthesize mutablePromotionIdsList;
 - (void) dealloc {
   self.merchantId = nil;
   self.aibangId = nil;
@@ -1310,6 +1008,7 @@ static PBPromotion* defaultPBPromotionInstance = nil;
   self.wapUrl = nil;
   self.imgUrl = nil;
   self.mutablePromotionsList = nil;
+  self.mutablePromotionIdsList = nil;
   [super dealloc];
 }
 - (id) init {
@@ -1351,6 +1050,13 @@ static PBMerchant* defaultPBMerchantInstance = nil;
 }
 - (PBPromotion*) promotionsAtIndex:(int32_t) index {
   id value = [mutablePromotionsList objectAtIndex:index];
+  return value;
+}
+- (NSArray*) promotionIdsList {
+  return mutablePromotionIdsList;
+}
+- (NSString*) promotionIdsAtIndex:(int32_t) index {
+  id value = [mutablePromotionIdsList objectAtIndex:index];
   return value;
 }
 - (BOOL) isInitialized {
@@ -1419,6 +1125,9 @@ static PBMerchant* defaultPBMerchantInstance = nil;
   for (PBPromotion* element in self.promotionsList) {
     [output writeMessage:30 value:element];
   }
+  for (NSString* element in self.mutablePromotionIdsList) {
+    [output writeString:31 value:element];
+  }
   [self.unknownFields writeToCodedOutputStream:output];
 }
 - (int32_t) serializedSize {
@@ -1481,6 +1190,14 @@ static PBMerchant* defaultPBMerchantInstance = nil;
   }
   for (PBPromotion* element in self.promotionsList) {
     size += computeMessageSize(30, element);
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSString* element in self.mutablePromotionIdsList) {
+      dataSize += computeStringSizeNoTag(element);
+    }
+    size += dataSize;
+    size += 2 * self.mutablePromotionIdsList.count;
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -1614,6 +1331,12 @@ static PBMerchant* defaultPBMerchantInstance = nil;
     }
     [result.mutablePromotionsList addObjectsFromArray:other.mutablePromotionsList];
   }
+  if (other.mutablePromotionIdsList.count > 0) {
+    if (result.mutablePromotionIdsList == nil) {
+      result.mutablePromotionIdsList = [NSMutableArray array];
+    }
+    [result.mutablePromotionIdsList addObjectsFromArray:other.mutablePromotionIdsList];
+  }
   [self mergeUnknownFields:other.unknownFields];
   return self;
 }
@@ -1707,6 +1430,10 @@ static PBMerchant* defaultPBMerchantInstance = nil;
         PBPromotion_Builder* subBuilder = [PBPromotion builder];
         [input readMessage:subBuilder extensionRegistry:extensionRegistry];
         [self addPromotions:[subBuilder buildPartial]];
+        break;
+      }
+      case 250: {
+        [self addPromotionIds:[input readString]];
         break;
       }
     }
@@ -2013,1705 +1740,60 @@ static PBMerchant* defaultPBMerchantInstance = nil;
   [result.mutablePromotionsList addObject:value];
   return self;
 }
-@end
-
-@interface PBParty ()
-@property (retain) PBMerchant* merchant;
-@property int32_t memberLimit;
-@property (retain) PBLocation* location;
-@property (retain) PBContact* contact;
-@property int32_t joinDeadtime;
-@property int32_t holdTime;
-@property (retain) NSString* content;
-@property (retain) NSMutableArray* mutablePhotoListList;
-@property PBPayType payType;
-@end
-
-@implementation PBParty
-
-- (BOOL) hasMerchant {
-  return !!hasMerchant_;
-}
-- (void) setHasMerchant:(BOOL) value {
-  hasMerchant_ = !!value;
-}
-@synthesize merchant;
-- (BOOL) hasMemberLimit {
-  return !!hasMemberLimit_;
-}
-- (void) setHasMemberLimit:(BOOL) value {
-  hasMemberLimit_ = !!value;
-}
-@synthesize memberLimit;
-- (BOOL) hasLocation {
-  return !!hasLocation_;
-}
-- (void) setHasLocation:(BOOL) value {
-  hasLocation_ = !!value;
-}
-@synthesize location;
-- (BOOL) hasContact {
-  return !!hasContact_;
-}
-- (void) setHasContact:(BOOL) value {
-  hasContact_ = !!value;
-}
-@synthesize contact;
-- (BOOL) hasJoinDeadtime {
-  return !!hasJoinDeadtime_;
-}
-- (void) setHasJoinDeadtime:(BOOL) value {
-  hasJoinDeadtime_ = !!value;
-}
-@synthesize joinDeadtime;
-- (BOOL) hasHoldTime {
-  return !!hasHoldTime_;
-}
-- (void) setHasHoldTime:(BOOL) value {
-  hasHoldTime_ = !!value;
-}
-@synthesize holdTime;
-- (BOOL) hasContent {
-  return !!hasContent_;
-}
-- (void) setHasContent:(BOOL) value {
-  hasContent_ = !!value;
-}
-@synthesize content;
-@synthesize mutablePhotoListList;
-- (BOOL) hasPayType {
-  return !!hasPayType_;
-}
-- (void) setHasPayType:(BOOL) value {
-  hasPayType_ = !!value;
-}
-@synthesize payType;
-- (void) dealloc {
-  self.merchant = nil;
-  self.location = nil;
-  self.contact = nil;
-  self.content = nil;
-  self.mutablePhotoListList = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.merchant = [PBMerchant defaultInstance];
-    self.memberLimit = 0;
-    self.location = [PBLocation defaultInstance];
-    self.contact = [PBContact defaultInstance];
-    self.joinDeadtime = 0;
-    self.holdTime = 0;
-    self.content = @"";
-    self.payType = PBPayTypeAa;
-  }
-  return self;
-}
-static PBParty* defaultPBPartyInstance = nil;
-+ (void) initialize {
-  if (self == [PBParty class]) {
-    defaultPBPartyInstance = [[PBParty alloc] init];
-  }
-}
-+ (PBParty*) defaultInstance {
-  return defaultPBPartyInstance;
-}
-- (PBParty*) defaultInstance {
-  return defaultPBPartyInstance;
-}
-- (NSArray*) photoListList {
-  return mutablePhotoListList;
-}
-- (NSString*) photoListAtIndex:(int32_t) index {
-  id value = [mutablePhotoListList objectAtIndex:index];
-  return value;
-}
-- (BOOL) isInitialized {
-  if (self.hasMerchant) {
-    if (!self.merchant.isInitialized) {
-      return NO;
-    }
-  }
-  if (self.hasLocation) {
-    if (!self.location.isInitialized) {
-      return NO;
-    }
-  }
-  return YES;
-}
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
-  if (self.hasMerchant) {
-    [output writeMessage:1 value:self.merchant];
-  }
-  if (self.hasMemberLimit) {
-    [output writeInt32:2 value:self.memberLimit];
-  }
-  if (self.hasLocation) {
-    [output writeMessage:3 value:self.location];
-  }
-  if (self.hasContact) {
-    [output writeMessage:4 value:self.contact];
-  }
-  if (self.hasJoinDeadtime) {
-    [output writeInt32:5 value:self.joinDeadtime];
-  }
-  if (self.hasHoldTime) {
-    [output writeInt32:6 value:self.holdTime];
-  }
-  if (self.hasContent) {
-    [output writeString:7 value:self.content];
-  }
-  for (NSString* element in self.mutablePhotoListList) {
-    [output writeString:8 value:element];
-  }
-  if (self.hasPayType) {
-    [output writeEnum:9 value:self.payType];
-  }
-  [self.unknownFields writeToCodedOutputStream:output];
-}
-- (int32_t) serializedSize {
-  int32_t size = memoizedSerializedSize;
-  if (size != -1) {
-    return size;
-  }
-
-  size = 0;
-  if (self.hasMerchant) {
-    size += computeMessageSize(1, self.merchant);
-  }
-  if (self.hasMemberLimit) {
-    size += computeInt32Size(2, self.memberLimit);
-  }
-  if (self.hasLocation) {
-    size += computeMessageSize(3, self.location);
-  }
-  if (self.hasContact) {
-    size += computeMessageSize(4, self.contact);
-  }
-  if (self.hasJoinDeadtime) {
-    size += computeInt32Size(5, self.joinDeadtime);
-  }
-  if (self.hasHoldTime) {
-    size += computeInt32Size(6, self.holdTime);
-  }
-  if (self.hasContent) {
-    size += computeStringSize(7, self.content);
-  }
-  {
-    int32_t dataSize = 0;
-    for (NSString* element in self.mutablePhotoListList) {
-      dataSize += computeStringSizeNoTag(element);
-    }
-    size += dataSize;
-    size += 1 * self.mutablePhotoListList.count;
-  }
-  if (self.hasPayType) {
-    size += computeEnumSize(9, self.payType);
-  }
-  size += self.unknownFields.serializedSize;
-  memoizedSerializedSize = size;
-  return size;
-}
-+ (PBParty*) parseFromData:(NSData*) data {
-  return (PBParty*)[[[PBParty builder] mergeFromData:data] build];
-}
-+ (PBParty*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBParty*)[[[PBParty builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
-}
-+ (PBParty*) parseFromInputStream:(NSInputStream*) input {
-  return (PBParty*)[[[PBParty builder] mergeFromInputStream:input] build];
-}
-+ (PBParty*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBParty*)[[[PBParty builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBParty*) parseFromCodedInputStream:(PBCodedInputStream*) input {
-  return (PBParty*)[[[PBParty builder] mergeFromCodedInputStream:input] build];
-}
-+ (PBParty*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBParty*)[[[PBParty builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBParty_Builder*) builder {
-  return [[[PBParty_Builder alloc] init] autorelease];
-}
-+ (PBParty_Builder*) builderWithPrototype:(PBParty*) prototype {
-  return [[PBParty builder] mergeFrom:prototype];
-}
-- (PBParty_Builder*) builder {
-  return [PBParty builder];
-}
-@end
-
-@interface PBParty_Builder()
-@property (retain) PBParty* result;
-@end
-
-@implementation PBParty_Builder
-@synthesize result;
-- (void) dealloc {
-  self.result = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.result = [[[PBParty alloc] init] autorelease];
-  }
-  return self;
-}
-- (PBGeneratedMessage*) internalGetResult {
-  return result;
-}
-- (PBParty_Builder*) clear {
-  self.result = [[[PBParty alloc] init] autorelease];
-  return self;
-}
-- (PBParty_Builder*) clone {
-  return [PBParty builderWithPrototype:result];
-}
-- (PBParty*) defaultInstance {
-  return [PBParty defaultInstance];
-}
-- (PBParty*) build {
-  [self checkInitialized];
-  return [self buildPartial];
-}
-- (PBParty*) buildPartial {
-  PBParty* returnMe = [[result retain] autorelease];
-  self.result = nil;
-  return returnMe;
-}
-- (PBParty_Builder*) mergeFrom:(PBParty*) other {
-  if (other == [PBParty defaultInstance]) {
-    return self;
-  }
-  if (other.hasMerchant) {
-    [self mergeMerchant:other.merchant];
-  }
-  if (other.hasMemberLimit) {
-    [self setMemberLimit:other.memberLimit];
-  }
-  if (other.hasLocation) {
-    [self mergeLocation:other.location];
-  }
-  if (other.hasContact) {
-    [self mergeContact:other.contact];
-  }
-  if (other.hasJoinDeadtime) {
-    [self setJoinDeadtime:other.joinDeadtime];
-  }
-  if (other.hasHoldTime) {
-    [self setHoldTime:other.holdTime];
-  }
-  if (other.hasContent) {
-    [self setContent:other.content];
-  }
-  if (other.mutablePhotoListList.count > 0) {
-    if (result.mutablePhotoListList == nil) {
-      result.mutablePhotoListList = [NSMutableArray array];
-    }
-    [result.mutablePhotoListList addObjectsFromArray:other.mutablePhotoListList];
-  }
-  if (other.hasPayType) {
-    [self setPayType:other.payType];
-  }
-  [self mergeUnknownFields:other.unknownFields];
-  return self;
-}
-- (PBParty_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
-  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
-}
-- (PBParty_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
-  while (YES) {
-    int32_t tag = [input readTag];
-    switch (tag) {
-      case 0:
-        [self setUnknownFields:[unknownFields build]];
-        return self;
-      default: {
-        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
-          [self setUnknownFields:[unknownFields build]];
-          return self;
-        }
-        break;
-      }
-      case 10: {
-        PBMerchant_Builder* subBuilder = [PBMerchant builder];
-        if (self.hasMerchant) {
-          [subBuilder mergeFrom:self.merchant];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setMerchant:[subBuilder buildPartial]];
-        break;
-      }
-      case 16: {
-        [self setMemberLimit:[input readInt32]];
-        break;
-      }
-      case 26: {
-        PBLocation_Builder* subBuilder = [PBLocation builder];
-        if (self.hasLocation) {
-          [subBuilder mergeFrom:self.location];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setLocation:[subBuilder buildPartial]];
-        break;
-      }
-      case 34: {
-        PBContact_Builder* subBuilder = [PBContact builder];
-        if (self.hasContact) {
-          [subBuilder mergeFrom:self.contact];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setContact:[subBuilder buildPartial]];
-        break;
-      }
-      case 40: {
-        [self setJoinDeadtime:[input readInt32]];
-        break;
-      }
-      case 48: {
-        [self setHoldTime:[input readInt32]];
-        break;
-      }
-      case 58: {
-        [self setContent:[input readString]];
-        break;
-      }
-      case 66: {
-        [self addPhotoList:[input readString]];
-        break;
-      }
-      case 72: {
-        int32_t value = [input readEnum];
-        if (PBPayTypeIsValidValue(value)) {
-          [self setPayType:value];
-        } else {
-          [unknownFields mergeVarintField:9 value:value];
-        }
-        break;
-      }
-    }
-  }
-}
-- (BOOL) hasMerchant {
-  return result.hasMerchant;
-}
-- (PBMerchant*) merchant {
-  return result.merchant;
-}
-- (PBParty_Builder*) setMerchant:(PBMerchant*) value {
-  result.hasMerchant = YES;
-  result.merchant = value;
-  return self;
-}
-- (PBParty_Builder*) setMerchantBuilder:(PBMerchant_Builder*) builderForValue {
-  return [self setMerchant:[builderForValue build]];
-}
-- (PBParty_Builder*) mergeMerchant:(PBMerchant*) value {
-  if (result.hasMerchant &&
-      result.merchant != [PBMerchant defaultInstance]) {
-    result.merchant =
-      [[[PBMerchant builderWithPrototype:result.merchant] mergeFrom:value] buildPartial];
-  } else {
-    result.merchant = value;
-  }
-  result.hasMerchant = YES;
-  return self;
-}
-- (PBParty_Builder*) clearMerchant {
-  result.hasMerchant = NO;
-  result.merchant = [PBMerchant defaultInstance];
-  return self;
-}
-- (BOOL) hasMemberLimit {
-  return result.hasMemberLimit;
-}
-- (int32_t) memberLimit {
-  return result.memberLimit;
-}
-- (PBParty_Builder*) setMemberLimit:(int32_t) value {
-  result.hasMemberLimit = YES;
-  result.memberLimit = value;
-  return self;
-}
-- (PBParty_Builder*) clearMemberLimit {
-  result.hasMemberLimit = NO;
-  result.memberLimit = 0;
-  return self;
-}
-- (BOOL) hasLocation {
-  return result.hasLocation;
-}
-- (PBLocation*) location {
-  return result.location;
-}
-- (PBParty_Builder*) setLocation:(PBLocation*) value {
-  result.hasLocation = YES;
-  result.location = value;
-  return self;
-}
-- (PBParty_Builder*) setLocationBuilder:(PBLocation_Builder*) builderForValue {
-  return [self setLocation:[builderForValue build]];
-}
-- (PBParty_Builder*) mergeLocation:(PBLocation*) value {
-  if (result.hasLocation &&
-      result.location != [PBLocation defaultInstance]) {
-    result.location =
-      [[[PBLocation builderWithPrototype:result.location] mergeFrom:value] buildPartial];
-  } else {
-    result.location = value;
-  }
-  result.hasLocation = YES;
-  return self;
-}
-- (PBParty_Builder*) clearLocation {
-  result.hasLocation = NO;
-  result.location = [PBLocation defaultInstance];
-  return self;
-}
-- (BOOL) hasContact {
-  return result.hasContact;
-}
-- (PBContact*) contact {
-  return result.contact;
-}
-- (PBParty_Builder*) setContact:(PBContact*) value {
-  result.hasContact = YES;
-  result.contact = value;
-  return self;
-}
-- (PBParty_Builder*) setContactBuilder:(PBContact_Builder*) builderForValue {
-  return [self setContact:[builderForValue build]];
-}
-- (PBParty_Builder*) mergeContact:(PBContact*) value {
-  if (result.hasContact &&
-      result.contact != [PBContact defaultInstance]) {
-    result.contact =
-      [[[PBContact builderWithPrototype:result.contact] mergeFrom:value] buildPartial];
-  } else {
-    result.contact = value;
-  }
-  result.hasContact = YES;
-  return self;
-}
-- (PBParty_Builder*) clearContact {
-  result.hasContact = NO;
-  result.contact = [PBContact defaultInstance];
-  return self;
-}
-- (BOOL) hasJoinDeadtime {
-  return result.hasJoinDeadtime;
-}
-- (int32_t) joinDeadtime {
-  return result.joinDeadtime;
-}
-- (PBParty_Builder*) setJoinDeadtime:(int32_t) value {
-  result.hasJoinDeadtime = YES;
-  result.joinDeadtime = value;
-  return self;
-}
-- (PBParty_Builder*) clearJoinDeadtime {
-  result.hasJoinDeadtime = NO;
-  result.joinDeadtime = 0;
-  return self;
-}
-- (BOOL) hasHoldTime {
-  return result.hasHoldTime;
-}
-- (int32_t) holdTime {
-  return result.holdTime;
-}
-- (PBParty_Builder*) setHoldTime:(int32_t) value {
-  result.hasHoldTime = YES;
-  result.holdTime = value;
-  return self;
-}
-- (PBParty_Builder*) clearHoldTime {
-  result.hasHoldTime = NO;
-  result.holdTime = 0;
-  return self;
-}
-- (BOOL) hasContent {
-  return result.hasContent;
-}
-- (NSString*) content {
-  return result.content;
-}
-- (PBParty_Builder*) setContent:(NSString*) value {
-  result.hasContent = YES;
-  result.content = value;
-  return self;
-}
-- (PBParty_Builder*) clearContent {
-  result.hasContent = NO;
-  result.content = @"";
-  return self;
-}
-- (NSArray*) photoListList {
-  if (result.mutablePhotoListList == nil) {
+- (NSArray*) promotionIdsList {
+  if (result.mutablePromotionIdsList == nil) {
     return [NSArray array];
   }
-  return result.mutablePhotoListList;
+  return result.mutablePromotionIdsList;
 }
-- (NSString*) photoListAtIndex:(int32_t) index {
-  return [result photoListAtIndex:index];
+- (NSString*) promotionIdsAtIndex:(int32_t) index {
+  return [result promotionIdsAtIndex:index];
 }
-- (PBParty_Builder*) replacePhotoListAtIndex:(int32_t) index with:(NSString*) value {
-  [result.mutablePhotoListList replaceObjectAtIndex:index withObject:value];
+- (PBMerchant_Builder*) replacePromotionIdsAtIndex:(int32_t) index with:(NSString*) value {
+  [result.mutablePromotionIdsList replaceObjectAtIndex:index withObject:value];
   return self;
 }
-- (PBParty_Builder*) addPhotoList:(NSString*) value {
-  if (result.mutablePhotoListList == nil) {
-    result.mutablePhotoListList = [NSMutableArray array];
+- (PBMerchant_Builder*) addPromotionIds:(NSString*) value {
+  if (result.mutablePromotionIdsList == nil) {
+    result.mutablePromotionIdsList = [NSMutableArray array];
   }
-  [result.mutablePhotoListList addObject:value];
+  [result.mutablePromotionIdsList addObject:value];
   return self;
 }
-- (PBParty_Builder*) addAllPhotoList:(NSArray*) values {
-  if (result.mutablePhotoListList == nil) {
-    result.mutablePhotoListList = [NSMutableArray array];
+- (PBMerchant_Builder*) addAllPromotionIds:(NSArray*) values {
+  if (result.mutablePromotionIdsList == nil) {
+    result.mutablePromotionIdsList = [NSMutableArray array];
   }
-  [result.mutablePhotoListList addObjectsFromArray:values];
+  [result.mutablePromotionIdsList addObjectsFromArray:values];
   return self;
 }
-- (PBParty_Builder*) clearPhotoListList {
-  result.mutablePhotoListList = nil;
-  return self;
-}
-- (BOOL) hasPayType {
-  return result.hasPayType;
-}
-- (PBPayType) payType {
-  return result.payType;
-}
-- (PBParty_Builder*) setPayType:(PBPayType) value {
-  result.hasPayType = YES;
-  result.payType = value;
-  return self;
-}
-- (PBParty_Builder*) clearPayType {
-  result.hasPayType = NO;
-  result.payType = PBPayTypeAa;
-  return self;
-}
-@end
-
-@interface PBTraffic ()
-@property int32_t memberLimit;
-@property (retain) PBLocation* startLoc;
-@property (retain) PBLocation* endLoc;
-@property (retain) PBContact* contact;
-@property int32_t joinDeadtime;
-@property int32_t holdTime;
-@property (retain) NSString* content;
-@property PBPayType payType;
-@end
-
-@implementation PBTraffic
-
-- (BOOL) hasMemberLimit {
-  return !!hasMemberLimit_;
-}
-- (void) setHasMemberLimit:(BOOL) value {
-  hasMemberLimit_ = !!value;
-}
-@synthesize memberLimit;
-- (BOOL) hasStartLoc {
-  return !!hasStartLoc_;
-}
-- (void) setHasStartLoc:(BOOL) value {
-  hasStartLoc_ = !!value;
-}
-@synthesize startLoc;
-- (BOOL) hasEndLoc {
-  return !!hasEndLoc_;
-}
-- (void) setHasEndLoc:(BOOL) value {
-  hasEndLoc_ = !!value;
-}
-@synthesize endLoc;
-- (BOOL) hasContact {
-  return !!hasContact_;
-}
-- (void) setHasContact:(BOOL) value {
-  hasContact_ = !!value;
-}
-@synthesize contact;
-- (BOOL) hasJoinDeadtime {
-  return !!hasJoinDeadtime_;
-}
-- (void) setHasJoinDeadtime:(BOOL) value {
-  hasJoinDeadtime_ = !!value;
-}
-@synthesize joinDeadtime;
-- (BOOL) hasHoldTime {
-  return !!hasHoldTime_;
-}
-- (void) setHasHoldTime:(BOOL) value {
-  hasHoldTime_ = !!value;
-}
-@synthesize holdTime;
-- (BOOL) hasContent {
-  return !!hasContent_;
-}
-- (void) setHasContent:(BOOL) value {
-  hasContent_ = !!value;
-}
-@synthesize content;
-- (BOOL) hasPayType {
-  return !!hasPayType_;
-}
-- (void) setHasPayType:(BOOL) value {
-  hasPayType_ = !!value;
-}
-@synthesize payType;
-- (void) dealloc {
-  self.startLoc = nil;
-  self.endLoc = nil;
-  self.contact = nil;
-  self.content = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.memberLimit = 0;
-    self.startLoc = [PBLocation defaultInstance];
-    self.endLoc = [PBLocation defaultInstance];
-    self.contact = [PBContact defaultInstance];
-    self.joinDeadtime = 0;
-    self.holdTime = 0;
-    self.content = @"";
-    self.payType = PBPayTypeAa;
-  }
-  return self;
-}
-static PBTraffic* defaultPBTrafficInstance = nil;
-+ (void) initialize {
-  if (self == [PBTraffic class]) {
-    defaultPBTrafficInstance = [[PBTraffic alloc] init];
-  }
-}
-+ (PBTraffic*) defaultInstance {
-  return defaultPBTrafficInstance;
-}
-- (PBTraffic*) defaultInstance {
-  return defaultPBTrafficInstance;
-}
-- (BOOL) isInitialized {
-  if (self.hasStartLoc) {
-    if (!self.startLoc.isInitialized) {
-      return NO;
-    }
-  }
-  if (self.hasEndLoc) {
-    if (!self.endLoc.isInitialized) {
-      return NO;
-    }
-  }
-  return YES;
-}
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
-  if (self.hasMemberLimit) {
-    [output writeInt32:1 value:self.memberLimit];
-  }
-  if (self.hasStartLoc) {
-    [output writeMessage:2 value:self.startLoc];
-  }
-  if (self.hasEndLoc) {
-    [output writeMessage:3 value:self.endLoc];
-  }
-  if (self.hasContact) {
-    [output writeMessage:4 value:self.contact];
-  }
-  if (self.hasJoinDeadtime) {
-    [output writeInt32:5 value:self.joinDeadtime];
-  }
-  if (self.hasHoldTime) {
-    [output writeInt32:6 value:self.holdTime];
-  }
-  if (self.hasContent) {
-    [output writeString:7 value:self.content];
-  }
-  if (self.hasPayType) {
-    [output writeEnum:8 value:self.payType];
-  }
-  [self.unknownFields writeToCodedOutputStream:output];
-}
-- (int32_t) serializedSize {
-  int32_t size = memoizedSerializedSize;
-  if (size != -1) {
-    return size;
-  }
-
-  size = 0;
-  if (self.hasMemberLimit) {
-    size += computeInt32Size(1, self.memberLimit);
-  }
-  if (self.hasStartLoc) {
-    size += computeMessageSize(2, self.startLoc);
-  }
-  if (self.hasEndLoc) {
-    size += computeMessageSize(3, self.endLoc);
-  }
-  if (self.hasContact) {
-    size += computeMessageSize(4, self.contact);
-  }
-  if (self.hasJoinDeadtime) {
-    size += computeInt32Size(5, self.joinDeadtime);
-  }
-  if (self.hasHoldTime) {
-    size += computeInt32Size(6, self.holdTime);
-  }
-  if (self.hasContent) {
-    size += computeStringSize(7, self.content);
-  }
-  if (self.hasPayType) {
-    size += computeEnumSize(8, self.payType);
-  }
-  size += self.unknownFields.serializedSize;
-  memoizedSerializedSize = size;
-  return size;
-}
-+ (PBTraffic*) parseFromData:(NSData*) data {
-  return (PBTraffic*)[[[PBTraffic builder] mergeFromData:data] build];
-}
-+ (PBTraffic*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBTraffic*)[[[PBTraffic builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
-}
-+ (PBTraffic*) parseFromInputStream:(NSInputStream*) input {
-  return (PBTraffic*)[[[PBTraffic builder] mergeFromInputStream:input] build];
-}
-+ (PBTraffic*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBTraffic*)[[[PBTraffic builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBTraffic*) parseFromCodedInputStream:(PBCodedInputStream*) input {
-  return (PBTraffic*)[[[PBTraffic builder] mergeFromCodedInputStream:input] build];
-}
-+ (PBTraffic*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBTraffic*)[[[PBTraffic builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBTraffic_Builder*) builder {
-  return [[[PBTraffic_Builder alloc] init] autorelease];
-}
-+ (PBTraffic_Builder*) builderWithPrototype:(PBTraffic*) prototype {
-  return [[PBTraffic builder] mergeFrom:prototype];
-}
-- (PBTraffic_Builder*) builder {
-  return [PBTraffic builder];
-}
-@end
-
-@interface PBTraffic_Builder()
-@property (retain) PBTraffic* result;
-@end
-
-@implementation PBTraffic_Builder
-@synthesize result;
-- (void) dealloc {
-  self.result = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.result = [[[PBTraffic alloc] init] autorelease];
-  }
-  return self;
-}
-- (PBGeneratedMessage*) internalGetResult {
-  return result;
-}
-- (PBTraffic_Builder*) clear {
-  self.result = [[[PBTraffic alloc] init] autorelease];
-  return self;
-}
-- (PBTraffic_Builder*) clone {
-  return [PBTraffic builderWithPrototype:result];
-}
-- (PBTraffic*) defaultInstance {
-  return [PBTraffic defaultInstance];
-}
-- (PBTraffic*) build {
-  [self checkInitialized];
-  return [self buildPartial];
-}
-- (PBTraffic*) buildPartial {
-  PBTraffic* returnMe = [[result retain] autorelease];
-  self.result = nil;
-  return returnMe;
-}
-- (PBTraffic_Builder*) mergeFrom:(PBTraffic*) other {
-  if (other == [PBTraffic defaultInstance]) {
-    return self;
-  }
-  if (other.hasMemberLimit) {
-    [self setMemberLimit:other.memberLimit];
-  }
-  if (other.hasStartLoc) {
-    [self mergeStartLoc:other.startLoc];
-  }
-  if (other.hasEndLoc) {
-    [self mergeEndLoc:other.endLoc];
-  }
-  if (other.hasContact) {
-    [self mergeContact:other.contact];
-  }
-  if (other.hasJoinDeadtime) {
-    [self setJoinDeadtime:other.joinDeadtime];
-  }
-  if (other.hasHoldTime) {
-    [self setHoldTime:other.holdTime];
-  }
-  if (other.hasContent) {
-    [self setContent:other.content];
-  }
-  if (other.hasPayType) {
-    [self setPayType:other.payType];
-  }
-  [self mergeUnknownFields:other.unknownFields];
-  return self;
-}
-- (PBTraffic_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
-  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
-}
-- (PBTraffic_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
-  while (YES) {
-    int32_t tag = [input readTag];
-    switch (tag) {
-      case 0:
-        [self setUnknownFields:[unknownFields build]];
-        return self;
-      default: {
-        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
-          [self setUnknownFields:[unknownFields build]];
-          return self;
-        }
-        break;
-      }
-      case 8: {
-        [self setMemberLimit:[input readInt32]];
-        break;
-      }
-      case 18: {
-        PBLocation_Builder* subBuilder = [PBLocation builder];
-        if (self.hasStartLoc) {
-          [subBuilder mergeFrom:self.startLoc];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setStartLoc:[subBuilder buildPartial]];
-        break;
-      }
-      case 26: {
-        PBLocation_Builder* subBuilder = [PBLocation builder];
-        if (self.hasEndLoc) {
-          [subBuilder mergeFrom:self.endLoc];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setEndLoc:[subBuilder buildPartial]];
-        break;
-      }
-      case 34: {
-        PBContact_Builder* subBuilder = [PBContact builder];
-        if (self.hasContact) {
-          [subBuilder mergeFrom:self.contact];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setContact:[subBuilder buildPartial]];
-        break;
-      }
-      case 40: {
-        [self setJoinDeadtime:[input readInt32]];
-        break;
-      }
-      case 48: {
-        [self setHoldTime:[input readInt32]];
-        break;
-      }
-      case 58: {
-        [self setContent:[input readString]];
-        break;
-      }
-      case 64: {
-        int32_t value = [input readEnum];
-        if (PBPayTypeIsValidValue(value)) {
-          [self setPayType:value];
-        } else {
-          [unknownFields mergeVarintField:8 value:value];
-        }
-        break;
-      }
-    }
-  }
-}
-- (BOOL) hasMemberLimit {
-  return result.hasMemberLimit;
-}
-- (int32_t) memberLimit {
-  return result.memberLimit;
-}
-- (PBTraffic_Builder*) setMemberLimit:(int32_t) value {
-  result.hasMemberLimit = YES;
-  result.memberLimit = value;
-  return self;
-}
-- (PBTraffic_Builder*) clearMemberLimit {
-  result.hasMemberLimit = NO;
-  result.memberLimit = 0;
-  return self;
-}
-- (BOOL) hasStartLoc {
-  return result.hasStartLoc;
-}
-- (PBLocation*) startLoc {
-  return result.startLoc;
-}
-- (PBTraffic_Builder*) setStartLoc:(PBLocation*) value {
-  result.hasStartLoc = YES;
-  result.startLoc = value;
-  return self;
-}
-- (PBTraffic_Builder*) setStartLocBuilder:(PBLocation_Builder*) builderForValue {
-  return [self setStartLoc:[builderForValue build]];
-}
-- (PBTraffic_Builder*) mergeStartLoc:(PBLocation*) value {
-  if (result.hasStartLoc &&
-      result.startLoc != [PBLocation defaultInstance]) {
-    result.startLoc =
-      [[[PBLocation builderWithPrototype:result.startLoc] mergeFrom:value] buildPartial];
-  } else {
-    result.startLoc = value;
-  }
-  result.hasStartLoc = YES;
-  return self;
-}
-- (PBTraffic_Builder*) clearStartLoc {
-  result.hasStartLoc = NO;
-  result.startLoc = [PBLocation defaultInstance];
-  return self;
-}
-- (BOOL) hasEndLoc {
-  return result.hasEndLoc;
-}
-- (PBLocation*) endLoc {
-  return result.endLoc;
-}
-- (PBTraffic_Builder*) setEndLoc:(PBLocation*) value {
-  result.hasEndLoc = YES;
-  result.endLoc = value;
-  return self;
-}
-- (PBTraffic_Builder*) setEndLocBuilder:(PBLocation_Builder*) builderForValue {
-  return [self setEndLoc:[builderForValue build]];
-}
-- (PBTraffic_Builder*) mergeEndLoc:(PBLocation*) value {
-  if (result.hasEndLoc &&
-      result.endLoc != [PBLocation defaultInstance]) {
-    result.endLoc =
-      [[[PBLocation builderWithPrototype:result.endLoc] mergeFrom:value] buildPartial];
-  } else {
-    result.endLoc = value;
-  }
-  result.hasEndLoc = YES;
-  return self;
-}
-- (PBTraffic_Builder*) clearEndLoc {
-  result.hasEndLoc = NO;
-  result.endLoc = [PBLocation defaultInstance];
-  return self;
-}
-- (BOOL) hasContact {
-  return result.hasContact;
-}
-- (PBContact*) contact {
-  return result.contact;
-}
-- (PBTraffic_Builder*) setContact:(PBContact*) value {
-  result.hasContact = YES;
-  result.contact = value;
-  return self;
-}
-- (PBTraffic_Builder*) setContactBuilder:(PBContact_Builder*) builderForValue {
-  return [self setContact:[builderForValue build]];
-}
-- (PBTraffic_Builder*) mergeContact:(PBContact*) value {
-  if (result.hasContact &&
-      result.contact != [PBContact defaultInstance]) {
-    result.contact =
-      [[[PBContact builderWithPrototype:result.contact] mergeFrom:value] buildPartial];
-  } else {
-    result.contact = value;
-  }
-  result.hasContact = YES;
-  return self;
-}
-- (PBTraffic_Builder*) clearContact {
-  result.hasContact = NO;
-  result.contact = [PBContact defaultInstance];
-  return self;
-}
-- (BOOL) hasJoinDeadtime {
-  return result.hasJoinDeadtime;
-}
-- (int32_t) joinDeadtime {
-  return result.joinDeadtime;
-}
-- (PBTraffic_Builder*) setJoinDeadtime:(int32_t) value {
-  result.hasJoinDeadtime = YES;
-  result.joinDeadtime = value;
-  return self;
-}
-- (PBTraffic_Builder*) clearJoinDeadtime {
-  result.hasJoinDeadtime = NO;
-  result.joinDeadtime = 0;
-  return self;
-}
-- (BOOL) hasHoldTime {
-  return result.hasHoldTime;
-}
-- (int32_t) holdTime {
-  return result.holdTime;
-}
-- (PBTraffic_Builder*) setHoldTime:(int32_t) value {
-  result.hasHoldTime = YES;
-  result.holdTime = value;
-  return self;
-}
-- (PBTraffic_Builder*) clearHoldTime {
-  result.hasHoldTime = NO;
-  result.holdTime = 0;
-  return self;
-}
-- (BOOL) hasContent {
-  return result.hasContent;
-}
-- (NSString*) content {
-  return result.content;
-}
-- (PBTraffic_Builder*) setContent:(NSString*) value {
-  result.hasContent = YES;
-  result.content = value;
-  return self;
-}
-- (PBTraffic_Builder*) clearContent {
-  result.hasContent = NO;
-  result.content = @"";
-  return self;
-}
-- (BOOL) hasPayType {
-  return result.hasPayType;
-}
-- (PBPayType) payType {
-  return result.payType;
-}
-- (PBTraffic_Builder*) setPayType:(PBPayType) value {
-  result.hasPayType = YES;
-  result.payType = value;
-  return self;
-}
-- (PBTraffic_Builder*) clearPayType {
-  result.hasPayType = NO;
-  result.payType = PBPayTypeAa;
-  return self;
-}
-@end
-
-@interface PBShopping ()
-@property (retain) PBMerchant* merchant;
-@property int32_t memberLimit;
-@property (retain) PBLocation* location;
-@property (retain) PBContact* contact;
-@property int32_t joinDeadtime;
-@property int32_t holdTime;
-@property (retain) NSString* content;
-@property (retain) NSMutableArray* mutablePhotoListList;
-@property PBPayType payType;
-@end
-
-@implementation PBShopping
-
-- (BOOL) hasMerchant {
-  return !!hasMerchant_;
-}
-- (void) setHasMerchant:(BOOL) value {
-  hasMerchant_ = !!value;
-}
-@synthesize merchant;
-- (BOOL) hasMemberLimit {
-  return !!hasMemberLimit_;
-}
-- (void) setHasMemberLimit:(BOOL) value {
-  hasMemberLimit_ = !!value;
-}
-@synthesize memberLimit;
-- (BOOL) hasLocation {
-  return !!hasLocation_;
-}
-- (void) setHasLocation:(BOOL) value {
-  hasLocation_ = !!value;
-}
-@synthesize location;
-- (BOOL) hasContact {
-  return !!hasContact_;
-}
-- (void) setHasContact:(BOOL) value {
-  hasContact_ = !!value;
-}
-@synthesize contact;
-- (BOOL) hasJoinDeadtime {
-  return !!hasJoinDeadtime_;
-}
-- (void) setHasJoinDeadtime:(BOOL) value {
-  hasJoinDeadtime_ = !!value;
-}
-@synthesize joinDeadtime;
-- (BOOL) hasHoldTime {
-  return !!hasHoldTime_;
-}
-- (void) setHasHoldTime:(BOOL) value {
-  hasHoldTime_ = !!value;
-}
-@synthesize holdTime;
-- (BOOL) hasContent {
-  return !!hasContent_;
-}
-- (void) setHasContent:(BOOL) value {
-  hasContent_ = !!value;
-}
-@synthesize content;
-@synthesize mutablePhotoListList;
-- (BOOL) hasPayType {
-  return !!hasPayType_;
-}
-- (void) setHasPayType:(BOOL) value {
-  hasPayType_ = !!value;
-}
-@synthesize payType;
-- (void) dealloc {
-  self.merchant = nil;
-  self.location = nil;
-  self.contact = nil;
-  self.content = nil;
-  self.mutablePhotoListList = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.merchant = [PBMerchant defaultInstance];
-    self.memberLimit = 0;
-    self.location = [PBLocation defaultInstance];
-    self.contact = [PBContact defaultInstance];
-    self.joinDeadtime = 0;
-    self.holdTime = 0;
-    self.content = @"";
-    self.payType = PBPayTypeAa;
-  }
-  return self;
-}
-static PBShopping* defaultPBShoppingInstance = nil;
-+ (void) initialize {
-  if (self == [PBShopping class]) {
-    defaultPBShoppingInstance = [[PBShopping alloc] init];
-  }
-}
-+ (PBShopping*) defaultInstance {
-  return defaultPBShoppingInstance;
-}
-- (PBShopping*) defaultInstance {
-  return defaultPBShoppingInstance;
-}
-- (NSArray*) photoListList {
-  return mutablePhotoListList;
-}
-- (NSString*) photoListAtIndex:(int32_t) index {
-  id value = [mutablePhotoListList objectAtIndex:index];
-  return value;
-}
-- (BOOL) isInitialized {
-  if (self.hasMerchant) {
-    if (!self.merchant.isInitialized) {
-      return NO;
-    }
-  }
-  if (self.hasLocation) {
-    if (!self.location.isInitialized) {
-      return NO;
-    }
-  }
-  return YES;
-}
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
-  if (self.hasMerchant) {
-    [output writeMessage:1 value:self.merchant];
-  }
-  if (self.hasMemberLimit) {
-    [output writeInt32:2 value:self.memberLimit];
-  }
-  if (self.hasLocation) {
-    [output writeMessage:3 value:self.location];
-  }
-  if (self.hasContact) {
-    [output writeMessage:4 value:self.contact];
-  }
-  if (self.hasJoinDeadtime) {
-    [output writeInt32:5 value:self.joinDeadtime];
-  }
-  if (self.hasHoldTime) {
-    [output writeInt32:6 value:self.holdTime];
-  }
-  if (self.hasContent) {
-    [output writeString:7 value:self.content];
-  }
-  for (NSString* element in self.mutablePhotoListList) {
-    [output writeString:8 value:element];
-  }
-  if (self.hasPayType) {
-    [output writeEnum:9 value:self.payType];
-  }
-  [self.unknownFields writeToCodedOutputStream:output];
-}
-- (int32_t) serializedSize {
-  int32_t size = memoizedSerializedSize;
-  if (size != -1) {
-    return size;
-  }
-
-  size = 0;
-  if (self.hasMerchant) {
-    size += computeMessageSize(1, self.merchant);
-  }
-  if (self.hasMemberLimit) {
-    size += computeInt32Size(2, self.memberLimit);
-  }
-  if (self.hasLocation) {
-    size += computeMessageSize(3, self.location);
-  }
-  if (self.hasContact) {
-    size += computeMessageSize(4, self.contact);
-  }
-  if (self.hasJoinDeadtime) {
-    size += computeInt32Size(5, self.joinDeadtime);
-  }
-  if (self.hasHoldTime) {
-    size += computeInt32Size(6, self.holdTime);
-  }
-  if (self.hasContent) {
-    size += computeStringSize(7, self.content);
-  }
-  {
-    int32_t dataSize = 0;
-    for (NSString* element in self.mutablePhotoListList) {
-      dataSize += computeStringSizeNoTag(element);
-    }
-    size += dataSize;
-    size += 1 * self.mutablePhotoListList.count;
-  }
-  if (self.hasPayType) {
-    size += computeEnumSize(9, self.payType);
-  }
-  size += self.unknownFields.serializedSize;
-  memoizedSerializedSize = size;
-  return size;
-}
-+ (PBShopping*) parseFromData:(NSData*) data {
-  return (PBShopping*)[[[PBShopping builder] mergeFromData:data] build];
-}
-+ (PBShopping*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBShopping*)[[[PBShopping builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
-}
-+ (PBShopping*) parseFromInputStream:(NSInputStream*) input {
-  return (PBShopping*)[[[PBShopping builder] mergeFromInputStream:input] build];
-}
-+ (PBShopping*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBShopping*)[[[PBShopping builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBShopping*) parseFromCodedInputStream:(PBCodedInputStream*) input {
-  return (PBShopping*)[[[PBShopping builder] mergeFromCodedInputStream:input] build];
-}
-+ (PBShopping*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBShopping*)[[[PBShopping builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBShopping_Builder*) builder {
-  return [[[PBShopping_Builder alloc] init] autorelease];
-}
-+ (PBShopping_Builder*) builderWithPrototype:(PBShopping*) prototype {
-  return [[PBShopping builder] mergeFrom:prototype];
-}
-- (PBShopping_Builder*) builder {
-  return [PBShopping builder];
-}
-@end
-
-@interface PBShopping_Builder()
-@property (retain) PBShopping* result;
-@end
-
-@implementation PBShopping_Builder
-@synthesize result;
-- (void) dealloc {
-  self.result = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.result = [[[PBShopping alloc] init] autorelease];
-  }
-  return self;
-}
-- (PBGeneratedMessage*) internalGetResult {
-  return result;
-}
-- (PBShopping_Builder*) clear {
-  self.result = [[[PBShopping alloc] init] autorelease];
-  return self;
-}
-- (PBShopping_Builder*) clone {
-  return [PBShopping builderWithPrototype:result];
-}
-- (PBShopping*) defaultInstance {
-  return [PBShopping defaultInstance];
-}
-- (PBShopping*) build {
-  [self checkInitialized];
-  return [self buildPartial];
-}
-- (PBShopping*) buildPartial {
-  PBShopping* returnMe = [[result retain] autorelease];
-  self.result = nil;
-  return returnMe;
-}
-- (PBShopping_Builder*) mergeFrom:(PBShopping*) other {
-  if (other == [PBShopping defaultInstance]) {
-    return self;
-  }
-  if (other.hasMerchant) {
-    [self mergeMerchant:other.merchant];
-  }
-  if (other.hasMemberLimit) {
-    [self setMemberLimit:other.memberLimit];
-  }
-  if (other.hasLocation) {
-    [self mergeLocation:other.location];
-  }
-  if (other.hasContact) {
-    [self mergeContact:other.contact];
-  }
-  if (other.hasJoinDeadtime) {
-    [self setJoinDeadtime:other.joinDeadtime];
-  }
-  if (other.hasHoldTime) {
-    [self setHoldTime:other.holdTime];
-  }
-  if (other.hasContent) {
-    [self setContent:other.content];
-  }
-  if (other.mutablePhotoListList.count > 0) {
-    if (result.mutablePhotoListList == nil) {
-      result.mutablePhotoListList = [NSMutableArray array];
-    }
-    [result.mutablePhotoListList addObjectsFromArray:other.mutablePhotoListList];
-  }
-  if (other.hasPayType) {
-    [self setPayType:other.payType];
-  }
-  [self mergeUnknownFields:other.unknownFields];
-  return self;
-}
-- (PBShopping_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
-  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
-}
-- (PBShopping_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
-  while (YES) {
-    int32_t tag = [input readTag];
-    switch (tag) {
-      case 0:
-        [self setUnknownFields:[unknownFields build]];
-        return self;
-      default: {
-        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
-          [self setUnknownFields:[unknownFields build]];
-          return self;
-        }
-        break;
-      }
-      case 10: {
-        PBMerchant_Builder* subBuilder = [PBMerchant builder];
-        if (self.hasMerchant) {
-          [subBuilder mergeFrom:self.merchant];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setMerchant:[subBuilder buildPartial]];
-        break;
-      }
-      case 16: {
-        [self setMemberLimit:[input readInt32]];
-        break;
-      }
-      case 26: {
-        PBLocation_Builder* subBuilder = [PBLocation builder];
-        if (self.hasLocation) {
-          [subBuilder mergeFrom:self.location];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setLocation:[subBuilder buildPartial]];
-        break;
-      }
-      case 34: {
-        PBContact_Builder* subBuilder = [PBContact builder];
-        if (self.hasContact) {
-          [subBuilder mergeFrom:self.contact];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setContact:[subBuilder buildPartial]];
-        break;
-      }
-      case 40: {
-        [self setJoinDeadtime:[input readInt32]];
-        break;
-      }
-      case 48: {
-        [self setHoldTime:[input readInt32]];
-        break;
-      }
-      case 58: {
-        [self setContent:[input readString]];
-        break;
-      }
-      case 66: {
-        [self addPhotoList:[input readString]];
-        break;
-      }
-      case 72: {
-        int32_t value = [input readEnum];
-        if (PBPayTypeIsValidValue(value)) {
-          [self setPayType:value];
-        } else {
-          [unknownFields mergeVarintField:9 value:value];
-        }
-        break;
-      }
-    }
-  }
-}
-- (BOOL) hasMerchant {
-  return result.hasMerchant;
-}
-- (PBMerchant*) merchant {
-  return result.merchant;
-}
-- (PBShopping_Builder*) setMerchant:(PBMerchant*) value {
-  result.hasMerchant = YES;
-  result.merchant = value;
-  return self;
-}
-- (PBShopping_Builder*) setMerchantBuilder:(PBMerchant_Builder*) builderForValue {
-  return [self setMerchant:[builderForValue build]];
-}
-- (PBShopping_Builder*) mergeMerchant:(PBMerchant*) value {
-  if (result.hasMerchant &&
-      result.merchant != [PBMerchant defaultInstance]) {
-    result.merchant =
-      [[[PBMerchant builderWithPrototype:result.merchant] mergeFrom:value] buildPartial];
-  } else {
-    result.merchant = value;
-  }
-  result.hasMerchant = YES;
-  return self;
-}
-- (PBShopping_Builder*) clearMerchant {
-  result.hasMerchant = NO;
-  result.merchant = [PBMerchant defaultInstance];
-  return self;
-}
-- (BOOL) hasMemberLimit {
-  return result.hasMemberLimit;
-}
-- (int32_t) memberLimit {
-  return result.memberLimit;
-}
-- (PBShopping_Builder*) setMemberLimit:(int32_t) value {
-  result.hasMemberLimit = YES;
-  result.memberLimit = value;
-  return self;
-}
-- (PBShopping_Builder*) clearMemberLimit {
-  result.hasMemberLimit = NO;
-  result.memberLimit = 0;
-  return self;
-}
-- (BOOL) hasLocation {
-  return result.hasLocation;
-}
-- (PBLocation*) location {
-  return result.location;
-}
-- (PBShopping_Builder*) setLocation:(PBLocation*) value {
-  result.hasLocation = YES;
-  result.location = value;
-  return self;
-}
-- (PBShopping_Builder*) setLocationBuilder:(PBLocation_Builder*) builderForValue {
-  return [self setLocation:[builderForValue build]];
-}
-- (PBShopping_Builder*) mergeLocation:(PBLocation*) value {
-  if (result.hasLocation &&
-      result.location != [PBLocation defaultInstance]) {
-    result.location =
-      [[[PBLocation builderWithPrototype:result.location] mergeFrom:value] buildPartial];
-  } else {
-    result.location = value;
-  }
-  result.hasLocation = YES;
-  return self;
-}
-- (PBShopping_Builder*) clearLocation {
-  result.hasLocation = NO;
-  result.location = [PBLocation defaultInstance];
-  return self;
-}
-- (BOOL) hasContact {
-  return result.hasContact;
-}
-- (PBContact*) contact {
-  return result.contact;
-}
-- (PBShopping_Builder*) setContact:(PBContact*) value {
-  result.hasContact = YES;
-  result.contact = value;
-  return self;
-}
-- (PBShopping_Builder*) setContactBuilder:(PBContact_Builder*) builderForValue {
-  return [self setContact:[builderForValue build]];
-}
-- (PBShopping_Builder*) mergeContact:(PBContact*) value {
-  if (result.hasContact &&
-      result.contact != [PBContact defaultInstance]) {
-    result.contact =
-      [[[PBContact builderWithPrototype:result.contact] mergeFrom:value] buildPartial];
-  } else {
-    result.contact = value;
-  }
-  result.hasContact = YES;
-  return self;
-}
-- (PBShopping_Builder*) clearContact {
-  result.hasContact = NO;
-  result.contact = [PBContact defaultInstance];
-  return self;
-}
-- (BOOL) hasJoinDeadtime {
-  return result.hasJoinDeadtime;
-}
-- (int32_t) joinDeadtime {
-  return result.joinDeadtime;
-}
-- (PBShopping_Builder*) setJoinDeadtime:(int32_t) value {
-  result.hasJoinDeadtime = YES;
-  result.joinDeadtime = value;
-  return self;
-}
-- (PBShopping_Builder*) clearJoinDeadtime {
-  result.hasJoinDeadtime = NO;
-  result.joinDeadtime = 0;
-  return self;
-}
-- (BOOL) hasHoldTime {
-  return result.hasHoldTime;
-}
-- (int32_t) holdTime {
-  return result.holdTime;
-}
-- (PBShopping_Builder*) setHoldTime:(int32_t) value {
-  result.hasHoldTime = YES;
-  result.holdTime = value;
-  return self;
-}
-- (PBShopping_Builder*) clearHoldTime {
-  result.hasHoldTime = NO;
-  result.holdTime = 0;
-  return self;
-}
-- (BOOL) hasContent {
-  return result.hasContent;
-}
-- (NSString*) content {
-  return result.content;
-}
-- (PBShopping_Builder*) setContent:(NSString*) value {
-  result.hasContent = YES;
-  result.content = value;
-  return self;
-}
-- (PBShopping_Builder*) clearContent {
-  result.hasContent = NO;
-  result.content = @"";
-  return self;
-}
-- (NSArray*) photoListList {
-  if (result.mutablePhotoListList == nil) {
-    return [NSArray array];
-  }
-  return result.mutablePhotoListList;
-}
-- (NSString*) photoListAtIndex:(int32_t) index {
-  return [result photoListAtIndex:index];
-}
-- (PBShopping_Builder*) replacePhotoListAtIndex:(int32_t) index with:(NSString*) value {
-  [result.mutablePhotoListList replaceObjectAtIndex:index withObject:value];
-  return self;
-}
-- (PBShopping_Builder*) addPhotoList:(NSString*) value {
-  if (result.mutablePhotoListList == nil) {
-    result.mutablePhotoListList = [NSMutableArray array];
-  }
-  [result.mutablePhotoListList addObject:value];
-  return self;
-}
-- (PBShopping_Builder*) addAllPhotoList:(NSArray*) values {
-  if (result.mutablePhotoListList == nil) {
-    result.mutablePhotoListList = [NSMutableArray array];
-  }
-  [result.mutablePhotoListList addObjectsFromArray:values];
-  return self;
-}
-- (PBShopping_Builder*) clearPhotoListList {
-  result.mutablePhotoListList = nil;
-  return self;
-}
-- (BOOL) hasPayType {
-  return result.hasPayType;
-}
-- (PBPayType) payType {
-  return result.payType;
-}
-- (PBShopping_Builder*) setPayType:(PBPayType) value {
-  result.hasPayType = YES;
-  result.payType = value;
-  return self;
-}
-- (PBShopping_Builder*) clearPayType {
-  result.hasPayType = NO;
-  result.payType = PBPayTypeAa;
+- (PBMerchant_Builder*) clearPromotionIdsList {
+  result.mutablePromotionIdsList = nil;
   return self;
 }
 @end
 
 @interface PBActivity ()
 @property PBActivityType type;
-@property int32_t cDate;
-@property (retain) NSString* uid;
 @property (retain) NSString* token;
-@property (retain) PBParty* party;
-@property (retain) PBTraffic* traffic;
-@property (retain) PBShopping* shopping;
-@property int32_t price;
+@property (retain) PBContact* content;
+@property int32_t joinDeadtime;
+@property int32_t holdDeadtime;
+@property PBPayType payType;
+@property Float32 budget;
+@property Float32 price;
+@property int32_t memberLimit;
+@property (retain) NSMutableArray* mutablePhotoListList;
 @property (retain) NSMutableArray* mutableParticipantsList;
 @property (retain) NSMutableArray* mutableSignupsList;
 @property int32_t commentCount;
 @property int32_t shareCount;
-@property int32_t signupCount;
 @property int32_t participantCount;
 @property int32_t markCount;
+@property (retain) PBMerchant* merchant;
+@property (retain) PBLocation* location;
+@property (retain) PBLocation* startLoc;
+@property (retain) PBLocation* endLoc;
 @end
 
 @implementation PBActivity
@@ -3723,20 +1805,6 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasType_ = !!value;
 }
 @synthesize type;
-- (BOOL) hasCDate {
-  return !!hasCDate_;
-}
-- (void) setHasCDate:(BOOL) value {
-  hasCDate_ = !!value;
-}
-@synthesize cDate;
-- (BOOL) hasUid {
-  return !!hasUid_;
-}
-- (void) setHasUid:(BOOL) value {
-  hasUid_ = !!value;
-}
-@synthesize uid;
 - (BOOL) hasToken {
   return !!hasToken_;
 }
@@ -3744,27 +1812,41 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasToken_ = !!value;
 }
 @synthesize token;
-- (BOOL) hasParty {
-  return !!hasParty_;
+- (BOOL) hasContent {
+  return !!hasContent_;
 }
-- (void) setHasParty:(BOOL) value {
-  hasParty_ = !!value;
+- (void) setHasContent:(BOOL) value {
+  hasContent_ = !!value;
 }
-@synthesize party;
-- (BOOL) hasTraffic {
-  return !!hasTraffic_;
+@synthesize content;
+- (BOOL) hasJoinDeadtime {
+  return !!hasJoinDeadtime_;
 }
-- (void) setHasTraffic:(BOOL) value {
-  hasTraffic_ = !!value;
+- (void) setHasJoinDeadtime:(BOOL) value {
+  hasJoinDeadtime_ = !!value;
 }
-@synthesize traffic;
-- (BOOL) hasShopping {
-  return !!hasShopping_;
+@synthesize joinDeadtime;
+- (BOOL) hasHoldDeadtime {
+  return !!hasHoldDeadtime_;
 }
-- (void) setHasShopping:(BOOL) value {
-  hasShopping_ = !!value;
+- (void) setHasHoldDeadtime:(BOOL) value {
+  hasHoldDeadtime_ = !!value;
 }
-@synthesize shopping;
+@synthesize holdDeadtime;
+- (BOOL) hasPayType {
+  return !!hasPayType_;
+}
+- (void) setHasPayType:(BOOL) value {
+  hasPayType_ = !!value;
+}
+@synthesize payType;
+- (BOOL) hasBudget {
+  return !!hasBudget_;
+}
+- (void) setHasBudget:(BOOL) value {
+  hasBudget_ = !!value;
+}
+@synthesize budget;
 - (BOOL) hasPrice {
   return !!hasPrice_;
 }
@@ -3772,6 +1854,14 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasPrice_ = !!value;
 }
 @synthesize price;
+- (BOOL) hasMemberLimit {
+  return !!hasMemberLimit_;
+}
+- (void) setHasMemberLimit:(BOOL) value {
+  hasMemberLimit_ = !!value;
+}
+@synthesize memberLimit;
+@synthesize mutablePhotoListList;
 @synthesize mutableParticipantsList;
 @synthesize mutableSignupsList;
 - (BOOL) hasCommentCount {
@@ -3788,13 +1878,6 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasShareCount_ = !!value;
 }
 @synthesize shareCount;
-- (BOOL) hasSignupCount {
-  return !!hasSignupCount_;
-}
-- (void) setHasSignupCount:(BOOL) value {
-  hasSignupCount_ = !!value;
-}
-@synthesize signupCount;
 - (BOOL) hasParticipantCount {
   return !!hasParticipantCount_;
 }
@@ -3809,31 +1892,65 @@ static PBShopping* defaultPBShoppingInstance = nil;
   hasMarkCount_ = !!value;
 }
 @synthesize markCount;
+- (BOOL) hasMerchant {
+  return !!hasMerchant_;
+}
+- (void) setHasMerchant:(BOOL) value {
+  hasMerchant_ = !!value;
+}
+@synthesize merchant;
+- (BOOL) hasLocation {
+  return !!hasLocation_;
+}
+- (void) setHasLocation:(BOOL) value {
+  hasLocation_ = !!value;
+}
+@synthesize location;
+- (BOOL) hasStartLoc {
+  return !!hasStartLoc_;
+}
+- (void) setHasStartLoc:(BOOL) value {
+  hasStartLoc_ = !!value;
+}
+@synthesize startLoc;
+- (BOOL) hasEndLoc {
+  return !!hasEndLoc_;
+}
+- (void) setHasEndLoc:(BOOL) value {
+  hasEndLoc_ = !!value;
+}
+@synthesize endLoc;
 - (void) dealloc {
-  self.uid = nil;
   self.token = nil;
-  self.party = nil;
-  self.traffic = nil;
-  self.shopping = nil;
+  self.content = nil;
+  self.mutablePhotoListList = nil;
   self.mutableParticipantsList = nil;
   self.mutableSignupsList = nil;
+  self.merchant = nil;
+  self.location = nil;
+  self.startLoc = nil;
+  self.endLoc = nil;
   [super dealloc];
 }
 - (id) init {
   if ((self = [super init])) {
     self.type = PBActivityTypeParty;
-    self.cDate = 0;
-    self.uid = @"";
     self.token = @"";
-    self.party = [PBParty defaultInstance];
-    self.traffic = [PBTraffic defaultInstance];
-    self.shopping = [PBShopping defaultInstance];
+    self.content = [PBContact defaultInstance];
+    self.joinDeadtime = 0;
+    self.holdDeadtime = 0;
+    self.payType = PBPayTypeAa;
+    self.budget = 0;
     self.price = 0;
+    self.memberLimit = 0;
     self.commentCount = 0;
     self.shareCount = 0;
-    self.signupCount = 0;
     self.participantCount = 0;
     self.markCount = 0;
+    self.merchant = [PBMerchant defaultInstance];
+    self.location = [PBLocation defaultInstance];
+    self.startLoc = [PBLocation defaultInstance];
+    self.endLoc = [PBLocation defaultInstance];
   }
   return self;
 }
@@ -3848,6 +1965,13 @@ static PBActivity* defaultPBActivityInstance = nil;
 }
 - (PBActivity*) defaultInstance {
   return defaultPBActivityInstance;
+}
+- (NSArray*) photoListList {
+  return mutablePhotoListList;
+}
+- (NSString*) photoListAtIndex:(int32_t) index {
+  id value = [mutablePhotoListList objectAtIndex:index];
+  return value;
 }
 - (NSArray*) participantsList {
   return mutableParticipantsList;
@@ -3864,27 +1988,23 @@ static PBActivity* defaultPBActivityInstance = nil;
   return value;
 }
 - (BOOL) isInitialized {
-  if (!self.hasType) {
-    return NO;
-  }
-  if (!self.hasCDate) {
-    return NO;
-  }
-  if (!self.hasUid) {
-    return NO;
-  }
-  if (self.hasParty) {
-    if (!self.party.isInitialized) {
+  if (self.hasMerchant) {
+    if (!self.merchant.isInitialized) {
       return NO;
     }
   }
-  if (self.hasTraffic) {
-    if (!self.traffic.isInitialized) {
+  if (self.hasLocation) {
+    if (!self.location.isInitialized) {
       return NO;
     }
   }
-  if (self.hasShopping) {
-    if (!self.shopping.isInitialized) {
+  if (self.hasStartLoc) {
+    if (!self.startLoc.isInitialized) {
+      return NO;
+    }
+  }
+  if (self.hasEndLoc) {
+    if (!self.endLoc.isInitialized) {
       return NO;
     }
   }
@@ -3894,47 +2014,62 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (self.hasType) {
     [output writeEnum:1 value:self.type];
   }
-  if (self.hasCDate) {
-    [output writeInt32:2 value:self.cDate];
-  }
-  if (self.hasUid) {
-    [output writeString:3 value:self.uid];
-  }
   if (self.hasToken) {
-    [output writeString:4 value:self.token];
+    [output writeString:2 value:self.token];
   }
-  if (self.hasParty) {
-    [output writeMessage:10 value:self.party];
+  if (self.hasContent) {
+    [output writeMessage:3 value:self.content];
   }
-  if (self.hasTraffic) {
-    [output writeMessage:11 value:self.traffic];
+  if (self.hasJoinDeadtime) {
+    [output writeInt32:4 value:self.joinDeadtime];
   }
-  if (self.hasShopping) {
-    [output writeMessage:12 value:self.shopping];
+  if (self.hasHoldDeadtime) {
+    [output writeInt32:5 value:self.holdDeadtime];
+  }
+  if (self.hasPayType) {
+    [output writeEnum:7 value:self.payType];
+  }
+  if (self.hasBudget) {
+    [output writeFloat:8 value:self.budget];
   }
   if (self.hasPrice) {
-    [output writeInt32:13 value:self.price];
+    [output writeFloat:9 value:self.price];
+  }
+  if (self.hasMemberLimit) {
+    [output writeInt32:10 value:self.memberLimit];
+  }
+  for (NSString* element in self.mutablePhotoListList) {
+    [output writeString:11 value:element];
   }
   for (NSString* element in self.mutableParticipantsList) {
-    [output writeString:14 value:element];
+    [output writeString:12 value:element];
   }
   for (NSString* element in self.mutableSignupsList) {
-    [output writeString:15 value:element];
+    [output writeString:13 value:element];
   }
   if (self.hasCommentCount) {
-    [output writeInt32:50 value:self.commentCount];
+    [output writeInt32:30 value:self.commentCount];
   }
   if (self.hasShareCount) {
-    [output writeInt32:51 value:self.shareCount];
-  }
-  if (self.hasSignupCount) {
-    [output writeInt32:52 value:self.signupCount];
+    [output writeInt32:31 value:self.shareCount];
   }
   if (self.hasParticipantCount) {
-    [output writeInt32:53 value:self.participantCount];
+    [output writeInt32:32 value:self.participantCount];
   }
   if (self.hasMarkCount) {
-    [output writeInt32:54 value:self.markCount];
+    [output writeInt32:33 value:self.markCount];
+  }
+  if (self.hasMerchant) {
+    [output writeMessage:50 value:self.merchant];
+  }
+  if (self.hasLocation) {
+    [output writeMessage:51 value:self.location];
+  }
+  if (self.hasStartLoc) {
+    [output writeMessage:70 value:self.startLoc];
+  }
+  if (self.hasEndLoc) {
+    [output writeMessage:71 value:self.endLoc];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -3948,26 +2083,37 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (self.hasType) {
     size += computeEnumSize(1, self.type);
   }
-  if (self.hasCDate) {
-    size += computeInt32Size(2, self.cDate);
-  }
-  if (self.hasUid) {
-    size += computeStringSize(3, self.uid);
-  }
   if (self.hasToken) {
-    size += computeStringSize(4, self.token);
+    size += computeStringSize(2, self.token);
   }
-  if (self.hasParty) {
-    size += computeMessageSize(10, self.party);
+  if (self.hasContent) {
+    size += computeMessageSize(3, self.content);
   }
-  if (self.hasTraffic) {
-    size += computeMessageSize(11, self.traffic);
+  if (self.hasJoinDeadtime) {
+    size += computeInt32Size(4, self.joinDeadtime);
   }
-  if (self.hasShopping) {
-    size += computeMessageSize(12, self.shopping);
+  if (self.hasHoldDeadtime) {
+    size += computeInt32Size(5, self.holdDeadtime);
+  }
+  if (self.hasPayType) {
+    size += computeEnumSize(7, self.payType);
+  }
+  if (self.hasBudget) {
+    size += computeFloatSize(8, self.budget);
   }
   if (self.hasPrice) {
-    size += computeInt32Size(13, self.price);
+    size += computeFloatSize(9, self.price);
+  }
+  if (self.hasMemberLimit) {
+    size += computeInt32Size(10, self.memberLimit);
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSString* element in self.mutablePhotoListList) {
+      dataSize += computeStringSizeNoTag(element);
+    }
+    size += dataSize;
+    size += 1 * self.mutablePhotoListList.count;
   }
   {
     int32_t dataSize = 0;
@@ -3986,19 +2132,28 @@ static PBActivity* defaultPBActivityInstance = nil;
     size += 1 * self.mutableSignupsList.count;
   }
   if (self.hasCommentCount) {
-    size += computeInt32Size(50, self.commentCount);
+    size += computeInt32Size(30, self.commentCount);
   }
   if (self.hasShareCount) {
-    size += computeInt32Size(51, self.shareCount);
-  }
-  if (self.hasSignupCount) {
-    size += computeInt32Size(52, self.signupCount);
+    size += computeInt32Size(31, self.shareCount);
   }
   if (self.hasParticipantCount) {
-    size += computeInt32Size(53, self.participantCount);
+    size += computeInt32Size(32, self.participantCount);
   }
   if (self.hasMarkCount) {
-    size += computeInt32Size(54, self.markCount);
+    size += computeInt32Size(33, self.markCount);
+  }
+  if (self.hasMerchant) {
+    size += computeMessageSize(50, self.merchant);
+  }
+  if (self.hasLocation) {
+    size += computeMessageSize(51, self.location);
+  }
+  if (self.hasStartLoc) {
+    size += computeMessageSize(70, self.startLoc);
+  }
+  if (self.hasEndLoc) {
+    size += computeMessageSize(71, self.endLoc);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -4078,26 +2233,35 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (other.hasType) {
     [self setType:other.type];
   }
-  if (other.hasCDate) {
-    [self setCDate:other.cDate];
-  }
-  if (other.hasUid) {
-    [self setUid:other.uid];
-  }
   if (other.hasToken) {
     [self setToken:other.token];
   }
-  if (other.hasParty) {
-    [self mergeParty:other.party];
+  if (other.hasContent) {
+    [self mergeContent:other.content];
   }
-  if (other.hasTraffic) {
-    [self mergeTraffic:other.traffic];
+  if (other.hasJoinDeadtime) {
+    [self setJoinDeadtime:other.joinDeadtime];
   }
-  if (other.hasShopping) {
-    [self mergeShopping:other.shopping];
+  if (other.hasHoldDeadtime) {
+    [self setHoldDeadtime:other.holdDeadtime];
+  }
+  if (other.hasPayType) {
+    [self setPayType:other.payType];
+  }
+  if (other.hasBudget) {
+    [self setBudget:other.budget];
   }
   if (other.hasPrice) {
     [self setPrice:other.price];
+  }
+  if (other.hasMemberLimit) {
+    [self setMemberLimit:other.memberLimit];
+  }
+  if (other.mutablePhotoListList.count > 0) {
+    if (result.mutablePhotoListList == nil) {
+      result.mutablePhotoListList = [NSMutableArray array];
+    }
+    [result.mutablePhotoListList addObjectsFromArray:other.mutablePhotoListList];
   }
   if (other.mutableParticipantsList.count > 0) {
     if (result.mutableParticipantsList == nil) {
@@ -4117,14 +2281,23 @@ static PBActivity* defaultPBActivityInstance = nil;
   if (other.hasShareCount) {
     [self setShareCount:other.shareCount];
   }
-  if (other.hasSignupCount) {
-    [self setSignupCount:other.signupCount];
-  }
   if (other.hasParticipantCount) {
     [self setParticipantCount:other.participantCount];
   }
   if (other.hasMarkCount) {
     [self setMarkCount:other.markCount];
+  }
+  if (other.hasMerchant) {
+    [self mergeMerchant:other.merchant];
+  }
+  if (other.hasLocation) {
+    [self mergeLocation:other.location];
+  }
+  if (other.hasStartLoc) {
+    [self mergeStartLoc:other.startLoc];
+  }
+  if (other.hasEndLoc) {
+    [self mergeEndLoc:other.endLoc];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -4156,75 +2329,110 @@ static PBActivity* defaultPBActivityInstance = nil;
         }
         break;
       }
-      case 16: {
-        [self setCDate:[input readInt32]];
-        break;
-      }
-      case 26: {
-        [self setUid:[input readString]];
-        break;
-      }
-      case 34: {
+      case 18: {
         [self setToken:[input readString]];
         break;
       }
-      case 82: {
-        PBParty_Builder* subBuilder = [PBParty builder];
-        if (self.hasParty) {
-          [subBuilder mergeFrom:self.party];
+      case 26: {
+        PBContact_Builder* subBuilder = [PBContact builder];
+        if (self.hasContent) {
+          [subBuilder mergeFrom:self.content];
         }
         [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setParty:[subBuilder buildPartial]];
+        [self setContent:[subBuilder buildPartial]];
+        break;
+      }
+      case 32: {
+        [self setJoinDeadtime:[input readInt32]];
+        break;
+      }
+      case 40: {
+        [self setHoldDeadtime:[input readInt32]];
+        break;
+      }
+      case 56: {
+        int32_t value = [input readEnum];
+        if (PBPayTypeIsValidValue(value)) {
+          [self setPayType:value];
+        } else {
+          [unknownFields mergeVarintField:7 value:value];
+        }
+        break;
+      }
+      case 69: {
+        [self setBudget:[input readFloat]];
+        break;
+      }
+      case 77: {
+        [self setPrice:[input readFloat]];
+        break;
+      }
+      case 80: {
+        [self setMemberLimit:[input readInt32]];
         break;
       }
       case 90: {
-        PBTraffic_Builder* subBuilder = [PBTraffic builder];
-        if (self.hasTraffic) {
-          [subBuilder mergeFrom:self.traffic];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setTraffic:[subBuilder buildPartial]];
+        [self addPhotoList:[input readString]];
         break;
       }
       case 98: {
-        PBShopping_Builder* subBuilder = [PBShopping builder];
-        if (self.hasShopping) {
-          [subBuilder mergeFrom:self.shopping];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setShopping:[subBuilder buildPartial]];
-        break;
-      }
-      case 104: {
-        [self setPrice:[input readInt32]];
-        break;
-      }
-      case 114: {
         [self addParticipants:[input readString]];
         break;
       }
-      case 122: {
+      case 106: {
         [self addSignups:[input readString]];
         break;
       }
-      case 400: {
+      case 240: {
         [self setCommentCount:[input readInt32]];
         break;
       }
-      case 408: {
+      case 248: {
         [self setShareCount:[input readInt32]];
         break;
       }
-      case 416: {
-        [self setSignupCount:[input readInt32]];
-        break;
-      }
-      case 424: {
+      case 256: {
         [self setParticipantCount:[input readInt32]];
         break;
       }
-      case 432: {
+      case 264: {
         [self setMarkCount:[input readInt32]];
+        break;
+      }
+      case 402: {
+        PBMerchant_Builder* subBuilder = [PBMerchant builder];
+        if (self.hasMerchant) {
+          [subBuilder mergeFrom:self.merchant];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setMerchant:[subBuilder buildPartial]];
+        break;
+      }
+      case 410: {
+        PBLocation_Builder* subBuilder = [PBLocation builder];
+        if (self.hasLocation) {
+          [subBuilder mergeFrom:self.location];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setLocation:[subBuilder buildPartial]];
+        break;
+      }
+      case 562: {
+        PBLocation_Builder* subBuilder = [PBLocation builder];
+        if (self.hasStartLoc) {
+          [subBuilder mergeFrom:self.startLoc];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setStartLoc:[subBuilder buildPartial]];
+        break;
+      }
+      case 570: {
+        PBLocation_Builder* subBuilder = [PBLocation builder];
+        if (self.hasEndLoc) {
+          [subBuilder mergeFrom:self.endLoc];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setEndLoc:[subBuilder buildPartial]];
         break;
       }
     }
@@ -4246,38 +2454,6 @@ static PBActivity* defaultPBActivityInstance = nil;
   result.type = PBActivityTypeParty;
   return self;
 }
-- (BOOL) hasCDate {
-  return result.hasCDate;
-}
-- (int32_t) cDate {
-  return result.cDate;
-}
-- (PBActivity_Builder*) setCDate:(int32_t) value {
-  result.hasCDate = YES;
-  result.cDate = value;
-  return self;
-}
-- (PBActivity_Builder*) clearCDate {
-  result.hasCDate = NO;
-  result.cDate = 0;
-  return self;
-}
-- (BOOL) hasUid {
-  return result.hasUid;
-}
-- (NSString*) uid {
-  return result.uid;
-}
-- (PBActivity_Builder*) setUid:(NSString*) value {
-  result.hasUid = YES;
-  result.uid = value;
-  return self;
-}
-- (PBActivity_Builder*) clearUid {
-  result.hasUid = NO;
-  result.uid = @"";
-  return self;
-}
 - (BOOL) hasToken {
   return result.hasToken;
 }
@@ -4294,103 +2470,107 @@ static PBActivity* defaultPBActivityInstance = nil;
   result.token = @"";
   return self;
 }
-- (BOOL) hasParty {
-  return result.hasParty;
+- (BOOL) hasContent {
+  return result.hasContent;
 }
-- (PBParty*) party {
-  return result.party;
+- (PBContact*) content {
+  return result.content;
 }
-- (PBActivity_Builder*) setParty:(PBParty*) value {
-  result.hasParty = YES;
-  result.party = value;
+- (PBActivity_Builder*) setContent:(PBContact*) value {
+  result.hasContent = YES;
+  result.content = value;
   return self;
 }
-- (PBActivity_Builder*) setPartyBuilder:(PBParty_Builder*) builderForValue {
-  return [self setParty:[builderForValue build]];
+- (PBActivity_Builder*) setContentBuilder:(PBContact_Builder*) builderForValue {
+  return [self setContent:[builderForValue build]];
 }
-- (PBActivity_Builder*) mergeParty:(PBParty*) value {
-  if (result.hasParty &&
-      result.party != [PBParty defaultInstance]) {
-    result.party =
-      [[[PBParty builderWithPrototype:result.party] mergeFrom:value] buildPartial];
+- (PBActivity_Builder*) mergeContent:(PBContact*) value {
+  if (result.hasContent &&
+      result.content != [PBContact defaultInstance]) {
+    result.content =
+      [[[PBContact builderWithPrototype:result.content] mergeFrom:value] buildPartial];
   } else {
-    result.party = value;
+    result.content = value;
   }
-  result.hasParty = YES;
+  result.hasContent = YES;
   return self;
 }
-- (PBActivity_Builder*) clearParty {
-  result.hasParty = NO;
-  result.party = [PBParty defaultInstance];
+- (PBActivity_Builder*) clearContent {
+  result.hasContent = NO;
+  result.content = [PBContact defaultInstance];
   return self;
 }
-- (BOOL) hasTraffic {
-  return result.hasTraffic;
+- (BOOL) hasJoinDeadtime {
+  return result.hasJoinDeadtime;
 }
-- (PBTraffic*) traffic {
-  return result.traffic;
+- (int32_t) joinDeadtime {
+  return result.joinDeadtime;
 }
-- (PBActivity_Builder*) setTraffic:(PBTraffic*) value {
-  result.hasTraffic = YES;
-  result.traffic = value;
+- (PBActivity_Builder*) setJoinDeadtime:(int32_t) value {
+  result.hasJoinDeadtime = YES;
+  result.joinDeadtime = value;
   return self;
 }
-- (PBActivity_Builder*) setTrafficBuilder:(PBTraffic_Builder*) builderForValue {
-  return [self setTraffic:[builderForValue build]];
-}
-- (PBActivity_Builder*) mergeTraffic:(PBTraffic*) value {
-  if (result.hasTraffic &&
-      result.traffic != [PBTraffic defaultInstance]) {
-    result.traffic =
-      [[[PBTraffic builderWithPrototype:result.traffic] mergeFrom:value] buildPartial];
-  } else {
-    result.traffic = value;
-  }
-  result.hasTraffic = YES;
+- (PBActivity_Builder*) clearJoinDeadtime {
+  result.hasJoinDeadtime = NO;
+  result.joinDeadtime = 0;
   return self;
 }
-- (PBActivity_Builder*) clearTraffic {
-  result.hasTraffic = NO;
-  result.traffic = [PBTraffic defaultInstance];
+- (BOOL) hasHoldDeadtime {
+  return result.hasHoldDeadtime;
+}
+- (int32_t) holdDeadtime {
+  return result.holdDeadtime;
+}
+- (PBActivity_Builder*) setHoldDeadtime:(int32_t) value {
+  result.hasHoldDeadtime = YES;
+  result.holdDeadtime = value;
   return self;
 }
-- (BOOL) hasShopping {
-  return result.hasShopping;
-}
-- (PBShopping*) shopping {
-  return result.shopping;
-}
-- (PBActivity_Builder*) setShopping:(PBShopping*) value {
-  result.hasShopping = YES;
-  result.shopping = value;
+- (PBActivity_Builder*) clearHoldDeadtime {
+  result.hasHoldDeadtime = NO;
+  result.holdDeadtime = 0;
   return self;
 }
-- (PBActivity_Builder*) setShoppingBuilder:(PBShopping_Builder*) builderForValue {
-  return [self setShopping:[builderForValue build]];
+- (BOOL) hasPayType {
+  return result.hasPayType;
 }
-- (PBActivity_Builder*) mergeShopping:(PBShopping*) value {
-  if (result.hasShopping &&
-      result.shopping != [PBShopping defaultInstance]) {
-    result.shopping =
-      [[[PBShopping builderWithPrototype:result.shopping] mergeFrom:value] buildPartial];
-  } else {
-    result.shopping = value;
-  }
-  result.hasShopping = YES;
+- (PBPayType) payType {
+  return result.payType;
+}
+- (PBActivity_Builder*) setPayType:(PBPayType) value {
+  result.hasPayType = YES;
+  result.payType = value;
   return self;
 }
-- (PBActivity_Builder*) clearShopping {
-  result.hasShopping = NO;
-  result.shopping = [PBShopping defaultInstance];
+- (PBActivity_Builder*) clearPayType {
+  result.hasPayType = NO;
+  result.payType = PBPayTypeAa;
+  return self;
+}
+- (BOOL) hasBudget {
+  return result.hasBudget;
+}
+- (Float32) budget {
+  return result.budget;
+}
+- (PBActivity_Builder*) setBudget:(Float32) value {
+  result.hasBudget = YES;
+  result.budget = value;
+  return self;
+}
+- (PBActivity_Builder*) clearBudget {
+  result.hasBudget = NO;
+  result.budget = 0;
   return self;
 }
 - (BOOL) hasPrice {
   return result.hasPrice;
 }
-- (int32_t) price {
+- (Float32) price {
   return result.price;
 }
-- (PBActivity_Builder*) setPrice:(int32_t) value {
+- (PBActivity_Builder*) setPrice:(Float32) value {
   result.hasPrice = YES;
   result.price = value;
   return self;
@@ -4398,6 +2578,53 @@ static PBActivity* defaultPBActivityInstance = nil;
 - (PBActivity_Builder*) clearPrice {
   result.hasPrice = NO;
   result.price = 0;
+  return self;
+}
+- (BOOL) hasMemberLimit {
+  return result.hasMemberLimit;
+}
+- (int32_t) memberLimit {
+  return result.memberLimit;
+}
+- (PBActivity_Builder*) setMemberLimit:(int32_t) value {
+  result.hasMemberLimit = YES;
+  result.memberLimit = value;
+  return self;
+}
+- (PBActivity_Builder*) clearMemberLimit {
+  result.hasMemberLimit = NO;
+  result.memberLimit = 0;
+  return self;
+}
+- (NSArray*) photoListList {
+  if (result.mutablePhotoListList == nil) {
+    return [NSArray array];
+  }
+  return result.mutablePhotoListList;
+}
+- (NSString*) photoListAtIndex:(int32_t) index {
+  return [result photoListAtIndex:index];
+}
+- (PBActivity_Builder*) replacePhotoListAtIndex:(int32_t) index with:(NSString*) value {
+  [result.mutablePhotoListList replaceObjectAtIndex:index withObject:value];
+  return self;
+}
+- (PBActivity_Builder*) addPhotoList:(NSString*) value {
+  if (result.mutablePhotoListList == nil) {
+    result.mutablePhotoListList = [NSMutableArray array];
+  }
+  [result.mutablePhotoListList addObject:value];
+  return self;
+}
+- (PBActivity_Builder*) addAllPhotoList:(NSArray*) values {
+  if (result.mutablePhotoListList == nil) {
+    result.mutablePhotoListList = [NSMutableArray array];
+  }
+  [result.mutablePhotoListList addObjectsFromArray:values];
+  return self;
+}
+- (PBActivity_Builder*) clearPhotoListList {
+  result.mutablePhotoListList = nil;
   return self;
 }
 - (NSArray*) participantsList {
@@ -4494,22 +2721,6 @@ static PBActivity* defaultPBActivityInstance = nil;
   result.shareCount = 0;
   return self;
 }
-- (BOOL) hasSignupCount {
-  return result.hasSignupCount;
-}
-- (int32_t) signupCount {
-  return result.signupCount;
-}
-- (PBActivity_Builder*) setSignupCount:(int32_t) value {
-  result.hasSignupCount = YES;
-  result.signupCount = value;
-  return self;
-}
-- (PBActivity_Builder*) clearSignupCount {
-  result.hasSignupCount = NO;
-  result.signupCount = 0;
-  return self;
-}
 - (BOOL) hasParticipantCount {
   return result.hasParticipantCount;
 }
@@ -4542,531 +2753,124 @@ static PBActivity* defaultPBActivityInstance = nil;
   result.markCount = 0;
   return self;
 }
-@end
-
-@interface PBJoin ()
-@property (retain) NSString* activityId;
-@property (retain) PBActivity* activity;
-@end
-
-@implementation PBJoin
-
-- (BOOL) hasActivityId {
-  return !!hasActivityId_;
+- (BOOL) hasMerchant {
+  return result.hasMerchant;
 }
-- (void) setHasActivityId:(BOOL) value {
-  hasActivityId_ = !!value;
+- (PBMerchant*) merchant {
+  return result.merchant;
 }
-@synthesize activityId;
-- (BOOL) hasActivity {
-  return !!hasActivity_;
-}
-- (void) setHasActivity:(BOOL) value {
-  hasActivity_ = !!value;
-}
-@synthesize activity;
-- (void) dealloc {
-  self.activityId = nil;
-  self.activity = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.activityId = @"";
-    self.activity = [PBActivity defaultInstance];
-  }
+- (PBActivity_Builder*) setMerchant:(PBMerchant*) value {
+  result.hasMerchant = YES;
+  result.merchant = value;
   return self;
 }
-static PBJoin* defaultPBJoinInstance = nil;
-+ (void) initialize {
-  if (self == [PBJoin class]) {
-    defaultPBJoinInstance = [[PBJoin alloc] init];
-  }
+- (PBActivity_Builder*) setMerchantBuilder:(PBMerchant_Builder*) builderForValue {
+  return [self setMerchant:[builderForValue build]];
 }
-+ (PBJoin*) defaultInstance {
-  return defaultPBJoinInstance;
-}
-- (PBJoin*) defaultInstance {
-  return defaultPBJoinInstance;
-}
-- (BOOL) isInitialized {
-  if (!self.hasActivityId) {
-    return NO;
-  }
-  if (self.hasActivity) {
-    if (!self.activity.isInitialized) {
-      return NO;
-    }
-  }
-  return YES;
-}
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
-  if (self.hasActivityId) {
-    [output writeString:1 value:self.activityId];
-  }
-  if (self.hasActivity) {
-    [output writeMessage:2 value:self.activity];
-  }
-  [self.unknownFields writeToCodedOutputStream:output];
-}
-- (int32_t) serializedSize {
-  int32_t size = memoizedSerializedSize;
-  if (size != -1) {
-    return size;
-  }
-
-  size = 0;
-  if (self.hasActivityId) {
-    size += computeStringSize(1, self.activityId);
-  }
-  if (self.hasActivity) {
-    size += computeMessageSize(2, self.activity);
-  }
-  size += self.unknownFields.serializedSize;
-  memoizedSerializedSize = size;
-  return size;
-}
-+ (PBJoin*) parseFromData:(NSData*) data {
-  return (PBJoin*)[[[PBJoin builder] mergeFromData:data] build];
-}
-+ (PBJoin*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBJoin*)[[[PBJoin builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
-}
-+ (PBJoin*) parseFromInputStream:(NSInputStream*) input {
-  return (PBJoin*)[[[PBJoin builder] mergeFromInputStream:input] build];
-}
-+ (PBJoin*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBJoin*)[[[PBJoin builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBJoin*) parseFromCodedInputStream:(PBCodedInputStream*) input {
-  return (PBJoin*)[[[PBJoin builder] mergeFromCodedInputStream:input] build];
-}
-+ (PBJoin*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBJoin*)[[[PBJoin builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBJoin_Builder*) builder {
-  return [[[PBJoin_Builder alloc] init] autorelease];
-}
-+ (PBJoin_Builder*) builderWithPrototype:(PBJoin*) prototype {
-  return [[PBJoin builder] mergeFrom:prototype];
-}
-- (PBJoin_Builder*) builder {
-  return [PBJoin builder];
-}
-@end
-
-@interface PBJoin_Builder()
-@property (retain) PBJoin* result;
-@end
-
-@implementation PBJoin_Builder
-@synthesize result;
-- (void) dealloc {
-  self.result = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.result = [[[PBJoin alloc] init] autorelease];
-  }
-  return self;
-}
-- (PBGeneratedMessage*) internalGetResult {
-  return result;
-}
-- (PBJoin_Builder*) clear {
-  self.result = [[[PBJoin alloc] init] autorelease];
-  return self;
-}
-- (PBJoin_Builder*) clone {
-  return [PBJoin builderWithPrototype:result];
-}
-- (PBJoin*) defaultInstance {
-  return [PBJoin defaultInstance];
-}
-- (PBJoin*) build {
-  [self checkInitialized];
-  return [self buildPartial];
-}
-- (PBJoin*) buildPartial {
-  PBJoin* returnMe = [[result retain] autorelease];
-  self.result = nil;
-  return returnMe;
-}
-- (PBJoin_Builder*) mergeFrom:(PBJoin*) other {
-  if (other == [PBJoin defaultInstance]) {
-    return self;
-  }
-  if (other.hasActivityId) {
-    [self setActivityId:other.activityId];
-  }
-  if (other.hasActivity) {
-    [self mergeActivity:other.activity];
-  }
-  [self mergeUnknownFields:other.unknownFields];
-  return self;
-}
-- (PBJoin_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
-  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
-}
-- (PBJoin_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
-  while (YES) {
-    int32_t tag = [input readTag];
-    switch (tag) {
-      case 0:
-        [self setUnknownFields:[unknownFields build]];
-        return self;
-      default: {
-        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
-          [self setUnknownFields:[unknownFields build]];
-          return self;
-        }
-        break;
-      }
-      case 10: {
-        [self setActivityId:[input readString]];
-        break;
-      }
-      case 18: {
-        PBActivity_Builder* subBuilder = [PBActivity builder];
-        if (self.hasActivity) {
-          [subBuilder mergeFrom:self.activity];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setActivity:[subBuilder buildPartial]];
-        break;
-      }
-    }
-  }
-}
-- (BOOL) hasActivityId {
-  return result.hasActivityId;
-}
-- (NSString*) activityId {
-  return result.activityId;
-}
-- (PBJoin_Builder*) setActivityId:(NSString*) value {
-  result.hasActivityId = YES;
-  result.activityId = value;
-  return self;
-}
-- (PBJoin_Builder*) clearActivityId {
-  result.hasActivityId = NO;
-  result.activityId = @"";
-  return self;
-}
-- (BOOL) hasActivity {
-  return result.hasActivity;
-}
-- (PBActivity*) activity {
-  return result.activity;
-}
-- (PBJoin_Builder*) setActivity:(PBActivity*) value {
-  result.hasActivity = YES;
-  result.activity = value;
-  return self;
-}
-- (PBJoin_Builder*) setActivityBuilder:(PBActivity_Builder*) builderForValue {
-  return [self setActivity:[builderForValue build]];
-}
-- (PBJoin_Builder*) mergeActivity:(PBActivity*) value {
-  if (result.hasActivity &&
-      result.activity != [PBActivity defaultInstance]) {
-    result.activity =
-      [[[PBActivity builderWithPrototype:result.activity] mergeFrom:value] buildPartial];
+- (PBActivity_Builder*) mergeMerchant:(PBMerchant*) value {
+  if (result.hasMerchant &&
+      result.merchant != [PBMerchant defaultInstance]) {
+    result.merchant =
+      [[[PBMerchant builderWithPrototype:result.merchant] mergeFrom:value] buildPartial];
   } else {
-    result.activity = value;
+    result.merchant = value;
   }
-  result.hasActivity = YES;
+  result.hasMerchant = YES;
   return self;
 }
-- (PBJoin_Builder*) clearActivity {
-  result.hasActivity = NO;
-  result.activity = [PBActivity defaultInstance];
+- (PBActivity_Builder*) clearMerchant {
+  result.hasMerchant = NO;
+  result.merchant = [PBMerchant defaultInstance];
   return self;
 }
-@end
-
-@interface PBShare ()
-@property (retain) NSString* activityId;
-@property (retain) PBActivity* activity;
-@property (retain) NSString* comment;
-@end
-
-@implementation PBShare
-
-- (BOOL) hasActivityId {
-  return !!hasActivityId_;
+- (BOOL) hasLocation {
+  return result.hasLocation;
 }
-- (void) setHasActivityId:(BOOL) value {
-  hasActivityId_ = !!value;
+- (PBLocation*) location {
+  return result.location;
 }
-@synthesize activityId;
-- (BOOL) hasActivity {
-  return !!hasActivity_;
-}
-- (void) setHasActivity:(BOOL) value {
-  hasActivity_ = !!value;
-}
-@synthesize activity;
-- (BOOL) hasComment {
-  return !!hasComment_;
-}
-- (void) setHasComment:(BOOL) value {
-  hasComment_ = !!value;
-}
-@synthesize comment;
-- (void) dealloc {
-  self.activityId = nil;
-  self.activity = nil;
-  self.comment = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.activityId = @"";
-    self.activity = [PBActivity defaultInstance];
-    self.comment = @"";
-  }
+- (PBActivity_Builder*) setLocation:(PBLocation*) value {
+  result.hasLocation = YES;
+  result.location = value;
   return self;
 }
-static PBShare* defaultPBShareInstance = nil;
-+ (void) initialize {
-  if (self == [PBShare class]) {
-    defaultPBShareInstance = [[PBShare alloc] init];
-  }
+- (PBActivity_Builder*) setLocationBuilder:(PBLocation_Builder*) builderForValue {
+  return [self setLocation:[builderForValue build]];
 }
-+ (PBShare*) defaultInstance {
-  return defaultPBShareInstance;
-}
-- (PBShare*) defaultInstance {
-  return defaultPBShareInstance;
-}
-- (BOOL) isInitialized {
-  if (!self.hasActivityId) {
-    return NO;
-  }
-  if (self.hasActivity) {
-    if (!self.activity.isInitialized) {
-      return NO;
-    }
-  }
-  return YES;
-}
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
-  if (self.hasActivityId) {
-    [output writeString:1 value:self.activityId];
-  }
-  if (self.hasActivity) {
-    [output writeMessage:2 value:self.activity];
-  }
-  if (self.hasComment) {
-    [output writeString:3 value:self.comment];
-  }
-  [self.unknownFields writeToCodedOutputStream:output];
-}
-- (int32_t) serializedSize {
-  int32_t size = memoizedSerializedSize;
-  if (size != -1) {
-    return size;
-  }
-
-  size = 0;
-  if (self.hasActivityId) {
-    size += computeStringSize(1, self.activityId);
-  }
-  if (self.hasActivity) {
-    size += computeMessageSize(2, self.activity);
-  }
-  if (self.hasComment) {
-    size += computeStringSize(3, self.comment);
-  }
-  size += self.unknownFields.serializedSize;
-  memoizedSerializedSize = size;
-  return size;
-}
-+ (PBShare*) parseFromData:(NSData*) data {
-  return (PBShare*)[[[PBShare builder] mergeFromData:data] build];
-}
-+ (PBShare*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBShare*)[[[PBShare builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
-}
-+ (PBShare*) parseFromInputStream:(NSInputStream*) input {
-  return (PBShare*)[[[PBShare builder] mergeFromInputStream:input] build];
-}
-+ (PBShare*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBShare*)[[[PBShare builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBShare*) parseFromCodedInputStream:(PBCodedInputStream*) input {
-  return (PBShare*)[[[PBShare builder] mergeFromCodedInputStream:input] build];
-}
-+ (PBShare*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  return (PBShare*)[[[PBShare builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
-}
-+ (PBShare_Builder*) builder {
-  return [[[PBShare_Builder alloc] init] autorelease];
-}
-+ (PBShare_Builder*) builderWithPrototype:(PBShare*) prototype {
-  return [[PBShare builder] mergeFrom:prototype];
-}
-- (PBShare_Builder*) builder {
-  return [PBShare builder];
-}
-@end
-
-@interface PBShare_Builder()
-@property (retain) PBShare* result;
-@end
-
-@implementation PBShare_Builder
-@synthesize result;
-- (void) dealloc {
-  self.result = nil;
-  [super dealloc];
-}
-- (id) init {
-  if ((self = [super init])) {
-    self.result = [[[PBShare alloc] init] autorelease];
-  }
-  return self;
-}
-- (PBGeneratedMessage*) internalGetResult {
-  return result;
-}
-- (PBShare_Builder*) clear {
-  self.result = [[[PBShare alloc] init] autorelease];
-  return self;
-}
-- (PBShare_Builder*) clone {
-  return [PBShare builderWithPrototype:result];
-}
-- (PBShare*) defaultInstance {
-  return [PBShare defaultInstance];
-}
-- (PBShare*) build {
-  [self checkInitialized];
-  return [self buildPartial];
-}
-- (PBShare*) buildPartial {
-  PBShare* returnMe = [[result retain] autorelease];
-  self.result = nil;
-  return returnMe;
-}
-- (PBShare_Builder*) mergeFrom:(PBShare*) other {
-  if (other == [PBShare defaultInstance]) {
-    return self;
-  }
-  if (other.hasActivityId) {
-    [self setActivityId:other.activityId];
-  }
-  if (other.hasActivity) {
-    [self mergeActivity:other.activity];
-  }
-  if (other.hasComment) {
-    [self setComment:other.comment];
-  }
-  [self mergeUnknownFields:other.unknownFields];
-  return self;
-}
-- (PBShare_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
-  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
-}
-- (PBShare_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
-  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
-  while (YES) {
-    int32_t tag = [input readTag];
-    switch (tag) {
-      case 0:
-        [self setUnknownFields:[unknownFields build]];
-        return self;
-      default: {
-        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
-          [self setUnknownFields:[unknownFields build]];
-          return self;
-        }
-        break;
-      }
-      case 10: {
-        [self setActivityId:[input readString]];
-        break;
-      }
-      case 18: {
-        PBActivity_Builder* subBuilder = [PBActivity builder];
-        if (self.hasActivity) {
-          [subBuilder mergeFrom:self.activity];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setActivity:[subBuilder buildPartial]];
-        break;
-      }
-      case 26: {
-        [self setComment:[input readString]];
-        break;
-      }
-    }
-  }
-}
-- (BOOL) hasActivityId {
-  return result.hasActivityId;
-}
-- (NSString*) activityId {
-  return result.activityId;
-}
-- (PBShare_Builder*) setActivityId:(NSString*) value {
-  result.hasActivityId = YES;
-  result.activityId = value;
-  return self;
-}
-- (PBShare_Builder*) clearActivityId {
-  result.hasActivityId = NO;
-  result.activityId = @"";
-  return self;
-}
-- (BOOL) hasActivity {
-  return result.hasActivity;
-}
-- (PBActivity*) activity {
-  return result.activity;
-}
-- (PBShare_Builder*) setActivity:(PBActivity*) value {
-  result.hasActivity = YES;
-  result.activity = value;
-  return self;
-}
-- (PBShare_Builder*) setActivityBuilder:(PBActivity_Builder*) builderForValue {
-  return [self setActivity:[builderForValue build]];
-}
-- (PBShare_Builder*) mergeActivity:(PBActivity*) value {
-  if (result.hasActivity &&
-      result.activity != [PBActivity defaultInstance]) {
-    result.activity =
-      [[[PBActivity builderWithPrototype:result.activity] mergeFrom:value] buildPartial];
+- (PBActivity_Builder*) mergeLocation:(PBLocation*) value {
+  if (result.hasLocation &&
+      result.location != [PBLocation defaultInstance]) {
+    result.location =
+      [[[PBLocation builderWithPrototype:result.location] mergeFrom:value] buildPartial];
   } else {
-    result.activity = value;
+    result.location = value;
   }
-  result.hasActivity = YES;
+  result.hasLocation = YES;
   return self;
 }
-- (PBShare_Builder*) clearActivity {
-  result.hasActivity = NO;
-  result.activity = [PBActivity defaultInstance];
+- (PBActivity_Builder*) clearLocation {
+  result.hasLocation = NO;
+  result.location = [PBLocation defaultInstance];
   return self;
 }
-- (BOOL) hasComment {
-  return result.hasComment;
+- (BOOL) hasStartLoc {
+  return result.hasStartLoc;
 }
-- (NSString*) comment {
-  return result.comment;
+- (PBLocation*) startLoc {
+  return result.startLoc;
 }
-- (PBShare_Builder*) setComment:(NSString*) value {
-  result.hasComment = YES;
-  result.comment = value;
+- (PBActivity_Builder*) setStartLoc:(PBLocation*) value {
+  result.hasStartLoc = YES;
+  result.startLoc = value;
   return self;
 }
-- (PBShare_Builder*) clearComment {
-  result.hasComment = NO;
-  result.comment = @"";
+- (PBActivity_Builder*) setStartLocBuilder:(PBLocation_Builder*) builderForValue {
+  return [self setStartLoc:[builderForValue build]];
+}
+- (PBActivity_Builder*) mergeStartLoc:(PBLocation*) value {
+  if (result.hasStartLoc &&
+      result.startLoc != [PBLocation defaultInstance]) {
+    result.startLoc =
+      [[[PBLocation builderWithPrototype:result.startLoc] mergeFrom:value] buildPartial];
+  } else {
+    result.startLoc = value;
+  }
+  result.hasStartLoc = YES;
+  return self;
+}
+- (PBActivity_Builder*) clearStartLoc {
+  result.hasStartLoc = NO;
+  result.startLoc = [PBLocation defaultInstance];
+  return self;
+}
+- (BOOL) hasEndLoc {
+  return result.hasEndLoc;
+}
+- (PBLocation*) endLoc {
+  return result.endLoc;
+}
+- (PBActivity_Builder*) setEndLoc:(PBLocation*) value {
+  result.hasEndLoc = YES;
+  result.endLoc = value;
+  return self;
+}
+- (PBActivity_Builder*) setEndLocBuilder:(PBLocation_Builder*) builderForValue {
+  return [self setEndLoc:[builderForValue build]];
+}
+- (PBActivity_Builder*) mergeEndLoc:(PBLocation*) value {
+  if (result.hasEndLoc &&
+      result.endLoc != [PBLocation defaultInstance]) {
+    result.endLoc =
+      [[[PBLocation builderWithPrototype:result.endLoc] mergeFrom:value] buildPartial];
+  } else {
+    result.endLoc = value;
+  }
+  result.hasEndLoc = YES;
+  return self;
+}
+- (PBActivity_Builder*) clearEndLoc {
+  result.hasEndLoc = NO;
+  result.endLoc = [PBLocation defaultInstance];
   return self;
 }
 @end
@@ -5077,8 +2881,8 @@ static PBShare* defaultPBShareInstance = nil;
 @property int32_t cDate;
 @property (retain) PBBriefUser* user;
 @property (retain) PBActivity* activity;
-@property (retain) PBShare* share;
-@property (retain) PBJoin* join;
+@property (retain) NSString* comment;
+@property (retain) PBAction* relatedAction;
 @end
 
 @implementation PBAction
@@ -5118,26 +2922,26 @@ static PBShare* defaultPBShareInstance = nil;
   hasActivity_ = !!value;
 }
 @synthesize activity;
-- (BOOL) hasShare {
-  return !!hasShare_;
+- (BOOL) hasComment {
+  return !!hasComment_;
 }
-- (void) setHasShare:(BOOL) value {
-  hasShare_ = !!value;
+- (void) setHasComment:(BOOL) value {
+  hasComment_ = !!value;
 }
-@synthesize share;
-- (BOOL) hasJoin {
-  return !!hasJoin_;
+@synthesize comment;
+- (BOOL) hasRelatedAction {
+  return !!hasRelatedAction_;
 }
-- (void) setHasJoin:(BOOL) value {
-  hasJoin_ = !!value;
+- (void) setHasRelatedAction:(BOOL) value {
+  hasRelatedAction_ = !!value;
 }
-@synthesize join;
+@synthesize relatedAction;
 - (void) dealloc {
   self.actionId = nil;
   self.user = nil;
   self.activity = nil;
-  self.share = nil;
-  self.join = nil;
+  self.comment = nil;
+  self.relatedAction = nil;
   [super dealloc];
 }
 - (id) init {
@@ -5147,8 +2951,8 @@ static PBShare* defaultPBShareInstance = nil;
     self.cDate = 0;
     self.user = [PBBriefUser defaultInstance];
     self.activity = [PBActivity defaultInstance];
-    self.share = [PBShare defaultInstance];
-    self.join = [PBJoin defaultInstance];
+    self.comment = @"";
+    self.relatedAction = [PBAction defaultInstance];
   }
   return self;
 }
@@ -5185,13 +2989,8 @@ static PBAction* defaultPBActionInstance = nil;
       return NO;
     }
   }
-  if (self.hasShare) {
-    if (!self.share.isInitialized) {
-      return NO;
-    }
-  }
-  if (self.hasJoin) {
-    if (!self.join.isInitialized) {
+  if (self.hasRelatedAction) {
+    if (!self.relatedAction.isInitialized) {
       return NO;
     }
   }
@@ -5213,11 +3012,11 @@ static PBAction* defaultPBActionInstance = nil;
   if (self.hasActivity) {
     [output writeMessage:20 value:self.activity];
   }
-  if (self.hasShare) {
-    [output writeMessage:21 value:self.share];
+  if (self.hasComment) {
+    [output writeString:21 value:self.comment];
   }
-  if (self.hasJoin) {
-    [output writeMessage:22 value:self.join];
+  if (self.hasRelatedAction) {
+    [output writeMessage:22 value:self.relatedAction];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -5243,11 +3042,11 @@ static PBAction* defaultPBActionInstance = nil;
   if (self.hasActivity) {
     size += computeMessageSize(20, self.activity);
   }
-  if (self.hasShare) {
-    size += computeMessageSize(21, self.share);
+  if (self.hasComment) {
+    size += computeStringSize(21, self.comment);
   }
-  if (self.hasJoin) {
-    size += computeMessageSize(22, self.join);
+  if (self.hasRelatedAction) {
+    size += computeMessageSize(22, self.relatedAction);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -5339,11 +3138,11 @@ static PBAction* defaultPBActionInstance = nil;
   if (other.hasActivity) {
     [self mergeActivity:other.activity];
   }
-  if (other.hasShare) {
-    [self mergeShare:other.share];
+  if (other.hasComment) {
+    [self setComment:other.comment];
   }
-  if (other.hasJoin) {
-    [self mergeJoin:other.join];
+  if (other.hasRelatedAction) {
+    [self mergeRelatedAction:other.relatedAction];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -5402,21 +3201,16 @@ static PBAction* defaultPBActionInstance = nil;
         break;
       }
       case 170: {
-        PBShare_Builder* subBuilder = [PBShare builder];
-        if (self.hasShare) {
-          [subBuilder mergeFrom:self.share];
-        }
-        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setShare:[subBuilder buildPartial]];
+        [self setComment:[input readString]];
         break;
       }
       case 178: {
-        PBJoin_Builder* subBuilder = [PBJoin builder];
-        if (self.hasJoin) {
-          [subBuilder mergeFrom:self.join];
+        PBAction_Builder* subBuilder = [PBAction builder];
+        if (self.hasRelatedAction) {
+          [subBuilder mergeFrom:self.relatedAction];
         }
         [input readMessage:subBuilder extensionRegistry:extensionRegistry];
-        [self setJoin:[subBuilder buildPartial]];
+        [self setRelatedAction:[subBuilder buildPartial]];
         break;
       }
     }
@@ -5530,64 +3324,576 @@ static PBAction* defaultPBActionInstance = nil;
   result.activity = [PBActivity defaultInstance];
   return self;
 }
-- (BOOL) hasShare {
-  return result.hasShare;
+- (BOOL) hasComment {
+  return result.hasComment;
 }
-- (PBShare*) share {
-  return result.share;
+- (NSString*) comment {
+  return result.comment;
 }
-- (PBAction_Builder*) setShare:(PBShare*) value {
-  result.hasShare = YES;
-  result.share = value;
+- (PBAction_Builder*) setComment:(NSString*) value {
+  result.hasComment = YES;
+  result.comment = value;
   return self;
 }
-- (PBAction_Builder*) setShareBuilder:(PBShare_Builder*) builderForValue {
-  return [self setShare:[builderForValue build]];
+- (PBAction_Builder*) clearComment {
+  result.hasComment = NO;
+  result.comment = @"";
+  return self;
 }
-- (PBAction_Builder*) mergeShare:(PBShare*) value {
-  if (result.hasShare &&
-      result.share != [PBShare defaultInstance]) {
-    result.share =
-      [[[PBShare builderWithPrototype:result.share] mergeFrom:value] buildPartial];
+- (BOOL) hasRelatedAction {
+  return result.hasRelatedAction;
+}
+- (PBAction*) relatedAction {
+  return result.relatedAction;
+}
+- (PBAction_Builder*) setRelatedAction:(PBAction*) value {
+  result.hasRelatedAction = YES;
+  result.relatedAction = value;
+  return self;
+}
+- (PBAction_Builder*) setRelatedActionBuilder:(PBAction_Builder*) builderForValue {
+  return [self setRelatedAction:[builderForValue build]];
+}
+- (PBAction_Builder*) mergeRelatedAction:(PBAction*) value {
+  if (result.hasRelatedAction &&
+      result.relatedAction != [PBAction defaultInstance]) {
+    result.relatedAction =
+      [[[PBAction builderWithPrototype:result.relatedAction] mergeFrom:value] buildPartial];
   } else {
-    result.share = value;
+    result.relatedAction = value;
   }
-  result.hasShare = YES;
+  result.hasRelatedAction = YES;
   return self;
 }
-- (PBAction_Builder*) clearShare {
-  result.hasShare = NO;
-  result.share = [PBShare defaultInstance];
+- (PBAction_Builder*) clearRelatedAction {
+  result.hasRelatedAction = NO;
+  result.relatedAction = [PBAction defaultInstance];
   return self;
 }
-- (BOOL) hasJoin {
-  return result.hasJoin;
+@end
+
+@interface PBComment ()
+@property (retain) NSString* commentId;
+@property (retain) PBBriefUser* user;
+@property int32_t cDate;
+@property (retain) NSString* actionId;
+@property (retain) NSString* content;
+@property int32_t star;
+@property BOOL isReply;
+@property (retain) NSString* replyActionId;
+@property (retain) NSString* digest;
+@end
+
+@implementation PBComment
+
+- (BOOL) hasCommentId {
+  return !!hasCommentId_;
 }
-- (PBJoin*) join {
-  return result.join;
+- (void) setHasCommentId:(BOOL) value {
+  hasCommentId_ = !!value;
 }
-- (PBAction_Builder*) setJoin:(PBJoin*) value {
-  result.hasJoin = YES;
-  result.join = value;
+@synthesize commentId;
+- (BOOL) hasUser {
+  return !!hasUser_;
+}
+- (void) setHasUser:(BOOL) value {
+  hasUser_ = !!value;
+}
+@synthesize user;
+- (BOOL) hasCDate {
+  return !!hasCDate_;
+}
+- (void) setHasCDate:(BOOL) value {
+  hasCDate_ = !!value;
+}
+@synthesize cDate;
+- (BOOL) hasActionId {
+  return !!hasActionId_;
+}
+- (void) setHasActionId:(BOOL) value {
+  hasActionId_ = !!value;
+}
+@synthesize actionId;
+- (BOOL) hasContent {
+  return !!hasContent_;
+}
+- (void) setHasContent:(BOOL) value {
+  hasContent_ = !!value;
+}
+@synthesize content;
+- (BOOL) hasStar {
+  return !!hasStar_;
+}
+- (void) setHasStar:(BOOL) value {
+  hasStar_ = !!value;
+}
+@synthesize star;
+- (BOOL) hasIsReply {
+  return !!hasIsReply_;
+}
+- (void) setHasIsReply:(BOOL) value {
+  hasIsReply_ = !!value;
+}
+- (BOOL) isReply {
+  return !!isReply_;
+}
+- (void) setIsReply:(BOOL) value {
+  isReply_ = !!value;
+}
+- (BOOL) hasReplyActionId {
+  return !!hasReplyActionId_;
+}
+- (void) setHasReplyActionId:(BOOL) value {
+  hasReplyActionId_ = !!value;
+}
+@synthesize replyActionId;
+- (BOOL) hasDigest {
+  return !!hasDigest_;
+}
+- (void) setHasDigest:(BOOL) value {
+  hasDigest_ = !!value;
+}
+@synthesize digest;
+- (void) dealloc {
+  self.commentId = nil;
+  self.user = nil;
+  self.actionId = nil;
+  self.content = nil;
+  self.replyActionId = nil;
+  self.digest = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.commentId = @"";
+    self.user = [PBBriefUser defaultInstance];
+    self.cDate = 0;
+    self.actionId = @"";
+    self.content = @"";
+    self.star = 0;
+    self.isReply = NO;
+    self.replyActionId = @"";
+    self.digest = @"";
+  }
   return self;
 }
-- (PBAction_Builder*) setJoinBuilder:(PBJoin_Builder*) builderForValue {
-  return [self setJoin:[builderForValue build]];
+static PBComment* defaultPBCommentInstance = nil;
++ (void) initialize {
+  if (self == [PBComment class]) {
+    defaultPBCommentInstance = [[PBComment alloc] init];
+  }
 }
-- (PBAction_Builder*) mergeJoin:(PBJoin*) value {
-  if (result.hasJoin &&
-      result.join != [PBJoin defaultInstance]) {
-    result.join =
-      [[[PBJoin builderWithPrototype:result.join] mergeFrom:value] buildPartial];
++ (PBComment*) defaultInstance {
+  return defaultPBCommentInstance;
+}
+- (PBComment*) defaultInstance {
+  return defaultPBCommentInstance;
+}
+- (BOOL) isInitialized {
+  if (!self.hasCommentId) {
+    return NO;
+  }
+  if (!self.hasUser) {
+    return NO;
+  }
+  if (!self.hasCDate) {
+    return NO;
+  }
+  if (!self.hasActionId) {
+    return NO;
+  }
+  if (!self.user.isInitialized) {
+    return NO;
+  }
+  return YES;
+}
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasCommentId) {
+    [output writeString:1 value:self.commentId];
+  }
+  if (self.hasUser) {
+    [output writeMessage:2 value:self.user];
+  }
+  if (self.hasCDate) {
+    [output writeInt32:3 value:self.cDate];
+  }
+  if (self.hasActionId) {
+    [output writeString:4 value:self.actionId];
+  }
+  if (self.hasContent) {
+    [output writeString:5 value:self.content];
+  }
+  if (self.hasStar) {
+    [output writeInt32:6 value:self.star];
+  }
+  if (self.hasIsReply) {
+    [output writeBool:7 value:self.isReply];
+  }
+  if (self.hasReplyActionId) {
+    [output writeString:8 value:self.replyActionId];
+  }
+  if (self.hasDigest) {
+    [output writeString:9 value:self.digest];
+  }
+  [self.unknownFields writeToCodedOutputStream:output];
+}
+- (int32_t) serializedSize {
+  int32_t size = memoizedSerializedSize;
+  if (size != -1) {
+    return size;
+  }
+
+  size = 0;
+  if (self.hasCommentId) {
+    size += computeStringSize(1, self.commentId);
+  }
+  if (self.hasUser) {
+    size += computeMessageSize(2, self.user);
+  }
+  if (self.hasCDate) {
+    size += computeInt32Size(3, self.cDate);
+  }
+  if (self.hasActionId) {
+    size += computeStringSize(4, self.actionId);
+  }
+  if (self.hasContent) {
+    size += computeStringSize(5, self.content);
+  }
+  if (self.hasStar) {
+    size += computeInt32Size(6, self.star);
+  }
+  if (self.hasIsReply) {
+    size += computeBoolSize(7, self.isReply);
+  }
+  if (self.hasReplyActionId) {
+    size += computeStringSize(8, self.replyActionId);
+  }
+  if (self.hasDigest) {
+    size += computeStringSize(9, self.digest);
+  }
+  size += self.unknownFields.serializedSize;
+  memoizedSerializedSize = size;
+  return size;
+}
++ (PBComment*) parseFromData:(NSData*) data {
+  return (PBComment*)[[[PBComment builder] mergeFromData:data] build];
+}
++ (PBComment*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBComment*)[[[PBComment builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
+}
++ (PBComment*) parseFromInputStream:(NSInputStream*) input {
+  return (PBComment*)[[[PBComment builder] mergeFromInputStream:input] build];
+}
++ (PBComment*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBComment*)[[[PBComment builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (PBComment*)[[[PBComment builder] mergeFromCodedInputStream:input] build];
+}
++ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (PBComment*)[[[PBComment builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (PBComment_Builder*) builder {
+  return [[[PBComment_Builder alloc] init] autorelease];
+}
++ (PBComment_Builder*) builderWithPrototype:(PBComment*) prototype {
+  return [[PBComment builder] mergeFrom:prototype];
+}
+- (PBComment_Builder*) builder {
+  return [PBComment builder];
+}
+@end
+
+@interface PBComment_Builder()
+@property (retain) PBComment* result;
+@end
+
+@implementation PBComment_Builder
+@synthesize result;
+- (void) dealloc {
+  self.result = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.result = [[[PBComment alloc] init] autorelease];
+  }
+  return self;
+}
+- (PBGeneratedMessage*) internalGetResult {
+  return result;
+}
+- (PBComment_Builder*) clear {
+  self.result = [[[PBComment alloc] init] autorelease];
+  return self;
+}
+- (PBComment_Builder*) clone {
+  return [PBComment builderWithPrototype:result];
+}
+- (PBComment*) defaultInstance {
+  return [PBComment defaultInstance];
+}
+- (PBComment*) build {
+  [self checkInitialized];
+  return [self buildPartial];
+}
+- (PBComment*) buildPartial {
+  PBComment* returnMe = [[result retain] autorelease];
+  self.result = nil;
+  return returnMe;
+}
+- (PBComment_Builder*) mergeFrom:(PBComment*) other {
+  if (other == [PBComment defaultInstance]) {
+    return self;
+  }
+  if (other.hasCommentId) {
+    [self setCommentId:other.commentId];
+  }
+  if (other.hasUser) {
+    [self mergeUser:other.user];
+  }
+  if (other.hasCDate) {
+    [self setCDate:other.cDate];
+  }
+  if (other.hasActionId) {
+    [self setActionId:other.actionId];
+  }
+  if (other.hasContent) {
+    [self setContent:other.content];
+  }
+  if (other.hasStar) {
+    [self setStar:other.star];
+  }
+  if (other.hasIsReply) {
+    [self setIsReply:other.isReply];
+  }
+  if (other.hasReplyActionId) {
+    [self setReplyActionId:other.replyActionId];
+  }
+  if (other.hasDigest) {
+    [self setDigest:other.digest];
+  }
+  [self mergeUnknownFields:other.unknownFields];
+  return self;
+}
+- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
+}
+- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
+  while (YES) {
+    int32_t tag = [input readTag];
+    switch (tag) {
+      case 0:
+        [self setUnknownFields:[unknownFields build]];
+        return self;
+      default: {
+        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
+          [self setUnknownFields:[unknownFields build]];
+          return self;
+        }
+        break;
+      }
+      case 10: {
+        [self setCommentId:[input readString]];
+        break;
+      }
+      case 18: {
+        PBBriefUser_Builder* subBuilder = [PBBriefUser builder];
+        if (self.hasUser) {
+          [subBuilder mergeFrom:self.user];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setUser:[subBuilder buildPartial]];
+        break;
+      }
+      case 24: {
+        [self setCDate:[input readInt32]];
+        break;
+      }
+      case 34: {
+        [self setActionId:[input readString]];
+        break;
+      }
+      case 42: {
+        [self setContent:[input readString]];
+        break;
+      }
+      case 48: {
+        [self setStar:[input readInt32]];
+        break;
+      }
+      case 56: {
+        [self setIsReply:[input readBool]];
+        break;
+      }
+      case 66: {
+        [self setReplyActionId:[input readString]];
+        break;
+      }
+      case 74: {
+        [self setDigest:[input readString]];
+        break;
+      }
+    }
+  }
+}
+- (BOOL) hasCommentId {
+  return result.hasCommentId;
+}
+- (NSString*) commentId {
+  return result.commentId;
+}
+- (PBComment_Builder*) setCommentId:(NSString*) value {
+  result.hasCommentId = YES;
+  result.commentId = value;
+  return self;
+}
+- (PBComment_Builder*) clearCommentId {
+  result.hasCommentId = NO;
+  result.commentId = @"";
+  return self;
+}
+- (BOOL) hasUser {
+  return result.hasUser;
+}
+- (PBBriefUser*) user {
+  return result.user;
+}
+- (PBComment_Builder*) setUser:(PBBriefUser*) value {
+  result.hasUser = YES;
+  result.user = value;
+  return self;
+}
+- (PBComment_Builder*) setUserBuilder:(PBBriefUser_Builder*) builderForValue {
+  return [self setUser:[builderForValue build]];
+}
+- (PBComment_Builder*) mergeUser:(PBBriefUser*) value {
+  if (result.hasUser &&
+      result.user != [PBBriefUser defaultInstance]) {
+    result.user =
+      [[[PBBriefUser builderWithPrototype:result.user] mergeFrom:value] buildPartial];
   } else {
-    result.join = value;
+    result.user = value;
   }
-  result.hasJoin = YES;
+  result.hasUser = YES;
   return self;
 }
-- (PBAction_Builder*) clearJoin {
-  result.hasJoin = NO;
-  result.join = [PBJoin defaultInstance];
+- (PBComment_Builder*) clearUser {
+  result.hasUser = NO;
+  result.user = [PBBriefUser defaultInstance];
+  return self;
+}
+- (BOOL) hasCDate {
+  return result.hasCDate;
+}
+- (int32_t) cDate {
+  return result.cDate;
+}
+- (PBComment_Builder*) setCDate:(int32_t) value {
+  result.hasCDate = YES;
+  result.cDate = value;
+  return self;
+}
+- (PBComment_Builder*) clearCDate {
+  result.hasCDate = NO;
+  result.cDate = 0;
+  return self;
+}
+- (BOOL) hasActionId {
+  return result.hasActionId;
+}
+- (NSString*) actionId {
+  return result.actionId;
+}
+- (PBComment_Builder*) setActionId:(NSString*) value {
+  result.hasActionId = YES;
+  result.actionId = value;
+  return self;
+}
+- (PBComment_Builder*) clearActionId {
+  result.hasActionId = NO;
+  result.actionId = @"";
+  return self;
+}
+- (BOOL) hasContent {
+  return result.hasContent;
+}
+- (NSString*) content {
+  return result.content;
+}
+- (PBComment_Builder*) setContent:(NSString*) value {
+  result.hasContent = YES;
+  result.content = value;
+  return self;
+}
+- (PBComment_Builder*) clearContent {
+  result.hasContent = NO;
+  result.content = @"";
+  return self;
+}
+- (BOOL) hasStar {
+  return result.hasStar;
+}
+- (int32_t) star {
+  return result.star;
+}
+- (PBComment_Builder*) setStar:(int32_t) value {
+  result.hasStar = YES;
+  result.star = value;
+  return self;
+}
+- (PBComment_Builder*) clearStar {
+  result.hasStar = NO;
+  result.star = 0;
+  return self;
+}
+- (BOOL) hasIsReply {
+  return result.hasIsReply;
+}
+- (BOOL) isReply {
+  return result.isReply;
+}
+- (PBComment_Builder*) setIsReply:(BOOL) value {
+  result.hasIsReply = YES;
+  result.isReply = value;
+  return self;
+}
+- (PBComment_Builder*) clearIsReply {
+  result.hasIsReply = NO;
+  result.isReply = NO;
+  return self;
+}
+- (BOOL) hasReplyActionId {
+  return result.hasReplyActionId;
+}
+- (NSString*) replyActionId {
+  return result.replyActionId;
+}
+- (PBComment_Builder*) setReplyActionId:(NSString*) value {
+  result.hasReplyActionId = YES;
+  result.replyActionId = value;
+  return self;
+}
+- (PBComment_Builder*) clearReplyActionId {
+  result.hasReplyActionId = NO;
+  result.replyActionId = @"";
+  return self;
+}
+- (BOOL) hasDigest {
+  return result.hasDigest;
+}
+- (NSString*) digest {
+  return result.digest;
+}
+- (PBComment_Builder*) setDigest:(NSString*) value {
+  result.hasDigest = YES;
+  result.digest = value;
+  return self;
+}
+- (PBComment_Builder*) clearDigest {
+  result.hasDigest = NO;
+  result.digest = @"";
   return self;
 }
 @end

@@ -48,6 +48,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
 @interface PBResponse ()
 @property PBResultCode code;
 @property (retain) NSString* errorMessage;
+@property BOOL hasMore;
 @property (retain) NSMutableArray* mutableActionsList;
 @property (retain) NSMutableArray* mutableMessagesList;
 @property (retain) NSMutableArray* mutableUsersList;
@@ -75,6 +76,18 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
   hasErrorMessage_ = !!value;
 }
 @synthesize errorMessage;
+- (BOOL) hasHasMore {
+  return !!hasHasMore_;
+}
+- (void) setHasHasMore:(BOOL) value {
+  hasHasMore_ = !!value;
+}
+- (BOOL) hasMore {
+  return !!hasMore_;
+}
+- (void) setHasMore:(BOOL) value {
+  hasMore_ = !!value;
+}
 @synthesize mutableActionsList;
 @synthesize mutableMessagesList;
 @synthesize mutableUsersList;
@@ -119,6 +132,7 @@ BOOL PBResultCodeIsValidValue(PBResultCode value) {
   if ((self = [super init])) {
     self.code = PBResultCodeUnknowError;
     self.errorMessage = @"";
+    self.hasMore = NO;
     self.user = [PBUser defaultInstance];
     self.action = [PBAction defaultInstance];
     self.merchant = [PBMerchant defaultInstance];
@@ -237,6 +251,9 @@ static PBResponse* defaultPBResponseInstance = nil;
   if (self.hasErrorMessage) {
     [output writeString:2 value:self.errorMessage];
   }
+  if (self.hasHasMore) {
+    [output writeBool:3 value:self.hasMore];
+  }
   for (PBAction* element in self.actionsList) {
     [output writeMessage:10 value:element];
   }
@@ -278,6 +295,9 @@ static PBResponse* defaultPBResponseInstance = nil;
   }
   if (self.hasErrorMessage) {
     size += computeStringSize(2, self.errorMessage);
+  }
+  if (self.hasHasMore) {
+    size += computeBoolSize(3, self.hasMore);
   }
   for (PBAction* element in self.actionsList) {
     size += computeMessageSize(10, element);
@@ -387,6 +407,9 @@ static PBResponse* defaultPBResponseInstance = nil;
   if (other.hasErrorMessage) {
     [self setErrorMessage:other.errorMessage];
   }
+  if (other.hasHasMore) {
+    [self setHasMore:other.hasMore];
+  }
   if (other.mutableActionsList.count > 0) {
     if (result.mutableActionsList == nil) {
       result.mutableActionsList = [NSMutableArray array];
@@ -464,6 +487,10 @@ static PBResponse* defaultPBResponseInstance = nil;
       }
       case 18: {
         [self setErrorMessage:[input readString]];
+        break;
+      }
+      case 24: {
+        [self setHasMore:[input readBool]];
         break;
       }
       case 82: {
@@ -562,6 +589,22 @@ static PBResponse* defaultPBResponseInstance = nil;
 - (PBResponse_Builder*) clearErrorMessage {
   result.hasErrorMessage = NO;
   result.errorMessage = @"";
+  return self;
+}
+- (BOOL) hasHasMore {
+  return result.hasHasMore;
+}
+- (BOOL) hasMore {
+  return result.hasMore;
+}
+- (PBResponse_Builder*) setHasMore:(BOOL) value {
+  result.hasHasMore = YES;
+  result.hasMore = value;
+  return self;
+}
+- (PBResponse_Builder*) clearHasMore {
+  result.hasHasMore = NO;
+  result.hasMore = NO;
   return self;
 }
 - (NSArray*) actionsList {

@@ -19,30 +19,20 @@
 @class PBContact_Builder;
 @class PBDevice;
 @class PBDevice_Builder;
-@class PBJoin;
-@class PBJoin_Builder;
 @class PBLocation;
 @class PBLocation_Builder;
 @class PBLog;
 @class PBLog_Builder;
 @class PBMerchant;
 @class PBMerchant_Builder;
-@class PBParty;
-@class PBParty_Builder;
 @class PBPromotion;
 @class PBPromotion_Builder;
 @class PBRegistration;
 @class PBRegistration_Builder;
 @class PBSNS;
 @class PBSNS_Builder;
-@class PBShare;
-@class PBShare_Builder;
-@class PBShopping;
-@class PBShopping_Builder;
 @class PBStatistic;
 @class PBStatistic_Builder;
-@class PBTraffic;
-@class PBTraffic_Builder;
 @class PBUser;
 @class PBUserBasic;
 @class PBUserBasic_Builder;
@@ -72,6 +62,14 @@ typedef enum {
 BOOL PBActionStatusIsValidValue(PBActionStatus value);
 
 typedef enum {
+  PBPromotionStatusRunning = 0,
+  PBPromotionStatusEnd = 1,
+  PBPromotionStatusPendding = 2,
+} PBPromotionStatus;
+
+BOOL PBPromotionStatusIsValidValue(PBPromotionStatus value);
+
+typedef enum {
   PBPayTypeAa = 1,
   PBPayTypeFree = 2,
   PBPayTypeOther = 10,
@@ -89,18 +87,18 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 @interface PBAlbum : PBGeneratedMessage {
 @private
   BOOL hasAlbumId_:1;
-  BOOL hasUid_:1;
   BOOL hasName_:1;
+  BOOL hasUser_:1;
   NSString* albumId;
-  NSString* uid;
   NSString* name;
+  PBBriefUser* user;
   NSMutableArray* mutableImageListList;
 }
 - (BOOL) hasAlbumId;
-- (BOOL) hasUid;
+- (BOOL) hasUser;
 - (BOOL) hasName;
 @property (readonly, retain) NSString* albumId;
-@property (readonly, retain) NSString* uid;
+@property (readonly, retain) PBBriefUser* user;
 @property (readonly, retain) NSString* name;
 - (NSArray*) imageListList;
 - (NSString*) imageListAtIndex:(int32_t) index;
@@ -144,10 +142,12 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBAlbum_Builder*) setAlbumId:(NSString*) value;
 - (PBAlbum_Builder*) clearAlbumId;
 
-- (BOOL) hasUid;
-- (NSString*) uid;
-- (PBAlbum_Builder*) setUid:(NSString*) value;
-- (PBAlbum_Builder*) clearUid;
+- (BOOL) hasUser;
+- (PBBriefUser*) user;
+- (PBAlbum_Builder*) setUser:(PBBriefUser*) value;
+- (PBAlbum_Builder*) setUserBuilder:(PBBriefUser_Builder*) builderForValue;
+- (PBAlbum_Builder*) mergeUser:(PBBriefUser*) value;
+- (PBAlbum_Builder*) clearUser;
 
 - (BOOL) hasName;
 - (NSString*) name;
@@ -162,141 +162,37 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBAlbum_Builder*) clearImageListList;
 @end
 
-@interface PBComment : PBGeneratedMessage {
-@private
-  BOOL hasIsReply_:1;
-  BOOL hasCDate_:1;
-  BOOL hasStar_:1;
-  BOOL hasCommentId_:1;
-  BOOL hasStringId_:1;
-  BOOL hasUid_:1;
-  BOOL hasContent_:1;
-  BOOL hasReplyId_:1;
-  BOOL hasDigest_:1;
-  BOOL isReply_:1;
-  int32_t cDate;
-  int32_t star;
-  NSString* commentId;
-  NSString* stringId;
-  NSString* uid;
-  NSString* content;
-  NSString* replyId;
-  NSString* digest;
-}
-- (BOOL) hasCommentId;
-- (BOOL) hasStringId;
-- (BOOL) hasUid;
-- (BOOL) hasCDate;
-- (BOOL) hasContent;
-- (BOOL) hasStar;
-- (BOOL) hasIsReply;
-- (BOOL) hasReplyId;
-- (BOOL) hasDigest;
-@property (readonly, retain) NSString* commentId;
-@property (readonly, retain) NSString* stringId;
-@property (readonly, retain) NSString* uid;
-@property (readonly) int32_t cDate;
-@property (readonly, retain) NSString* content;
-@property (readonly) int32_t star;
-- (BOOL) isReply;
-@property (readonly, retain) NSString* replyId;
-@property (readonly, retain) NSString* digest;
-
-+ (PBComment*) defaultInstance;
-- (PBComment*) defaultInstance;
-
-- (BOOL) isInitialized;
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
-- (PBComment_Builder*) builder;
-+ (PBComment_Builder*) builder;
-+ (PBComment_Builder*) builderWithPrototype:(PBComment*) prototype;
-
-+ (PBComment*) parseFromData:(NSData*) data;
-+ (PBComment*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBComment*) parseFromInputStream:(NSInputStream*) input;
-+ (PBComment*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input;
-+ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-@end
-
-@interface PBComment_Builder : PBGeneratedMessage_Builder {
-@private
-  PBComment* result;
-}
-
-- (PBComment*) defaultInstance;
-
-- (PBComment_Builder*) clear;
-- (PBComment_Builder*) clone;
-
-- (PBComment*) build;
-- (PBComment*) buildPartial;
-
-- (PBComment_Builder*) mergeFrom:(PBComment*) other;
-- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
-- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-
-- (BOOL) hasCommentId;
-- (NSString*) commentId;
-- (PBComment_Builder*) setCommentId:(NSString*) value;
-- (PBComment_Builder*) clearCommentId;
-
-- (BOOL) hasStringId;
-- (NSString*) stringId;
-- (PBComment_Builder*) setStringId:(NSString*) value;
-- (PBComment_Builder*) clearStringId;
-
-- (BOOL) hasUid;
-- (NSString*) uid;
-- (PBComment_Builder*) setUid:(NSString*) value;
-- (PBComment_Builder*) clearUid;
-
-- (BOOL) hasCDate;
-- (int32_t) cDate;
-- (PBComment_Builder*) setCDate:(int32_t) value;
-- (PBComment_Builder*) clearCDate;
-
-- (BOOL) hasContent;
-- (NSString*) content;
-- (PBComment_Builder*) setContent:(NSString*) value;
-- (PBComment_Builder*) clearContent;
-
-- (BOOL) hasStar;
-- (int32_t) star;
-- (PBComment_Builder*) setStar:(int32_t) value;
-- (PBComment_Builder*) clearStar;
-
-- (BOOL) hasIsReply;
-- (BOOL) isReply;
-- (PBComment_Builder*) setIsReply:(BOOL) value;
-- (PBComment_Builder*) clearIsReply;
-
-- (BOOL) hasReplyId;
-- (NSString*) replyId;
-- (PBComment_Builder*) setReplyId:(NSString*) value;
-- (PBComment_Builder*) clearReplyId;
-
-- (BOOL) hasDigest;
-- (NSString*) digest;
-- (PBComment_Builder*) setDigest:(NSString*) value;
-- (PBComment_Builder*) clearDigest;
-@end
-
 @interface PBPromotion : PBGeneratedMessage {
 @private
   BOOL hasStartDate_:1;
   BOOL hasEndDate_:1;
+  BOOL hasPromotionId_:1;
+  BOOL hasTitle_:1;
   BOOL hasContent_:1;
+  BOOL hasMerchantId_:1;
+  BOOL hasStatus_:1;
   int32_t startDate;
   int32_t endDate;
+  NSString* promotionId;
+  NSString* title;
   NSString* content;
+  NSString* merchantId;
+  PBPromotionStatus status;
 }
+- (BOOL) hasPromotionId;
 - (BOOL) hasStartDate;
 - (BOOL) hasEndDate;
+- (BOOL) hasTitle;
 - (BOOL) hasContent;
+- (BOOL) hasStatus;
+- (BOOL) hasMerchantId;
+@property (readonly, retain) NSString* promotionId;
 @property (readonly) int32_t startDate;
 @property (readonly) int32_t endDate;
+@property (readonly, retain) NSString* title;
 @property (readonly, retain) NSString* content;
+@property (readonly) PBPromotionStatus status;
+@property (readonly, retain) NSString* merchantId;
 
 + (PBPromotion*) defaultInstance;
 - (PBPromotion*) defaultInstance;
@@ -332,6 +228,11 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBPromotion_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
 - (PBPromotion_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
 
+- (BOOL) hasPromotionId;
+- (NSString*) promotionId;
+- (PBPromotion_Builder*) setPromotionId:(NSString*) value;
+- (PBPromotion_Builder*) clearPromotionId;
+
 - (BOOL) hasStartDate;
 - (int32_t) startDate;
 - (PBPromotion_Builder*) setStartDate:(int32_t) value;
@@ -342,10 +243,25 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBPromotion_Builder*) setEndDate:(int32_t) value;
 - (PBPromotion_Builder*) clearEndDate;
 
+- (BOOL) hasTitle;
+- (NSString*) title;
+- (PBPromotion_Builder*) setTitle:(NSString*) value;
+- (PBPromotion_Builder*) clearTitle;
+
 - (BOOL) hasContent;
 - (NSString*) content;
 - (PBPromotion_Builder*) setContent:(NSString*) value;
 - (PBPromotion_Builder*) clearContent;
+
+- (BOOL) hasStatus;
+- (PBPromotionStatus) status;
+- (PBPromotion_Builder*) setStatus:(PBPromotionStatus) value;
+- (PBPromotion_Builder*) clearStatus;
+
+- (BOOL) hasMerchantId;
+- (NSString*) merchantId;
+- (PBPromotion_Builder*) setMerchantId:(NSString*) value;
+- (PBPromotion_Builder*) clearMerchantId;
 @end
 
 @interface PBMerchant : PBGeneratedMessage {
@@ -384,6 +300,7 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
   NSString* name;
   NSString* aibangId;
   NSString* merchantId;
+  NSMutableArray* mutablePromotionIdsList;
   NSMutableArray* mutablePromotionsList;
 }
 - (BOOL) hasMerchantId;
@@ -422,6 +339,8 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 @property (readonly, retain) NSString* imgUrl;
 - (NSArray*) promotionsList;
 - (PBPromotion*) promotionsAtIndex:(int32_t) index;
+- (NSArray*) promotionIdsList;
+- (NSString*) promotionIdsAtIndex:(int32_t) index;
 
 + (PBMerchant*) defaultInstance;
 - (PBMerchant*) defaultInstance;
@@ -548,436 +467,91 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBMerchant_Builder*) addPromotions:(PBPromotion*) value;
 - (PBMerchant_Builder*) addAllPromotions:(NSArray*) values;
 - (PBMerchant_Builder*) clearPromotionsList;
-@end
 
-@interface PBParty : PBGeneratedMessage {
-@private
-  BOOL hasMemberLimit_:1;
-  BOOL hasJoinDeadtime_:1;
-  BOOL hasHoldTime_:1;
-  BOOL hasContent_:1;
-  BOOL hasMerchant_:1;
-  BOOL hasLocation_:1;
-  BOOL hasContact_:1;
-  BOOL hasPayType_:1;
-  int32_t memberLimit;
-  int32_t joinDeadtime;
-  int32_t holdTime;
-  NSString* content;
-  PBMerchant* merchant;
-  PBLocation* location;
-  PBContact* contact;
-  PBPayType payType;
-  NSMutableArray* mutablePhotoListList;
-}
-- (BOOL) hasMerchant;
-- (BOOL) hasMemberLimit;
-- (BOOL) hasLocation;
-- (BOOL) hasContact;
-- (BOOL) hasJoinDeadtime;
-- (BOOL) hasHoldTime;
-- (BOOL) hasContent;
-- (BOOL) hasPayType;
-@property (readonly, retain) PBMerchant* merchant;
-@property (readonly) int32_t memberLimit;
-@property (readonly, retain) PBLocation* location;
-@property (readonly, retain) PBContact* contact;
-@property (readonly) int32_t joinDeadtime;
-@property (readonly) int32_t holdTime;
-@property (readonly, retain) NSString* content;
-@property (readonly) PBPayType payType;
-- (NSArray*) photoListList;
-- (NSString*) photoListAtIndex:(int32_t) index;
-
-+ (PBParty*) defaultInstance;
-- (PBParty*) defaultInstance;
-
-- (BOOL) isInitialized;
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
-- (PBParty_Builder*) builder;
-+ (PBParty_Builder*) builder;
-+ (PBParty_Builder*) builderWithPrototype:(PBParty*) prototype;
-
-+ (PBParty*) parseFromData:(NSData*) data;
-+ (PBParty*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBParty*) parseFromInputStream:(NSInputStream*) input;
-+ (PBParty*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBParty*) parseFromCodedInputStream:(PBCodedInputStream*) input;
-+ (PBParty*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-@end
-
-@interface PBParty_Builder : PBGeneratedMessage_Builder {
-@private
-  PBParty* result;
-}
-
-- (PBParty*) defaultInstance;
-
-- (PBParty_Builder*) clear;
-- (PBParty_Builder*) clone;
-
-- (PBParty*) build;
-- (PBParty*) buildPartial;
-
-- (PBParty_Builder*) mergeFrom:(PBParty*) other;
-- (PBParty_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
-- (PBParty_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-
-- (BOOL) hasMerchant;
-- (PBMerchant*) merchant;
-- (PBParty_Builder*) setMerchant:(PBMerchant*) value;
-- (PBParty_Builder*) setMerchantBuilder:(PBMerchant_Builder*) builderForValue;
-- (PBParty_Builder*) mergeMerchant:(PBMerchant*) value;
-- (PBParty_Builder*) clearMerchant;
-
-- (BOOL) hasMemberLimit;
-- (int32_t) memberLimit;
-- (PBParty_Builder*) setMemberLimit:(int32_t) value;
-- (PBParty_Builder*) clearMemberLimit;
-
-- (BOOL) hasLocation;
-- (PBLocation*) location;
-- (PBParty_Builder*) setLocation:(PBLocation*) value;
-- (PBParty_Builder*) setLocationBuilder:(PBLocation_Builder*) builderForValue;
-- (PBParty_Builder*) mergeLocation:(PBLocation*) value;
-- (PBParty_Builder*) clearLocation;
-
-- (BOOL) hasContact;
-- (PBContact*) contact;
-- (PBParty_Builder*) setContact:(PBContact*) value;
-- (PBParty_Builder*) setContactBuilder:(PBContact_Builder*) builderForValue;
-- (PBParty_Builder*) mergeContact:(PBContact*) value;
-- (PBParty_Builder*) clearContact;
-
-- (BOOL) hasJoinDeadtime;
-- (int32_t) joinDeadtime;
-- (PBParty_Builder*) setJoinDeadtime:(int32_t) value;
-- (PBParty_Builder*) clearJoinDeadtime;
-
-- (BOOL) hasHoldTime;
-- (int32_t) holdTime;
-- (PBParty_Builder*) setHoldTime:(int32_t) value;
-- (PBParty_Builder*) clearHoldTime;
-
-- (BOOL) hasContent;
-- (NSString*) content;
-- (PBParty_Builder*) setContent:(NSString*) value;
-- (PBParty_Builder*) clearContent;
-
-- (NSArray*) photoListList;
-- (NSString*) photoListAtIndex:(int32_t) index;
-- (PBParty_Builder*) replacePhotoListAtIndex:(int32_t) index with:(NSString*) value;
-- (PBParty_Builder*) addPhotoList:(NSString*) value;
-- (PBParty_Builder*) addAllPhotoList:(NSArray*) values;
-- (PBParty_Builder*) clearPhotoListList;
-
-- (BOOL) hasPayType;
-- (PBPayType) payType;
-- (PBParty_Builder*) setPayType:(PBPayType) value;
-- (PBParty_Builder*) clearPayType;
-@end
-
-@interface PBTraffic : PBGeneratedMessage {
-@private
-  BOOL hasMemberLimit_:1;
-  BOOL hasJoinDeadtime_:1;
-  BOOL hasHoldTime_:1;
-  BOOL hasContent_:1;
-  BOOL hasStartLoc_:1;
-  BOOL hasEndLoc_:1;
-  BOOL hasContact_:1;
-  BOOL hasPayType_:1;
-  int32_t memberLimit;
-  int32_t joinDeadtime;
-  int32_t holdTime;
-  NSString* content;
-  PBLocation* startLoc;
-  PBLocation* endLoc;
-  PBContact* contact;
-  PBPayType payType;
-}
-- (BOOL) hasMemberLimit;
-- (BOOL) hasStartLoc;
-- (BOOL) hasEndLoc;
-- (BOOL) hasContact;
-- (BOOL) hasJoinDeadtime;
-- (BOOL) hasHoldTime;
-- (BOOL) hasContent;
-- (BOOL) hasPayType;
-@property (readonly) int32_t memberLimit;
-@property (readonly, retain) PBLocation* startLoc;
-@property (readonly, retain) PBLocation* endLoc;
-@property (readonly, retain) PBContact* contact;
-@property (readonly) int32_t joinDeadtime;
-@property (readonly) int32_t holdTime;
-@property (readonly, retain) NSString* content;
-@property (readonly) PBPayType payType;
-
-+ (PBTraffic*) defaultInstance;
-- (PBTraffic*) defaultInstance;
-
-- (BOOL) isInitialized;
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
-- (PBTraffic_Builder*) builder;
-+ (PBTraffic_Builder*) builder;
-+ (PBTraffic_Builder*) builderWithPrototype:(PBTraffic*) prototype;
-
-+ (PBTraffic*) parseFromData:(NSData*) data;
-+ (PBTraffic*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBTraffic*) parseFromInputStream:(NSInputStream*) input;
-+ (PBTraffic*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBTraffic*) parseFromCodedInputStream:(PBCodedInputStream*) input;
-+ (PBTraffic*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-@end
-
-@interface PBTraffic_Builder : PBGeneratedMessage_Builder {
-@private
-  PBTraffic* result;
-}
-
-- (PBTraffic*) defaultInstance;
-
-- (PBTraffic_Builder*) clear;
-- (PBTraffic_Builder*) clone;
-
-- (PBTraffic*) build;
-- (PBTraffic*) buildPartial;
-
-- (PBTraffic_Builder*) mergeFrom:(PBTraffic*) other;
-- (PBTraffic_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
-- (PBTraffic_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-
-- (BOOL) hasMemberLimit;
-- (int32_t) memberLimit;
-- (PBTraffic_Builder*) setMemberLimit:(int32_t) value;
-- (PBTraffic_Builder*) clearMemberLimit;
-
-- (BOOL) hasStartLoc;
-- (PBLocation*) startLoc;
-- (PBTraffic_Builder*) setStartLoc:(PBLocation*) value;
-- (PBTraffic_Builder*) setStartLocBuilder:(PBLocation_Builder*) builderForValue;
-- (PBTraffic_Builder*) mergeStartLoc:(PBLocation*) value;
-- (PBTraffic_Builder*) clearStartLoc;
-
-- (BOOL) hasEndLoc;
-- (PBLocation*) endLoc;
-- (PBTraffic_Builder*) setEndLoc:(PBLocation*) value;
-- (PBTraffic_Builder*) setEndLocBuilder:(PBLocation_Builder*) builderForValue;
-- (PBTraffic_Builder*) mergeEndLoc:(PBLocation*) value;
-- (PBTraffic_Builder*) clearEndLoc;
-
-- (BOOL) hasContact;
-- (PBContact*) contact;
-- (PBTraffic_Builder*) setContact:(PBContact*) value;
-- (PBTraffic_Builder*) setContactBuilder:(PBContact_Builder*) builderForValue;
-- (PBTraffic_Builder*) mergeContact:(PBContact*) value;
-- (PBTraffic_Builder*) clearContact;
-
-- (BOOL) hasJoinDeadtime;
-- (int32_t) joinDeadtime;
-- (PBTraffic_Builder*) setJoinDeadtime:(int32_t) value;
-- (PBTraffic_Builder*) clearJoinDeadtime;
-
-- (BOOL) hasHoldTime;
-- (int32_t) holdTime;
-- (PBTraffic_Builder*) setHoldTime:(int32_t) value;
-- (PBTraffic_Builder*) clearHoldTime;
-
-- (BOOL) hasContent;
-- (NSString*) content;
-- (PBTraffic_Builder*) setContent:(NSString*) value;
-- (PBTraffic_Builder*) clearContent;
-
-- (BOOL) hasPayType;
-- (PBPayType) payType;
-- (PBTraffic_Builder*) setPayType:(PBPayType) value;
-- (PBTraffic_Builder*) clearPayType;
-@end
-
-@interface PBShopping : PBGeneratedMessage {
-@private
-  BOOL hasMemberLimit_:1;
-  BOOL hasJoinDeadtime_:1;
-  BOOL hasHoldTime_:1;
-  BOOL hasContent_:1;
-  BOOL hasMerchant_:1;
-  BOOL hasLocation_:1;
-  BOOL hasContact_:1;
-  BOOL hasPayType_:1;
-  int32_t memberLimit;
-  int32_t joinDeadtime;
-  int32_t holdTime;
-  NSString* content;
-  PBMerchant* merchant;
-  PBLocation* location;
-  PBContact* contact;
-  PBPayType payType;
-  NSMutableArray* mutablePhotoListList;
-}
-- (BOOL) hasMerchant;
-- (BOOL) hasMemberLimit;
-- (BOOL) hasLocation;
-- (BOOL) hasContact;
-- (BOOL) hasJoinDeadtime;
-- (BOOL) hasHoldTime;
-- (BOOL) hasContent;
-- (BOOL) hasPayType;
-@property (readonly, retain) PBMerchant* merchant;
-@property (readonly) int32_t memberLimit;
-@property (readonly, retain) PBLocation* location;
-@property (readonly, retain) PBContact* contact;
-@property (readonly) int32_t joinDeadtime;
-@property (readonly) int32_t holdTime;
-@property (readonly, retain) NSString* content;
-@property (readonly) PBPayType payType;
-- (NSArray*) photoListList;
-- (NSString*) photoListAtIndex:(int32_t) index;
-
-+ (PBShopping*) defaultInstance;
-- (PBShopping*) defaultInstance;
-
-- (BOOL) isInitialized;
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
-- (PBShopping_Builder*) builder;
-+ (PBShopping_Builder*) builder;
-+ (PBShopping_Builder*) builderWithPrototype:(PBShopping*) prototype;
-
-+ (PBShopping*) parseFromData:(NSData*) data;
-+ (PBShopping*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBShopping*) parseFromInputStream:(NSInputStream*) input;
-+ (PBShopping*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBShopping*) parseFromCodedInputStream:(PBCodedInputStream*) input;
-+ (PBShopping*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-@end
-
-@interface PBShopping_Builder : PBGeneratedMessage_Builder {
-@private
-  PBShopping* result;
-}
-
-- (PBShopping*) defaultInstance;
-
-- (PBShopping_Builder*) clear;
-- (PBShopping_Builder*) clone;
-
-- (PBShopping*) build;
-- (PBShopping*) buildPartial;
-
-- (PBShopping_Builder*) mergeFrom:(PBShopping*) other;
-- (PBShopping_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
-- (PBShopping_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-
-- (BOOL) hasMerchant;
-- (PBMerchant*) merchant;
-- (PBShopping_Builder*) setMerchant:(PBMerchant*) value;
-- (PBShopping_Builder*) setMerchantBuilder:(PBMerchant_Builder*) builderForValue;
-- (PBShopping_Builder*) mergeMerchant:(PBMerchant*) value;
-- (PBShopping_Builder*) clearMerchant;
-
-- (BOOL) hasMemberLimit;
-- (int32_t) memberLimit;
-- (PBShopping_Builder*) setMemberLimit:(int32_t) value;
-- (PBShopping_Builder*) clearMemberLimit;
-
-- (BOOL) hasLocation;
-- (PBLocation*) location;
-- (PBShopping_Builder*) setLocation:(PBLocation*) value;
-- (PBShopping_Builder*) setLocationBuilder:(PBLocation_Builder*) builderForValue;
-- (PBShopping_Builder*) mergeLocation:(PBLocation*) value;
-- (PBShopping_Builder*) clearLocation;
-
-- (BOOL) hasContact;
-- (PBContact*) contact;
-- (PBShopping_Builder*) setContact:(PBContact*) value;
-- (PBShopping_Builder*) setContactBuilder:(PBContact_Builder*) builderForValue;
-- (PBShopping_Builder*) mergeContact:(PBContact*) value;
-- (PBShopping_Builder*) clearContact;
-
-- (BOOL) hasJoinDeadtime;
-- (int32_t) joinDeadtime;
-- (PBShopping_Builder*) setJoinDeadtime:(int32_t) value;
-- (PBShopping_Builder*) clearJoinDeadtime;
-
-- (BOOL) hasHoldTime;
-- (int32_t) holdTime;
-- (PBShopping_Builder*) setHoldTime:(int32_t) value;
-- (PBShopping_Builder*) clearHoldTime;
-
-- (BOOL) hasContent;
-- (NSString*) content;
-- (PBShopping_Builder*) setContent:(NSString*) value;
-- (PBShopping_Builder*) clearContent;
-
-- (NSArray*) photoListList;
-- (NSString*) photoListAtIndex:(int32_t) index;
-- (PBShopping_Builder*) replacePhotoListAtIndex:(int32_t) index with:(NSString*) value;
-- (PBShopping_Builder*) addPhotoList:(NSString*) value;
-- (PBShopping_Builder*) addAllPhotoList:(NSArray*) values;
-- (PBShopping_Builder*) clearPhotoListList;
-
-- (BOOL) hasPayType;
-- (PBPayType) payType;
-- (PBShopping_Builder*) setPayType:(PBPayType) value;
-- (PBShopping_Builder*) clearPayType;
+- (NSArray*) promotionIdsList;
+- (NSString*) promotionIdsAtIndex:(int32_t) index;
+- (PBMerchant_Builder*) replacePromotionIdsAtIndex:(int32_t) index with:(NSString*) value;
+- (PBMerchant_Builder*) addPromotionIds:(NSString*) value;
+- (PBMerchant_Builder*) addAllPromotionIds:(NSArray*) values;
+- (PBMerchant_Builder*) clearPromotionIdsList;
 @end
 
 @interface PBActivity : PBGeneratedMessage {
 @private
-  BOOL hasCDate_:1;
+  BOOL hasBudget_:1;
   BOOL hasPrice_:1;
+  BOOL hasJoinDeadtime_:1;
+  BOOL hasHoldDeadtime_:1;
+  BOOL hasMemberLimit_:1;
+  BOOL hasMarkCount_:1;
   BOOL hasCommentCount_:1;
   BOOL hasShareCount_:1;
-  BOOL hasSignupCount_:1;
   BOOL hasParticipantCount_:1;
-  BOOL hasMarkCount_:1;
-  BOOL hasUid_:1;
   BOOL hasToken_:1;
-  BOOL hasParty_:1;
-  BOOL hasTraffic_:1;
-  BOOL hasShopping_:1;
+  BOOL hasEndLoc_:1;
+  BOOL hasContent_:1;
+  BOOL hasStartLoc_:1;
+  BOOL hasLocation_:1;
+  BOOL hasMerchant_:1;
+  BOOL hasPayType_:1;
   BOOL hasType_:1;
-  int32_t cDate;
-  int32_t price;
+  Float32 budget;
+  Float32 price;
+  int32_t joinDeadtime;
+  int32_t holdDeadtime;
+  int32_t memberLimit;
+  int32_t markCount;
   int32_t commentCount;
   int32_t shareCount;
-  int32_t signupCount;
   int32_t participantCount;
-  int32_t markCount;
-  NSString* uid;
   NSString* token;
-  PBParty* party;
-  PBTraffic* traffic;
-  PBShopping* shopping;
+  PBLocation* endLoc;
+  PBContact* content;
+  PBLocation* startLoc;
+  PBLocation* location;
+  PBMerchant* merchant;
+  PBPayType payType;
   PBActivityType type;
-  NSMutableArray* mutableParticipantsList;
   NSMutableArray* mutableSignupsList;
+  NSMutableArray* mutableParticipantsList;
+  NSMutableArray* mutablePhotoListList;
 }
 - (BOOL) hasType;
-- (BOOL) hasCDate;
-- (BOOL) hasUid;
 - (BOOL) hasToken;
-- (BOOL) hasParty;
-- (BOOL) hasTraffic;
-- (BOOL) hasShopping;
+- (BOOL) hasContent;
+- (BOOL) hasJoinDeadtime;
+- (BOOL) hasHoldDeadtime;
+- (BOOL) hasPayType;
+- (BOOL) hasBudget;
 - (BOOL) hasPrice;
+- (BOOL) hasMemberLimit;
 - (BOOL) hasCommentCount;
 - (BOOL) hasShareCount;
-- (BOOL) hasSignupCount;
 - (BOOL) hasParticipantCount;
 - (BOOL) hasMarkCount;
+- (BOOL) hasMerchant;
+- (BOOL) hasLocation;
+- (BOOL) hasStartLoc;
+- (BOOL) hasEndLoc;
 @property (readonly) PBActivityType type;
-@property (readonly) int32_t cDate;
-@property (readonly, retain) NSString* uid;
 @property (readonly, retain) NSString* token;
-@property (readonly, retain) PBParty* party;
-@property (readonly, retain) PBTraffic* traffic;
-@property (readonly, retain) PBShopping* shopping;
-@property (readonly) int32_t price;
+@property (readonly, retain) PBContact* content;
+@property (readonly) int32_t joinDeadtime;
+@property (readonly) int32_t holdDeadtime;
+@property (readonly) PBPayType payType;
+@property (readonly) Float32 budget;
+@property (readonly) Float32 price;
+@property (readonly) int32_t memberLimit;
 @property (readonly) int32_t commentCount;
 @property (readonly) int32_t shareCount;
-@property (readonly) int32_t signupCount;
 @property (readonly) int32_t participantCount;
 @property (readonly) int32_t markCount;
+@property (readonly, retain) PBMerchant* merchant;
+@property (readonly, retain) PBLocation* location;
+@property (readonly, retain) PBLocation* startLoc;
+@property (readonly, retain) PBLocation* endLoc;
+- (NSArray*) photoListList;
+- (NSString*) photoListAtIndex:(int32_t) index;
 - (NSArray*) participantsList;
 - (NSString*) participantsAtIndex:(int32_t) index;
 - (NSArray*) signupsList;
@@ -1022,46 +596,54 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBActivity_Builder*) setType:(PBActivityType) value;
 - (PBActivity_Builder*) clearType;
 
-- (BOOL) hasCDate;
-- (int32_t) cDate;
-- (PBActivity_Builder*) setCDate:(int32_t) value;
-- (PBActivity_Builder*) clearCDate;
-
-- (BOOL) hasUid;
-- (NSString*) uid;
-- (PBActivity_Builder*) setUid:(NSString*) value;
-- (PBActivity_Builder*) clearUid;
-
 - (BOOL) hasToken;
 - (NSString*) token;
 - (PBActivity_Builder*) setToken:(NSString*) value;
 - (PBActivity_Builder*) clearToken;
 
-- (BOOL) hasParty;
-- (PBParty*) party;
-- (PBActivity_Builder*) setParty:(PBParty*) value;
-- (PBActivity_Builder*) setPartyBuilder:(PBParty_Builder*) builderForValue;
-- (PBActivity_Builder*) mergeParty:(PBParty*) value;
-- (PBActivity_Builder*) clearParty;
+- (BOOL) hasContent;
+- (PBContact*) content;
+- (PBActivity_Builder*) setContent:(PBContact*) value;
+- (PBActivity_Builder*) setContentBuilder:(PBContact_Builder*) builderForValue;
+- (PBActivity_Builder*) mergeContent:(PBContact*) value;
+- (PBActivity_Builder*) clearContent;
 
-- (BOOL) hasTraffic;
-- (PBTraffic*) traffic;
-- (PBActivity_Builder*) setTraffic:(PBTraffic*) value;
-- (PBActivity_Builder*) setTrafficBuilder:(PBTraffic_Builder*) builderForValue;
-- (PBActivity_Builder*) mergeTraffic:(PBTraffic*) value;
-- (PBActivity_Builder*) clearTraffic;
+- (BOOL) hasJoinDeadtime;
+- (int32_t) joinDeadtime;
+- (PBActivity_Builder*) setJoinDeadtime:(int32_t) value;
+- (PBActivity_Builder*) clearJoinDeadtime;
 
-- (BOOL) hasShopping;
-- (PBShopping*) shopping;
-- (PBActivity_Builder*) setShopping:(PBShopping*) value;
-- (PBActivity_Builder*) setShoppingBuilder:(PBShopping_Builder*) builderForValue;
-- (PBActivity_Builder*) mergeShopping:(PBShopping*) value;
-- (PBActivity_Builder*) clearShopping;
+- (BOOL) hasHoldDeadtime;
+- (int32_t) holdDeadtime;
+- (PBActivity_Builder*) setHoldDeadtime:(int32_t) value;
+- (PBActivity_Builder*) clearHoldDeadtime;
+
+- (BOOL) hasPayType;
+- (PBPayType) payType;
+- (PBActivity_Builder*) setPayType:(PBPayType) value;
+- (PBActivity_Builder*) clearPayType;
+
+- (BOOL) hasBudget;
+- (Float32) budget;
+- (PBActivity_Builder*) setBudget:(Float32) value;
+- (PBActivity_Builder*) clearBudget;
 
 - (BOOL) hasPrice;
-- (int32_t) price;
-- (PBActivity_Builder*) setPrice:(int32_t) value;
+- (Float32) price;
+- (PBActivity_Builder*) setPrice:(Float32) value;
 - (PBActivity_Builder*) clearPrice;
+
+- (BOOL) hasMemberLimit;
+- (int32_t) memberLimit;
+- (PBActivity_Builder*) setMemberLimit:(int32_t) value;
+- (PBActivity_Builder*) clearMemberLimit;
+
+- (NSArray*) photoListList;
+- (NSString*) photoListAtIndex:(int32_t) index;
+- (PBActivity_Builder*) replacePhotoListAtIndex:(int32_t) index with:(NSString*) value;
+- (PBActivity_Builder*) addPhotoList:(NSString*) value;
+- (PBActivity_Builder*) addAllPhotoList:(NSArray*) values;
+- (PBActivity_Builder*) clearPhotoListList;
 
 - (NSArray*) participantsList;
 - (NSString*) participantsAtIndex:(int32_t) index;
@@ -1087,11 +669,6 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBActivity_Builder*) setShareCount:(int32_t) value;
 - (PBActivity_Builder*) clearShareCount;
 
-- (BOOL) hasSignupCount;
-- (int32_t) signupCount;
-- (PBActivity_Builder*) setSignupCount:(int32_t) value;
-- (PBActivity_Builder*) clearSignupCount;
-
 - (BOOL) hasParticipantCount;
 - (int32_t) participantCount;
 - (PBActivity_Builder*) setParticipantCount:(int32_t) value;
@@ -1101,150 +678,51 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (int32_t) markCount;
 - (PBActivity_Builder*) setMarkCount:(int32_t) value;
 - (PBActivity_Builder*) clearMarkCount;
-@end
 
-@interface PBJoin : PBGeneratedMessage {
-@private
-  BOOL hasActivityId_:1;
-  BOOL hasActivity_:1;
-  NSString* activityId;
-  PBActivity* activity;
-}
-- (BOOL) hasActivityId;
-- (BOOL) hasActivity;
-@property (readonly, retain) NSString* activityId;
-@property (readonly, retain) PBActivity* activity;
+- (BOOL) hasMerchant;
+- (PBMerchant*) merchant;
+- (PBActivity_Builder*) setMerchant:(PBMerchant*) value;
+- (PBActivity_Builder*) setMerchantBuilder:(PBMerchant_Builder*) builderForValue;
+- (PBActivity_Builder*) mergeMerchant:(PBMerchant*) value;
+- (PBActivity_Builder*) clearMerchant;
 
-+ (PBJoin*) defaultInstance;
-- (PBJoin*) defaultInstance;
+- (BOOL) hasLocation;
+- (PBLocation*) location;
+- (PBActivity_Builder*) setLocation:(PBLocation*) value;
+- (PBActivity_Builder*) setLocationBuilder:(PBLocation_Builder*) builderForValue;
+- (PBActivity_Builder*) mergeLocation:(PBLocation*) value;
+- (PBActivity_Builder*) clearLocation;
 
-- (BOOL) isInitialized;
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
-- (PBJoin_Builder*) builder;
-+ (PBJoin_Builder*) builder;
-+ (PBJoin_Builder*) builderWithPrototype:(PBJoin*) prototype;
+- (BOOL) hasStartLoc;
+- (PBLocation*) startLoc;
+- (PBActivity_Builder*) setStartLoc:(PBLocation*) value;
+- (PBActivity_Builder*) setStartLocBuilder:(PBLocation_Builder*) builderForValue;
+- (PBActivity_Builder*) mergeStartLoc:(PBLocation*) value;
+- (PBActivity_Builder*) clearStartLoc;
 
-+ (PBJoin*) parseFromData:(NSData*) data;
-+ (PBJoin*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBJoin*) parseFromInputStream:(NSInputStream*) input;
-+ (PBJoin*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBJoin*) parseFromCodedInputStream:(PBCodedInputStream*) input;
-+ (PBJoin*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-@end
-
-@interface PBJoin_Builder : PBGeneratedMessage_Builder {
-@private
-  PBJoin* result;
-}
-
-- (PBJoin*) defaultInstance;
-
-- (PBJoin_Builder*) clear;
-- (PBJoin_Builder*) clone;
-
-- (PBJoin*) build;
-- (PBJoin*) buildPartial;
-
-- (PBJoin_Builder*) mergeFrom:(PBJoin*) other;
-- (PBJoin_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
-- (PBJoin_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-
-- (BOOL) hasActivityId;
-- (NSString*) activityId;
-- (PBJoin_Builder*) setActivityId:(NSString*) value;
-- (PBJoin_Builder*) clearActivityId;
-
-- (BOOL) hasActivity;
-- (PBActivity*) activity;
-- (PBJoin_Builder*) setActivity:(PBActivity*) value;
-- (PBJoin_Builder*) setActivityBuilder:(PBActivity_Builder*) builderForValue;
-- (PBJoin_Builder*) mergeActivity:(PBActivity*) value;
-- (PBJoin_Builder*) clearActivity;
-@end
-
-@interface PBShare : PBGeneratedMessage {
-@private
-  BOOL hasActivityId_:1;
-  BOOL hasComment_:1;
-  BOOL hasActivity_:1;
-  NSString* activityId;
-  NSString* comment;
-  PBActivity* activity;
-}
-- (BOOL) hasActivityId;
-- (BOOL) hasActivity;
-- (BOOL) hasComment;
-@property (readonly, retain) NSString* activityId;
-@property (readonly, retain) PBActivity* activity;
-@property (readonly, retain) NSString* comment;
-
-+ (PBShare*) defaultInstance;
-- (PBShare*) defaultInstance;
-
-- (BOOL) isInitialized;
-- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
-- (PBShare_Builder*) builder;
-+ (PBShare_Builder*) builder;
-+ (PBShare_Builder*) builderWithPrototype:(PBShare*) prototype;
-
-+ (PBShare*) parseFromData:(NSData*) data;
-+ (PBShare*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBShare*) parseFromInputStream:(NSInputStream*) input;
-+ (PBShare*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-+ (PBShare*) parseFromCodedInputStream:(PBCodedInputStream*) input;
-+ (PBShare*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-@end
-
-@interface PBShare_Builder : PBGeneratedMessage_Builder {
-@private
-  PBShare* result;
-}
-
-- (PBShare*) defaultInstance;
-
-- (PBShare_Builder*) clear;
-- (PBShare_Builder*) clone;
-
-- (PBShare*) build;
-- (PBShare*) buildPartial;
-
-- (PBShare_Builder*) mergeFrom:(PBShare*) other;
-- (PBShare_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
-- (PBShare_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
-
-- (BOOL) hasActivityId;
-- (NSString*) activityId;
-- (PBShare_Builder*) setActivityId:(NSString*) value;
-- (PBShare_Builder*) clearActivityId;
-
-- (BOOL) hasActivity;
-- (PBActivity*) activity;
-- (PBShare_Builder*) setActivity:(PBActivity*) value;
-- (PBShare_Builder*) setActivityBuilder:(PBActivity_Builder*) builderForValue;
-- (PBShare_Builder*) mergeActivity:(PBActivity*) value;
-- (PBShare_Builder*) clearActivity;
-
-- (BOOL) hasComment;
-- (NSString*) comment;
-- (PBShare_Builder*) setComment:(NSString*) value;
-- (PBShare_Builder*) clearComment;
+- (BOOL) hasEndLoc;
+- (PBLocation*) endLoc;
+- (PBActivity_Builder*) setEndLoc:(PBLocation*) value;
+- (PBActivity_Builder*) setEndLocBuilder:(PBLocation_Builder*) builderForValue;
+- (PBActivity_Builder*) mergeEndLoc:(PBLocation*) value;
+- (PBActivity_Builder*) clearEndLoc;
 @end
 
 @interface PBAction : PBGeneratedMessage {
 @private
   BOOL hasCDate_:1;
   BOOL hasActionId_:1;
+  BOOL hasComment_:1;
   BOOL hasUser_:1;
   BOOL hasActivity_:1;
-  BOOL hasShare_:1;
-  BOOL hasJoin_:1;
+  BOOL hasRelatedAction_:1;
   BOOL hasType_:1;
   int32_t cDate;
   NSString* actionId;
+  NSString* comment;
   PBBriefUser* user;
   PBActivity* activity;
-  PBShare* share;
-  PBJoin* join;
+  PBAction* relatedAction;
   PBActionType type;
 }
 - (BOOL) hasActionId;
@@ -1252,15 +730,15 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (BOOL) hasCDate;
 - (BOOL) hasUser;
 - (BOOL) hasActivity;
-- (BOOL) hasShare;
-- (BOOL) hasJoin;
+- (BOOL) hasComment;
+- (BOOL) hasRelatedAction;
 @property (readonly, retain) NSString* actionId;
 @property (readonly) PBActionType type;
 @property (readonly) int32_t cDate;
 @property (readonly, retain) PBBriefUser* user;
 @property (readonly, retain) PBActivity* activity;
-@property (readonly, retain) PBShare* share;
-@property (readonly, retain) PBJoin* join;
+@property (readonly, retain) NSString* comment;
+@property (readonly, retain) PBAction* relatedAction;
 
 + (PBAction*) defaultInstance;
 - (PBAction*) defaultInstance;
@@ -1325,18 +803,138 @@ BOOL PBPayTypeIsValidValue(PBPayType value);
 - (PBAction_Builder*) mergeActivity:(PBActivity*) value;
 - (PBAction_Builder*) clearActivity;
 
-- (BOOL) hasShare;
-- (PBShare*) share;
-- (PBAction_Builder*) setShare:(PBShare*) value;
-- (PBAction_Builder*) setShareBuilder:(PBShare_Builder*) builderForValue;
-- (PBAction_Builder*) mergeShare:(PBShare*) value;
-- (PBAction_Builder*) clearShare;
+- (BOOL) hasComment;
+- (NSString*) comment;
+- (PBAction_Builder*) setComment:(NSString*) value;
+- (PBAction_Builder*) clearComment;
 
-- (BOOL) hasJoin;
-- (PBJoin*) join;
-- (PBAction_Builder*) setJoin:(PBJoin*) value;
-- (PBAction_Builder*) setJoinBuilder:(PBJoin_Builder*) builderForValue;
-- (PBAction_Builder*) mergeJoin:(PBJoin*) value;
-- (PBAction_Builder*) clearJoin;
+- (BOOL) hasRelatedAction;
+- (PBAction*) relatedAction;
+- (PBAction_Builder*) setRelatedAction:(PBAction*) value;
+- (PBAction_Builder*) setRelatedActionBuilder:(PBAction_Builder*) builderForValue;
+- (PBAction_Builder*) mergeRelatedAction:(PBAction*) value;
+- (PBAction_Builder*) clearRelatedAction;
+@end
+
+@interface PBComment : PBGeneratedMessage {
+@private
+  BOOL hasIsReply_:1;
+  BOOL hasCDate_:1;
+  BOOL hasStar_:1;
+  BOOL hasCommentId_:1;
+  BOOL hasActionId_:1;
+  BOOL hasContent_:1;
+  BOOL hasReplyActionId_:1;
+  BOOL hasDigest_:1;
+  BOOL hasUser_:1;
+  BOOL isReply_:1;
+  int32_t cDate;
+  int32_t star;
+  NSString* commentId;
+  NSString* actionId;
+  NSString* content;
+  NSString* replyActionId;
+  NSString* digest;
+  PBBriefUser* user;
+}
+- (BOOL) hasCommentId;
+- (BOOL) hasUser;
+- (BOOL) hasCDate;
+- (BOOL) hasActionId;
+- (BOOL) hasContent;
+- (BOOL) hasStar;
+- (BOOL) hasIsReply;
+- (BOOL) hasReplyActionId;
+- (BOOL) hasDigest;
+@property (readonly, retain) NSString* commentId;
+@property (readonly, retain) PBBriefUser* user;
+@property (readonly) int32_t cDate;
+@property (readonly, retain) NSString* actionId;
+@property (readonly, retain) NSString* content;
+@property (readonly) int32_t star;
+- (BOOL) isReply;
+@property (readonly, retain) NSString* replyActionId;
+@property (readonly, retain) NSString* digest;
+
++ (PBComment*) defaultInstance;
+- (PBComment*) defaultInstance;
+
+- (BOOL) isInitialized;
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
+- (PBComment_Builder*) builder;
++ (PBComment_Builder*) builder;
++ (PBComment_Builder*) builderWithPrototype:(PBComment*) prototype;
+
++ (PBComment*) parseFromData:(NSData*) data;
++ (PBComment*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (PBComment*) parseFromInputStream:(NSInputStream*) input;
++ (PBComment*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input;
++ (PBComment*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+@end
+
+@interface PBComment_Builder : PBGeneratedMessage_Builder {
+@private
+  PBComment* result;
+}
+
+- (PBComment*) defaultInstance;
+
+- (PBComment_Builder*) clear;
+- (PBComment_Builder*) clone;
+
+- (PBComment*) build;
+- (PBComment*) buildPartial;
+
+- (PBComment_Builder*) mergeFrom:(PBComment*) other;
+- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
+- (PBComment_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+
+- (BOOL) hasCommentId;
+- (NSString*) commentId;
+- (PBComment_Builder*) setCommentId:(NSString*) value;
+- (PBComment_Builder*) clearCommentId;
+
+- (BOOL) hasUser;
+- (PBBriefUser*) user;
+- (PBComment_Builder*) setUser:(PBBriefUser*) value;
+- (PBComment_Builder*) setUserBuilder:(PBBriefUser_Builder*) builderForValue;
+- (PBComment_Builder*) mergeUser:(PBBriefUser*) value;
+- (PBComment_Builder*) clearUser;
+
+- (BOOL) hasCDate;
+- (int32_t) cDate;
+- (PBComment_Builder*) setCDate:(int32_t) value;
+- (PBComment_Builder*) clearCDate;
+
+- (BOOL) hasActionId;
+- (NSString*) actionId;
+- (PBComment_Builder*) setActionId:(NSString*) value;
+- (PBComment_Builder*) clearActionId;
+
+- (BOOL) hasContent;
+- (NSString*) content;
+- (PBComment_Builder*) setContent:(NSString*) value;
+- (PBComment_Builder*) clearContent;
+
+- (BOOL) hasStar;
+- (int32_t) star;
+- (PBComment_Builder*) setStar:(int32_t) value;
+- (PBComment_Builder*) clearStar;
+
+- (BOOL) hasIsReply;
+- (BOOL) isReply;
+- (PBComment_Builder*) setIsReply:(BOOL) value;
+- (PBComment_Builder*) clearIsReply;
+
+- (BOOL) hasReplyActionId;
+- (NSString*) replyActionId;
+- (PBComment_Builder*) setReplyActionId:(NSString*) value;
+- (PBComment_Builder*) clearReplyActionId;
+
+- (BOOL) hasDigest;
+- (NSString*) digest;
+- (PBComment_Builder*) setDigest:(NSString*) value;
+- (PBComment_Builder*) clearDigest;
 @end
 

@@ -21,8 +21,6 @@
 @class PBContact_Builder;
 @class PBDevice;
 @class PBDevice_Builder;
-@class PBJoin;
-@class PBJoin_Builder;
 @class PBLocation;
 @class PBLocation_Builder;
 @class PBLog;
@@ -31,8 +29,6 @@
 @class PBMerchant_Builder;
 @class PBMessage;
 @class PBMessage_Builder;
-@class PBParty;
-@class PBParty_Builder;
 @class PBPromotion;
 @class PBPromotion_Builder;
 @class PBRegistration;
@@ -41,14 +37,8 @@
 @class PBResponse_Builder;
 @class PBSNS;
 @class PBSNS_Builder;
-@class PBShare;
-@class PBShare_Builder;
-@class PBShopping;
-@class PBShopping_Builder;
 @class PBStatistic;
 @class PBStatistic_Builder;
-@class PBTraffic;
-@class PBTraffic_Builder;
 @class PBUser;
 @class PBUserBasic;
 @class PBUserBasic_Builder;
@@ -82,11 +72,13 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
 
 @interface PBResponse : PBGeneratedMessage {
 @private
+  BOOL hasHasMore_:1;
   BOOL hasErrorMessage_:1;
   BOOL hasUser_:1;
   BOOL hasAction_:1;
   BOOL hasMerchant_:1;
   BOOL hasCode_:1;
+  BOOL hasMore_:1;
   NSString* errorMessage;
   PBUser* user;
   PBAction* action;
@@ -101,11 +93,13 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
 }
 - (BOOL) hasCode;
 - (BOOL) hasErrorMessage;
+- (BOOL) hasHasMore;
 - (BOOL) hasUser;
 - (BOOL) hasAction;
 - (BOOL) hasMerchant;
 @property (readonly) PBResultCode code;
 @property (readonly, retain) NSString* errorMessage;
+- (BOOL) hasMore;
 @property (readonly, retain) PBUser* user;
 @property (readonly, retain) PBAction* action;
 @property (readonly, retain) PBMerchant* merchant;
@@ -165,6 +159,11 @@ BOOL PBResultCodeIsValidValue(PBResultCode value);
 - (NSString*) errorMessage;
 - (PBResponse_Builder*) setErrorMessage:(NSString*) value;
 - (PBResponse_Builder*) clearErrorMessage;
+
+- (BOOL) hasHasMore;
+- (BOOL) hasMore;
+- (PBResponse_Builder*) setHasMore:(BOOL) value;
+- (PBResponse_Builder*) clearHasMore;
 
 - (NSArray*) actionsList;
 - (PBAction*) actionsAtIndex:(int32_t) index;
