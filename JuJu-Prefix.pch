@@ -23,7 +23,6 @@
     #import <QuartzCore/QuartzCore.h>
     #import <CoreGraphics/CoreGraphics.h>
 
-    #import "OpenUDID.h"
     #import "LogUtil.h"
     #import "Bootstrap.h"
     #import "MobClick.h"
