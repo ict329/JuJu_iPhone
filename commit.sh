@@ -48,8 +48,5 @@ echo ''
 echo $line' congratulations! hope there is no conflict! '$line
 echo ''
 
-cd ~/.ssh
-./gckj.sh
-
 cd -
 
