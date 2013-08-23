@@ -1,10 +1,5 @@
 #!/bin/bash
 
-cd ~/.ssh
-./ju.sh
-
-cd -
-
 line=' ========= '
 if [ -z "$1" ]; then
     echo "$line"" Commit message is empty. Can  not be comitted ""$line"
@@ -47,6 +42,4 @@ git push
 echo ''
 echo $line' congratulations! hope there is no conflict! '$line
 echo ''
-
-cd -
 
